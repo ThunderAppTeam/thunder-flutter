@@ -22,6 +22,12 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "onboardingTitle": MessageLookupByLibrary.simpleMessage("⚡Thunder")
+        "commonLogin": MessageLookupByLibrary.simpleMessage("로그인"),
+        "welcomeAlreadyAccount":
+            MessageLookupByLibrary.simpleMessage("이미 계정이 있나요?"),
+        "welcomeDescription":
+            MessageLookupByLibrary.simpleMessage("눈바디를 측정하고 \n달라진 나를 확인하세요"),
+        "welcomeStart": MessageLookupByLibrary.simpleMessage("시작하기"),
+        "welcomeTitle": MessageLookupByLibrary.simpleMessage("⚡Thunder")
       };
 }

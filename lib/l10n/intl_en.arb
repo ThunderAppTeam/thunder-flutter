@@ -1,3 +1,10 @@
 {
-  "onboardingTitle": "⚡Thunder"
+  "@_COMMON": {},
+  "commonLogin": "로그인",
+
+  "@_WELCOME": {},
+  "welcomeTitle": "⚡Thunder",
+  "welcomeDescription": "눈바디를 측정하고 \n달라진 나를 확인하세요",
+  "welcomeStart": "시작하기",
+  "welcomeAlreadyAccount": "이미 계정이 있나요?"
 }

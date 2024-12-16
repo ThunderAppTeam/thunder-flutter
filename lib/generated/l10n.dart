@@ -50,11 +50,51 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `로그인`
+  String get commonLogin {
+    return Intl.message(
+      '로그인',
+      name: 'commonLogin',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `⚡Thunder`
-  String get onboardingTitle {
+  String get welcomeTitle {
     return Intl.message(
       '⚡Thunder',
-      name: 'onboardingTitle',
+      name: 'welcomeTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `눈바디를 측정하고 \n달라진 나를 확인하세요`
+  String get welcomeDescription {
+    return Intl.message(
+      '눈바디를 측정하고 \n달라진 나를 확인하세요',
+      name: 'welcomeDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `시작하기`
+  String get welcomeStart {
+    return Intl.message(
+      '시작하기',
+      name: 'welcomeStart',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `이미 계정이 있나요?`
+  String get welcomeAlreadyAccount {
+    return Intl.message(
+      '이미 계정이 있나요?',
+      name: 'welcomeAlreadyAccount',
       desc: '',
       args: [],
     );

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:noon_body/core/theme/sizes.dart';
+import 'package:noon_body/core/utils/theme_utils.dart';
 
 class OnboardingButton extends StatefulWidget {
   final String text;
@@ -47,17 +49,16 @@ class _OnboardingButtonState extends State<OnboardingButton> {
           child: Container(
             decoration: BoxDecoration(
               color: widget.backgroundColor,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(Sizes.radius16),
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              padding: const EdgeInsets.symmetric(vertical: Sizes.spacing16),
               child: Center(
                 child: Text(
                   widget.text,
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: widget.textColor,
-                  ),
+                  style: getTextTheme(context).textTitle18.copyWith(
+                        color: widget.textColor,
+                      ),
                 ),
               ),
             ),

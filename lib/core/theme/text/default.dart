@@ -4,63 +4,35 @@ import 'package:noon_body/core/theme/sizes.dart';
 import 'app_text_theme.dart';
 
 const AppTextTheme defaultTextTheme = AppTextTheme(
-  // Body styles
-  textBody16: TextStyle(
-    fontSize: Sizes.fontSize16,
-    fontWeight: FontWeight.w400,
-  ),
-  textBody14: TextStyle(
-    fontFamily: FontFamily.pretendard,
-    fontSize: Sizes.fontSize14,
-    fontWeight: FontWeight.w400,
-  ),
-  textBody12: TextStyle(
-    fontFamily: FontFamily.pretendard,
-    fontSize: Sizes.fontSize12,
-    fontWeight: FontWeight.w400,
-  ),
-
-  // Subtitle styles
-  textSubtitle24: TextStyle(
-    fontFamily: FontFamily.pretendard,
-    fontSize: Sizes.fontSize24,
-    height: 36 / 24,
-    fontWeight: FontWeight.w600,
-  ),
-  textSubtitle16: TextStyle(
-    fontFamily: FontFamily.pretendard,
-    fontSize: Sizes.fontSize16,
-    height: 24 / 16,
-    fontWeight: FontWeight.w600,
-  ),
-  textSubtitle14: TextStyle(
-    fontFamily: FontFamily.pretendard,
-    fontSize: Sizes.fontSize14,
-    fontWeight: FontWeight.w600,
-  ),
-  textSubtitle12: TextStyle(
-    fontFamily: FontFamily.pretendard,
-    fontSize: Sizes.fontSize12,
-    fontWeight: FontWeight.w600,
-  ),
-
-  // Heading styles
+  // Heading styles (큰 텍스트, 화면 제목 및 메인 글자)
   textHead32: TextStyle(
     fontFamily: FontFamily.pretendard,
     fontSize: Sizes.fontSize32,
-    height: 48 / 32,
+    height: Sizes.lineHeight48 / Sizes.fontSize32,
     fontWeight: FontWeight.w700,
+    color: Colors.white,
   ),
-  textHead18: TextStyle(
+  textHead24: TextStyle(
+    fontFamily: FontFamily.pretendard,
+    fontSize: Sizes.fontSize24,
+    height: Sizes.lineHeight36 / Sizes.fontSize24,
+    fontWeight: FontWeight.w700,
+    color: Colors.white,
+  ),
+
+  // Title styles (살짝 Bold감이 있는 작은 텍스트)
+  textTitle18: TextStyle(
     fontFamily: FontFamily.pretendard,
     fontSize: Sizes.fontSize18,
-    height: 27 / 18,
-    fontWeight: FontWeight.w700,
+    height: Sizes.lineHeight24 / Sizes.fontSize18,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
   ),
-  textHead16: TextStyle(
+  textTitle16: TextStyle(
     fontFamily: FontFamily.pretendard,
     fontSize: Sizes.fontSize16,
-    height: 24 / 16,
-    fontWeight: FontWeight.w700,
+    height: Sizes.lineHeight20 / Sizes.fontSize16,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
   ),
 );
