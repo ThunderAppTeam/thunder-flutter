@@ -70,10 +70,10 @@ class S {
     );
   }
 
-  /// `눈바디를 측정하고 \n달라진 나를 확인하세요`
+  /// `눈바디를 측정하고\n달라진 나를 확인하세요`
   String get welcomeDescription {
     return Intl.message(
-      '눈바디를 측정하고 \n달라진 나를 확인하세요',
+      '눈바디를 측정하고\n달라진 나를 확인하세요',
       name: 'welcomeDescription',
       desc: '',
       args: [],
@@ -95,6 +95,56 @@ class S {
     return Intl.message(
       '이미 계정이 있나요?',
       name: 'welcomeAlreadyAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `계정을 만들기 위해\n휴대폰 번호를 입력해주세요`
+  String get phoneNumberTitle {
+    return Intl.message(
+      '계정을 만들기 위해\n휴대폰 번호를 입력해주세요',
+      name: 'phoneNumberTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `🇰🇷 +82`
+  String get phoneNumberFlagCode {
+    return Intl.message(
+      '🇰🇷 +82',
+      name: 'phoneNumberFlagCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `- 없이 숫자만 입력`
+  String get phoneNumberInputHint {
+    return Intl.message(
+      '- 없이 숫자만 입력',
+      name: 'phoneNumberInputHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `아래 버튼을 누르면 위에 입력한 휴대폰 번호로 인증문자가 전송될 예정입니다.`
+  String get phoneNumberGuideText {
+    return Intl.message(
+      '아래 버튼을 누르면 위에 입력한 휴대폰 번호로 인증문자가 전송될 예정입니다.',
+      name: 'phoneNumberGuideText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `인증문자 받기`
+  String get phoneNumberButton {
+    return Intl.message(
+      '인증문자 받기',
+      name: 'phoneNumberButton',
       desc: '',
       args: [],
     );

@@ -17,6 +17,8 @@ abstract class Sizes {
   // line height
 
   static const double lineHeight20 = 20.0;
+  static const double lineHeight21 = 21.0;
+  static const double lineHeight22 = 22.0;
   static const double lineHeight24 = 24.0;
   static const double lineHeight36 = 36.0;
   static const double lineHeight48 = 48.0;

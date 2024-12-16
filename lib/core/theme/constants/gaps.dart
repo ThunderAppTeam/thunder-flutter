@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:noon_body/core/theme/sizes.dart';
+import 'package:noon_body/core/theme/constants/sizes.dart';
 
 abstract class Gaps {
   // Vertical

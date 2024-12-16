@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:noon_body/core/theme/constants/sizes.dart';
 import 'package:noon_body/core/theme/constants/styles.dart';
+import 'package:noon_body/core/theme/gen/colors.gen.dart';
 import 'package:noon_body/core/utils/theme_utils.dart';
 
 class OnboardingButton extends StatefulWidget {
@@ -15,8 +16,8 @@ class OnboardingButton extends StatefulWidget {
     required this.text,
     required this.onPressed,
     this.isEnabled = true,
-    this.backgroundColor = Colors.white,
-    this.textColor = Colors.black,
+    this.backgroundColor = ColorName.white,
+    this.textColor = ColorName.black,
   });
 
   @override

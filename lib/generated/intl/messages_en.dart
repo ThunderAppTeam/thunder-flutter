@@ -23,10 +23,18 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "commonLogin": MessageLookupByLibrary.simpleMessage("로그인"),
+        "phoneNumberButton": MessageLookupByLibrary.simpleMessage("인증문자 받기"),
+        "phoneNumberFlagCode": MessageLookupByLibrary.simpleMessage("🇰🇷 +82"),
+        "phoneNumberGuideText": MessageLookupByLibrary.simpleMessage(
+            "아래 버튼을 누르면 위에 입력한 휴대폰 번호로 인증문자가 전송될 예정입니다."),
+        "phoneNumberInputHint":
+            MessageLookupByLibrary.simpleMessage("- 없이 숫자만 입력"),
+        "phoneNumberTitle":
+            MessageLookupByLibrary.simpleMessage("계정을 만들기 위해\n휴대폰 번호를 입력해주세요"),
         "welcomeAlreadyAccount":
             MessageLookupByLibrary.simpleMessage("이미 계정이 있나요?"),
         "welcomeDescription":
-            MessageLookupByLibrary.simpleMessage("눈바디를 측정하고 \n달라진 나를 확인하세요"),
+            MessageLookupByLibrary.simpleMessage("눈바디를 측정하고\n달라진 나를 확인하세요"),
         "welcomeStart": MessageLookupByLibrary.simpleMessage("시작하기"),
         "welcomeTitle": MessageLookupByLibrary.simpleMessage("⚡Thunder")
       };

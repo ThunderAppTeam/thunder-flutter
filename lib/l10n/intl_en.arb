@@ -1,10 +1,15 @@
 {
   "@_COMMON": {},
   "commonLogin": "로그인",
-
   "@_WELCOME": {},
   "welcomeTitle": "⚡Thunder",
-  "welcomeDescription": "눈바디를 측정하고 \n달라진 나를 확인하세요",
+  "welcomeDescription": "눈바디를 측정하고\n달라진 나를 확인하세요",
   "welcomeStart": "시작하기",
-  "welcomeAlreadyAccount": "이미 계정이 있나요?"
+  "welcomeAlreadyAccount": "이미 계정이 있나요?",
+  "@_PHONE_NUMBER": {},
+  "phoneNumberTitle": "계정을 만들기 위해\n휴대폰 번호를 입력해주세요",
+  "phoneNumberFlagCode": "🇰🇷 +82",
+  "phoneNumberInputHint": "- 없이 숫자만 입력",
+  "phoneNumberGuideText": "아래 버튼을 누르면 위에 입력한 휴대폰 번호로 인증문자가 전송될 예정입니다.",
+  "phoneNumberButton": "인증문자 받기"
 }

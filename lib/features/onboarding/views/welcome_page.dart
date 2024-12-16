@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:noon_body/core/theme/gaps.dart';
+import 'package:go_router/go_router.dart';
+import 'package:noon_body/core/router/routes.dart';
+import 'package:noon_body/core/theme/constants/gaps.dart';
 import 'package:noon_body/core/theme/gen/assets.gen.dart';
 import 'package:noon_body/core/theme/gen/colors.gen.dart';
-
-import 'package:noon_body/core/theme/sizes.dart';
+import 'package:noon_body/core/theme/constants/sizes.dart';
 import 'package:noon_body/core/utils/theme_utils.dart';
 import 'package:noon_body/features/onboarding/views/widgets/onboarding_button.dart';
 import 'package:noon_body/generated/l10n.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
+
+  void _onStartPressed(BuildContext context) {
+    context.push(Routes.phoneNumber.path);
+  }
+
+  void _onLoginTap() {
+    // pressed가 아닌 이유, 바로 tap했을 시에 발생하는 이벤트
+    // TODO-Feat: 로그인 버튼 눌렀을 때 로직 추가
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +63,7 @@ class WelcomePage extends StatelessWidget {
                 children: [
                   OnboardingButton(
                     text: S.of(context).welcomeStart,
-                    onPressed: () => {},
+                    onPressed: () => _onStartPressed(context),
                   ),
                   Gaps.v8,
                   Padding(
@@ -68,8 +78,7 @@ class WelcomePage extends StatelessWidget {
                         ),
                         Gaps.h8,
                         GestureDetector(
-                          // TODO-Feat: 로그인 페이지로 이동
-                          onTap: () => {},
+                          onTap: _onLoginTap,
                           child: Text(
                             S.of(context).commonLogin,
                             style: textTheme.textTitle16.copyWith(

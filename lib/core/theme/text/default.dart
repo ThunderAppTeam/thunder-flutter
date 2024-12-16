@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:noon_body/core/theme/gen/fonts.gen.dart';
-import 'package:noon_body/core/theme/sizes.dart';
+import 'package:noon_body/core/theme/constants/sizes.dart';
 import 'app_text_theme.dart';
 
 const AppTextTheme defaultTextTheme = AppTextTheme(
-  // Heading styles (큰 텍스트, 화면 제목 및 메인 글자)
+  // #####--- Heading styles (큰 텍스트, 화면 제목 및 메인 글자)
   textHead32: TextStyle(
     fontFamily: FontFamily.pretendard,
     fontSize: Sizes.fontSize32,
@@ -20,7 +20,7 @@ const AppTextTheme defaultTextTheme = AppTextTheme(
     color: Colors.white,
   ),
 
-  // Title styles (살짝 Bold감이 있는 작은 텍스트)
+  // #####--- Title styles (살짝 Bold감이 있는 작은 텍스트)
   textTitle18: TextStyle(
     fontFamily: FontFamily.pretendard,
     fontSize: Sizes.fontSize18,
@@ -31,8 +31,26 @@ const AppTextTheme defaultTextTheme = AppTextTheme(
   textTitle16: TextStyle(
     fontFamily: FontFamily.pretendard,
     fontSize: Sizes.fontSize16,
-    height: Sizes.lineHeight20 / Sizes.fontSize16,
+    height: Sizes.lineHeight22 / Sizes.fontSize16,
     fontWeight: FontWeight.w600,
+    color: Colors.white,
+  ),
+
+  // #####--- Subtitle styles (Bold감이 있는 작은 텍스트)
+  textSubtitle14: TextStyle(
+    fontFamily: FontFamily.pretendard,
+    fontSize: Sizes.fontSize14,
+    height: Sizes.lineHeight21 / Sizes.fontSize14,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  ),
+
+  // #####--- Body styles (작은 텍스트)
+  textBody14: TextStyle(
+    fontFamily: FontFamily.pretendard,
+    fontSize: Sizes.fontSize14,
+    height: Sizes.lineHeight20 / Sizes.fontSize14,
+    fontWeight: FontWeight.w400,
     color: Colors.white,
   ),
 );
