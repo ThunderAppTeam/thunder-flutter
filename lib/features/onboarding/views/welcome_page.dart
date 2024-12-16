@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:noon_body/core/router/routes.dart';
 import 'package:noon_body/core/theme/sizes.dart';
+import 'package:noon_body/generated/l10n.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -20,11 +21,11 @@ class WelcomePage extends StatelessWidget {
                   top: Sizes.spacing40,
                   bottom: Sizes.spacing24,
                 ),
-                child: const Text(
-                  '⚡Thunder',
+                child: Text(
+                  S.of(context).onboardingTitle,
                   style: TextStyle(
                     fontSize: Sizes.fontSize32,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
                 ),

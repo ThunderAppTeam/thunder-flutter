@@ -14,7 +14,12 @@ dependencies:
   flutter:
     sdk: flutter
 
-  #=== UI & Styles & Assets
+  #=== Internationalization
+  intl: any
+  flutter_localizations:
+    sdk: flutter
+  intl_utils: ^2.8.7
+
   #=== Core
   flutter_riverpod: ^2.6.1
   go_router: ^14.6.2
