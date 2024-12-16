@@ -4,7 +4,7 @@ import 'package:noon_body/core/theme/gen/colors.gen.dart';
 abstract class Styles {
   // Opacity
   static const double opacity30 = 0.3;
-  static const double opacity50 = 0.05;
+  static const double opacity50 = 0.5;
   static const double opacity80 = 0.8;
   static const double opacity100 = 1.0;
 
