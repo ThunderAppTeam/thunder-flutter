@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:noon_body/core/theme/sizes.dart';
+import 'package:noon_body/core/theme/constants/sizes.dart';
+import 'package:noon_body/core/theme/constants/styles.dart';
 import 'package:noon_body/core/utils/theme_utils.dart';
 
 class OnboardingButton extends StatefulWidget {
@@ -34,8 +35,8 @@ class _OnboardingButtonState extends State<OnboardingButton> {
   @override
   Widget build(BuildContext context) {
     return AnimatedOpacity(
-      duration: const Duration(milliseconds: 200),
-      opacity: widget.isEnabled ? 1.0 : 0.3,
+      duration: Styles.duration200,
+      opacity: widget.isEnabled ? Styles.opacity100 : Styles.opacity30,
       child: GestureDetector(
         onTapDown: (_) => _updatePressedState(true),
         onTapUp: (_) {
@@ -44,12 +45,12 @@ class _OnboardingButtonState extends State<OnboardingButton> {
         },
         onTapCancel: () => _updatePressedState(false),
         child: AnimatedScale(
-          scale: _isPressed ? 0.95 : 1.0,
-          duration: const Duration(milliseconds: 100),
+          scale: _isPressed ? Styles.scale95 : Styles.scale100,
+          duration: Styles.duration100,
           child: Container(
             decoration: BoxDecoration(
               color: widget.backgroundColor,
-              borderRadius: BorderRadius.circular(Sizes.radius16),
+              borderRadius: BorderRadius.circular(Styles.radius16),
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: Sizes.spacing16),
