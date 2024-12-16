@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:noon_body/core/extensions/text_style.dart';
+import 'package:noon_body/core/formatters/phone_number_formatter.dart';
 import 'package:noon_body/core/router/routes.dart';
 import 'package:noon_body/core/theme/constants/gaps.dart';
 import 'package:noon_body/core/theme/constants/sizes.dart';
@@ -22,6 +23,7 @@ class PhoneNumberPage extends StatefulWidget {
 
 class _PhoneNumberPageState extends State<PhoneNumberPage> {
   static const _minLength = 10;
+  static const _maxLength = 12;
 
   final _controller = TextEditingController();
   bool get _isValid => _controller.text.length >= _minLength;
@@ -63,7 +65,8 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
               keyboardType: TextInputType.phone,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(_minLength + 1),
+                LengthLimitingTextInputFormatter(_maxLength),
+                KoreanPhoneNumberFormatter(),
               ],
               style: textTheme.textHead24,
               cursorColor: ColorName.white,
