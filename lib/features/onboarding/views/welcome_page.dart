@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:noon_body/core/router/routes.dart';
+import 'package:noon_body/core/theme/sizes.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -10,18 +11,23 @@ class WelcomePage extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: Sizes.spacing20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Spacer(),
-              const Text(
-                'Thunder에서\n당신의 변화를 기록하세요',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: Sizes.spacing40,
+                  bottom: Sizes.spacing24,
                 ),
-                textAlign: TextAlign.center,
+                child: const Text(
+                  '⚡Thunder',
+                  style: TextStyle(
+                    fontSize: Sizes.fontSize32,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
               const SizedBox(height: 16),
               const Text(

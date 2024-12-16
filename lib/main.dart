@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:noon_body/core/router/router.dart';
+import 'package:noon_body/core/theme/text/default.dart';
 
 void main() {
   runApp(
@@ -17,9 +18,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Thunder',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      theme: ThemeData.dark(
         useMaterial3: true,
+      ).copyWith(
+        extensions: [
+          defaultTextTheme,
+        ],
       ),
       routerConfig: router,
     );
