@@ -92,5 +92,10 @@ flutter_gen:
   fonts:
     enabled: true
 
+  colors:
+    enabled: true
+    inputs:
+      - assets/colors/system.xml
+
 flutter_intl:
   enabled: true

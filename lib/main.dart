@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark(
         useMaterial3: true,
       ).copyWith(
+        scaffoldBackgroundColor: Colors.black,
         extensions: [
           defaultTextTheme,
         ],
