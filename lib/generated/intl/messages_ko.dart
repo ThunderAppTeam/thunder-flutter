@@ -31,6 +31,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("- 없이 숫자만 입력"),
         "phoneNumberTitle":
             MessageLookupByLibrary.simpleMessage("계정을 만들기 위해\n휴대폰 번호를 입력해주세요"),
+        "verificationHint": MessageLookupByLibrary.simpleMessage("6자리 숫자"),
+        "verificationTitle":
+            MessageLookupByLibrary.simpleMessage("문자로 받은\n인증번호 6자리를 입력해주세요"),
         "welcomeAlreadyAccount":
             MessageLookupByLibrary.simpleMessage("이미 계정이 있나요?"),
         "welcomeDescription":

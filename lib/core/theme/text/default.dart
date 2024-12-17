@@ -44,6 +44,13 @@ const AppTextTheme defaultTextTheme = AppTextTheme(
     fontWeight: FontWeight.w600,
     color: Colors.white,
   ),
+  textSubtitle12: TextStyle(
+    fontFamily: FontFamily.pretendard,
+    fontSize: Sizes.fontSize12,
+    height: Sizes.lineHeight18 / Sizes.fontSize12,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  ),
 
   // #####--- Body styles (작은 텍스트)
   textBody14: TextStyle(

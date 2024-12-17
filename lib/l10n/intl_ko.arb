@@ -11,5 +11,8 @@
   "phoneNumberFlagCode": "🇰🇷 +82",
   "phoneNumberInputHint": "- 없이 숫자만 입력",
   "phoneNumberGuideText": "아래 버튼을 누르면 위에 입력한 휴대폰 번호로 인증문자가 전송될 예정입니다.",
-  "phoneNumberButton": "인증문자 받기"
+  "phoneNumberButton": "인증문자 받기",
+  "@_VERIFICATION": {},
+  "verificationHint": "6자리 숫자",
+  "verificationTitle": "문자로 받은\n인증번호 6자리를 입력해주세요"
 }

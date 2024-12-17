@@ -149,6 +149,26 @@ class S {
       args: [],
     );
   }
+
+  /// `6자리 숫자`
+  String get verificationHint {
+    return Intl.message(
+      '6자리 숫자',
+      name: 'verificationHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `문자로 받은\n인증번호 6자리를 입력해주세요`
+  String get verificationTitle {
+    return Intl.message(
+      '문자로 받은\n인증번호 6자리를 입력해주세요',
+      name: 'verificationTitle',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
