@@ -5,12 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:noon_body/core/router/routes.dart';
 import 'package:noon_body/core/theme/constants/gaps.dart';
-import 'package:noon_body/core/theme/constants/sizes.dart';
-import 'package:noon_body/core/theme/constants/styles.dart';
-import 'package:noon_body/core/theme/gen/colors.gen.dart';
-import 'package:noon_body/core/utils/theme_utils.dart';
 import 'package:noon_body/features/onboarding/views/widgets/onboarding_button.dart';
 import 'package:noon_body/features/onboarding/views/widgets/onboarding_scaffold.dart';
+import 'package:noon_body/features/onboarding/views/widgets/onboarding_small_button.dart';
 import 'package:noon_body/features/onboarding/views/widgets/onboarding_text_field.dart';
 import 'package:noon_body/generated/l10n.dart';
 
@@ -25,8 +22,10 @@ class _VerificationPageState extends State<VerificationPage> {
   final _controller = TextEditingController();
   Timer? _timer;
   int _remainingSeconds = 180; // 3분 = 180초
+  static const int _cooldownSeconds = 175; // 180 - 5 = 175초
 
   bool get _isValid => _controller.text.length == 6;
+  bool get _canResend => _remainingSeconds <= _cooldownSeconds; // 5초 이하로 남았을 때
 
   @override
   void initState() {
@@ -42,6 +41,9 @@ class _VerificationPageState extends State<VerificationPage> {
   }
 
   void _startTimer() {
+    _timer?.cancel();
+    setState(() => _remainingSeconds = 180);
+
     _timer = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
@@ -64,7 +66,6 @@ class _VerificationPageState extends State<VerificationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = getTextTheme(context);
     return OnboardingScaffold(
       title: S.of(context).verificationTitle,
       content: Column(
@@ -86,25 +87,21 @@ class _VerificationPageState extends State<VerificationPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
-                padding: EdgeInsets.all(Sizes.spacing8),
-                decoration: BoxDecoration(
-                  color: ColorName.white,
-                  borderRadius: BorderRadius.circular(Styles.radius4),
-                ),
-                child: Text(
-                  '인증문자 다시 받기',
-                  style: textTheme.textSubtitle12.copyWith(
-                    color: ColorName.black.withOpacity(Styles.opacity70),
-                  ),
-                ),
+              OnboardingSmallButton(
+                text: S.of(context).verificationResend,
+                onPressed: _canResend
+                    ? () {
+                        _startTimer();
+                      }
+                    : null,
+                isEnabled: _canResend,
               ),
             ],
           ),
         ],
       ),
       bottomButton: OnboardingButton(
-        text: '확인',
+        text: S.of(context).commonConfirm,
         onPressed: () => context.pushNamed(Routes.nickname.name),
         isEnabled: _isValid,
       ),

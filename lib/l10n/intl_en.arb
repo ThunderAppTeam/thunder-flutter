@@ -1,6 +1,7 @@
 {
   "@_COMMON": {},
   "commonLogin": "로그인",
+  "commonConfirm": "확인",
   "@_WELCOME": {},
   "welcomeTitle": "⚡Thunder",
   "welcomeDescription": "눈바디를 측정하고\n달라진 나를 확인하세요",
@@ -14,5 +15,6 @@
   "phoneNumberButton": "인증문자 받기",
   "@_VERIFICATION": {},
   "verificationHint": "6자리 숫자",
-  "verificationTitle": "문자로 받은\n인증번호 6자리를 입력해주세요"
+  "verificationTitle": "문자로 받은\n인증번호 6자리를 입력해주세요",
+  "verificationResend": "인증문자 다시 받기"
 }

@@ -22,6 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "commonConfirm": MessageLookupByLibrary.simpleMessage("확인"),
         "commonLogin": MessageLookupByLibrary.simpleMessage("로그인"),
         "phoneNumberButton": MessageLookupByLibrary.simpleMessage("인증문자 받기"),
         "phoneNumberFlagCode": MessageLookupByLibrary.simpleMessage("🇰🇷 +82"),
@@ -32,6 +33,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "phoneNumberTitle":
             MessageLookupByLibrary.simpleMessage("계정을 만들기 위해\n휴대폰 번호를 입력해주세요"),
         "verificationHint": MessageLookupByLibrary.simpleMessage("6자리 숫자"),
+        "verificationResend":
+            MessageLookupByLibrary.simpleMessage("인증문자 다시 받기"),
         "verificationTitle":
             MessageLookupByLibrary.simpleMessage("문자로 받은\n인증번호 6자리를 입력해주세요"),
         "welcomeAlreadyAccount":

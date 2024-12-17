@@ -60,6 +60,16 @@ class S {
     );
   }
 
+  /// `확인`
+  String get commonConfirm {
+    return Intl.message(
+      '확인',
+      name: 'commonConfirm',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `⚡Thunder`
   String get welcomeTitle {
     return Intl.message(
@@ -165,6 +175,16 @@ class S {
     return Intl.message(
       '문자로 받은\n인증번호 6자리를 입력해주세요',
       name: 'verificationTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `인증문자 다시 받기`
+  String get verificationResend {
+    return Intl.message(
+      '인증문자 다시 받기',
+      name: 'verificationResend',
       desc: '',
       args: [],
     );
