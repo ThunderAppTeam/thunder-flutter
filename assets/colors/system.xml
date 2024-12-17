@@ -19,4 +19,5 @@
 
     <!-- Accent -->
     <color name="accent_red">#FE2C55</color>
+    <color name="accent_blue">#007AFF</color>
 </resources>

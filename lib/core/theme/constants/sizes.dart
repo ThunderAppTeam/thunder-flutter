@@ -27,4 +27,7 @@ abstract class Sizes {
 
   // icon size
   static const double icon14 = 14.0;
+
+  // cursor height
+  static const double cursorHeight28 = 28.0;
 }

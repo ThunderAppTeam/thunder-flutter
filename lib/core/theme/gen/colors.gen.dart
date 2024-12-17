@@ -13,6 +13,9 @@ import 'package:flutter/material.dart';
 class ColorName {
   ColorName._();
 
+  /// Color: #007AFF
+  static const Color accentBlue = Color(0xFF007AFF);
+
   /// Color: #FE2C55
   static const Color accentRed = Color(0xFFFE2C55);
 

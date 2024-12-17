@@ -37,7 +37,8 @@ class OnboardingTextField extends StatelessWidget {
       keyboardType: keyboardType,
       inputFormatters: inputFormatters,
       style: textTheme.textHead24,
-      cursorColor: ColorName.white,
+      cursorColor: ColorName.accentBlue,
+      cursorHeight: Sizes.cursorHeight28,
       autofocus: autofocus,
       decoration: InputDecoration(
         hintText: hintText,
