@@ -80,6 +80,26 @@ class S {
     );
   }
 
+  /// `여성`
+  String get commonFemale {
+    return Intl.message(
+      '여성',
+      name: 'commonFemale',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `남성`
+  String get commonMale {
+    return Intl.message(
+      '남성',
+      name: 'commonMale',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `⚡Thunder`
   String get welcomeTitle {
     return Intl.message(
@@ -257,6 +277,86 @@ class S {
       name: 'genderTitle',
       desc: '',
       args: [nickname],
+    );
+  }
+
+  /// `동의하고 시작하기`
+  String get termsConfirm {
+    return Intl.message(
+      '동의하고 시작하기',
+      name: 'termsConfirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `썬더를 이용하려면 동의가 필요해요`
+  String get termsTitle {
+    return Intl.message(
+      '썬더를 이용하려면 동의가 필요해요',
+      name: 'termsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `모두 동의`
+  String get termsAllAgree {
+    return Intl.message(
+      '모두 동의',
+      name: 'termsAllAgree',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `필수`
+  String get termsRequired {
+    return Intl.message(
+      '필수',
+      name: 'termsRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `선택`
+  String get termsOptional {
+    return Intl.message(
+      '선택',
+      name: 'termsOptional',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `서비스 이용약관`
+  String get termsService {
+    return Intl.message(
+      '서비스 이용약관',
+      name: 'termsService',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `개인정보 수집 및 이용`
+  String get termsPrivacy {
+    return Intl.message(
+      '개인정보 수집 및 이용',
+      name: 'termsPrivacy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `마케팅 정보 수신 동의`
+  String get termsMarketing {
+    return Intl.message(
+      '마케팅 정보 수신 동의',
+      name: 'termsMarketing',
+      desc: '',
+      args: [],
     );
   }
 }

@@ -36,7 +36,6 @@ class _GenderPageState extends State<GenderPage> {
         },
       ),
     );
-
     if (result == true) {
       context.go(Routes.home.path);
     }
@@ -55,20 +54,20 @@ class _GenderPageState extends State<GenderPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           GenderButton(
-            label: '여성',
+            label: S.of(context).commonFemale,
             isSelected: _selectedGender == Gender.female,
             onTap: () => setState(() => _selectedGender = Gender.female),
           ),
           Gaps.v16,
           GenderButton(
-            label: '남성',
+            label: S.of(context).commonMale,
             isSelected: _selectedGender == Gender.male,
             onTap: () => setState(() => _selectedGender = Gender.male),
           ),
         ],
       ),
       bottomButton: OnboardingButton(
-        text: '확인',
+        text: S.of(context).commonConfirm,
         onPressed: _handleNextPress,
         isEnabled: _isValid,
       ),

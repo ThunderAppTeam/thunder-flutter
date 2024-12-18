@@ -41,7 +41,7 @@ class _CustomPressableWrapperState extends State<CustomPressableWrapper> {
         },
         onTapCancel: () => _updatePressedState(false),
         child: AnimatedScale(
-          scale: _isPressed ? Styles.scale95 : Styles.scale100,
+          scale: _isPressed ? Styles.scale98 : Styles.scale100,
           duration: Styles.duration100,
           child: widget.child,
         ),

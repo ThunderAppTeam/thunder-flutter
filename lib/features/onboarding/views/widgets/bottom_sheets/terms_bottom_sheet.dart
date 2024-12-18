@@ -4,6 +4,7 @@ import 'package:noon_body/core/theme/constants/sizes.dart';
 import 'package:noon_body/core/theme/gen/colors.gen.dart';
 import 'package:noon_body/core/utils/theme_utils.dart';
 import 'package:noon_body/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
+import 'package:noon_body/generated/l10n.dart';
 
 enum Terms {
   service(true),
@@ -28,14 +29,14 @@ class TermsBottomSheet extends StatefulWidget {
 }
 
 class _TermsBottomSheetState extends State<TermsBottomSheet> {
-  String _getTermLabel(Terms term) {
+  String _getTermLabel(Terms term, BuildContext context) {
     switch (term) {
       case Terms.service:
-        return '서비스 이용약관';
+        return S.of(context).termsService;
       case Terms.privacy:
-        return '개인정보 수집 및 이용';
+        return S.of(context).termsPrivacy;
       case Terms.marketing:
-        return '마케팅 정보 수신 동의';
+        return S.of(context).termsMarketing;
     }
   }
 
@@ -88,7 +89,7 @@ class _TermsBottomSheetState extends State<TermsBottomSheet> {
         Gaps.h12,
         Expanded(
           child: Text(
-            '모두 동의',
+            S.of(context).termsAllAgree,
             style: textTheme.textTitle18.copyWith(
               color: ColorName.black,
             ),
@@ -120,7 +121,10 @@ class _TermsBottomSheetState extends State<TermsBottomSheet> {
         // 텍스트 영역
         Expanded(
           child: Text(
-            (term.isRequired ? '(필수) ' : '(선택) ') + label,
+            (term.isRequired
+                    ? '(${S.of(context).termsRequired}) '
+                    : '(${S.of(context).termsOptional}) ') +
+                label,
             style: textTheme.textBody16.copyWith(
               color: ColorName.black,
             ),
@@ -145,7 +149,7 @@ class _TermsBottomSheetState extends State<TermsBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return CustomBottomSheet(
-      title: '썬더를 이용하려면 동의가 필요해요',
+      title: S.of(context).termsTitle,
       content: Column(
         children: [
           _buildAllAgreeCheckbox(),
@@ -156,7 +160,7 @@ class _TermsBottomSheetState extends State<TermsBottomSheet> {
               children: [
                 _buildTermItem(
                   term: term,
-                  label: _getTermLabel(term),
+                  label: _getTermLabel(term, context),
                   value: _agreements[term] ?? false,
                   onChanged: (value) => _toggleTerm(term, value),
                 ),
@@ -166,7 +170,7 @@ class _TermsBottomSheetState extends State<TermsBottomSheet> {
           }),
         ],
       ),
-      buttonText: '동의하고 시작하기',
+      buttonText: S.of(context).termsConfirm,
       onPressed: _isValid ? _handleAgree : null,
       isEnabled: _isValid,
     );

@@ -40,7 +40,7 @@ class KoreanPhoneNumberFormatter extends TextInputFormatter {
     if (text.length <= 5) {
       return '${text.substring(0, 2)}-${text.substring(2)}';
     }
-    // 02-XXX-X
+    // 02-XXX-XXXX
     if (text.length <= 9) {
       return '${text.substring(0, 2)}-${text.substring(2, 5)}-${text.substring(5)}';
     }

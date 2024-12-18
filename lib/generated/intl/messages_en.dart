@@ -30,7 +30,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "회원님의 나이 정보가 프로필에 표시됩니다. 생년월일은 공개되지 않습니다."),
         "birthdateTitle": m0,
         "commonConfirm": MessageLookupByLibrary.simpleMessage("확인"),
+        "commonFemale": MessageLookupByLibrary.simpleMessage("여성"),
         "commonLogin": MessageLookupByLibrary.simpleMessage("로그인"),
+        "commonMale": MessageLookupByLibrary.simpleMessage("남성"),
         "commonNext": MessageLookupByLibrary.simpleMessage("다음"),
         "genderTitle": m1,
         "nicknameGuideText": MessageLookupByLibrary.simpleMessage(
@@ -47,6 +49,15 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("- 없이 숫자만 입력"),
         "phoneNumberTitle":
             MessageLookupByLibrary.simpleMessage("계정을 만들기 위해\n휴대폰 번호를 입력해주세요"),
+        "termsAllAgree": MessageLookupByLibrary.simpleMessage("모두 동의"),
+        "termsConfirm": MessageLookupByLibrary.simpleMessage("동의하고 시작하기"),
+        "termsMarketing": MessageLookupByLibrary.simpleMessage("마케팅 정보 수신 동의"),
+        "termsOptional": MessageLookupByLibrary.simpleMessage("선택"),
+        "termsPrivacy": MessageLookupByLibrary.simpleMessage("개인정보 수집 및 이용"),
+        "termsRequired": MessageLookupByLibrary.simpleMessage("필수"),
+        "termsService": MessageLookupByLibrary.simpleMessage("서비스 이용약관"),
+        "termsTitle":
+            MessageLookupByLibrary.simpleMessage("썬더를 이용하려면 동의가 필요해요"),
         "verificationHint": MessageLookupByLibrary.simpleMessage("6자리 숫자"),
         "verificationResend":
             MessageLookupByLibrary.simpleMessage("인증문자 다시 받기"),

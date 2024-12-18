@@ -12,7 +12,7 @@ import 'package:noon_body/features/onboarding/views/verification_page.dart';
 final router = GoRouter(
   // initialLocation: Routes.start.path,
   // TODO: 이후에 배포 후에 주석 해제
-  initialLocation: !kDebugMode ? Routes.start.path : Routes.gender.path,
+  initialLocation: !kDebugMode ? Routes.start.path : Routes.start.path,
   routes: [
     // Onboarding
     GoRoute(

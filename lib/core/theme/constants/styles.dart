@@ -13,7 +13,7 @@ abstract class Styles {
 
   // Scale
   static const double scale0 = 0.0;
-  static const double scale95 = 0.95;
+  static const double scale98 = 0.98;
   static const double scale100 = 1.0;
 
   // Radius

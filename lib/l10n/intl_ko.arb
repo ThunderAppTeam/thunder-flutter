@@ -3,6 +3,8 @@
   "commonLogin": "로그인",
   "commonConfirm": "확인",
   "commonNext": "다음",
+  "commonFemale": "여성",
+  "commonMale": "남성",
   "@_WELCOME": {},
   "welcomeTitle": "⚡Thunder",
   "welcomeDescription": "눈바디를 측정하고\n달라진 나를 확인하세요",
@@ -25,5 +27,14 @@
   "@_BIRTHDATE": {},
   "birthdateTitle": "{nickname}님의\n생년월일은 언제신가요?",
   "birthdateGuideText": "회원님의 나이 정보가 프로필에 표시됩니다. 생년월일은 공개되지 않습니다.",
-  "genderTitle": "{nickname}님의\n성별을 알려주세요"
+  "genderTitle": "{nickname}님의\n성별을 알려주세요",
+  "@_TERMS": {},
+  "termsConfirm": "동의하고 시작하기",
+  "termsTitle": "썬더를 이용하려면 동의가 필요해요",
+  "termsAllAgree": "모두 동의",
+  "termsRequired": "필수",
+  "termsOptional": "선택",
+  "termsService": "서비스 이용약관",
+  "termsPrivacy": "개인정보 수집 및 이용",
+  "termsMarketing": "마케팅 정보 수신 동의"
 }
