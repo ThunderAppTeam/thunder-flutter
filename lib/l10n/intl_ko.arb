@@ -19,7 +19,10 @@
   "verificationTitle": "문자로 받은\n인증번호 6자리를 입력해주세요",
   "verificationResend": "인증문자 다시 받기",
   "@_NICKNAME": {},
-  "nicknameTitle": "회원등록을 시작할게요!\\n어떤 닉네임을 사용하시겠어요?",
+  "nicknameTitle": "회원등록을 시작할게요!\n어떤 닉네임을 사용하시겠어요?",
   "nicknameHint": "닉네임 최소 2글자 최대 8글자",
-  "nicknameGuideText": "닉네임은 프로필에 표시되는 이름입니다. 나중에 다시 변경할 수 있습니다."
+  "nicknameGuideText": "닉네임은 프로필에 표시되는 이름입니다. 나중에 다시 변경할 수 있습니다.",
+  "@_BIRTHDATE": {},
+  "birthdateTitle": "{nickname}님의\n생년월일은 언제신가요?",
+  "birthdateGuideText": "회원님의 나이 정보가 프로필에 표시됩니다. 생년월일은 공개되지 않습니다."
 }

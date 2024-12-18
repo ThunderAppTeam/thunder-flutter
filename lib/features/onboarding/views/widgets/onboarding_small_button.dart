@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:noon_body/core/animations/custom_button_animation.dart';
+import 'package:noon_body/core/widgets/wrappers/custom_pressable_wrapper.dart';
 import 'package:noon_body/core/theme/constants/sizes.dart';
 import 'package:noon_body/core/theme/constants/styles.dart';
 import 'package:noon_body/core/theme/gen/colors.gen.dart';
@@ -23,7 +23,7 @@ class OnboardingSmallButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CurstomButtonAnimation(
+    return CustomPressableWrapper(
       onPressed: onPressed,
       isEnabled: isEnabled,
       child: Container(

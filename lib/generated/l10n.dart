@@ -203,7 +203,7 @@ class S {
   /// `회원등록을 시작할게요!\n어떤 닉네임을 사용하시겠어요?`
   String get nicknameTitle {
     return Intl.message(
-      '회원등록을 시작할게요!\\n어떤 닉네임을 사용하시겠어요?',
+      '회원등록을 시작할게요!\n어떤 닉네임을 사용하시겠어요?',
       name: 'nicknameTitle',
       desc: '',
       args: [],
@@ -225,6 +225,26 @@ class S {
     return Intl.message(
       '닉네임은 프로필에 표시되는 이름입니다. 나중에 다시 변경할 수 있습니다.',
       name: 'nicknameGuideText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{nickname}님의\n생년월일은 언제신가요?`
+  String birthdateTitle(Object nickname) {
+    return Intl.message(
+      '$nickname님의\n생년월일은 언제신가요?',
+      name: 'birthdateTitle',
+      desc: '',
+      args: [nickname],
+    );
+  }
+
+  /// `회원님의 나이 정보가 프로필에 표시됩니다. 생년월일은 공개되지 않습니다.`
+  String get birthdateGuideText {
+    return Intl.message(
+      '회원님의 나이 정보가 프로필에 표시됩니다. 생년월일은 공개되지 않습니다.',
+      name: 'birthdateGuideText',
       desc: '',
       args: [],
     );

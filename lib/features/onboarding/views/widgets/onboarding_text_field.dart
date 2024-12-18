@@ -10,30 +10,36 @@ import 'package:noon_body/features/onboarding/views/widgets/clear_text_button.da
 
 class OnboardingTextField extends StatelessWidget {
   final TextEditingController controller;
+  final FocusNode? focusNode;
   final String hintText;
   final String? suffixText;
   final List<TextInputFormatter>? inputFormatters;
-  final VoidCallback? onChanged;
+  final Function(String)? onChanged;
   final TextInputType keyboardType;
   final bool autofocus;
+  final bool canClear;
 
   const OnboardingTextField({
     required this.controller,
+    this.focusNode,
     required this.hintText,
     this.suffixText,
     this.inputFormatters,
     this.onChanged,
     this.keyboardType = TextInputType.text,
     this.autofocus = false,
+    this.canClear = false,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     final textTheme = getTextTheme(context);
+    final hasSuffix = canClear || suffixText != null;
 
     return TextFormField(
       controller: controller,
+      focusNode: focusNode,
       keyboardType: keyboardType,
       inputFormatters: inputFormatters,
       style: textTheme.textHead24,
@@ -43,36 +49,37 @@ class OnboardingTextField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: textTheme.textHead24.withOpacity(Styles.opacity50),
-        contentPadding: EdgeInsets.zero,
+        isDense: true,
+        contentPadding: const EdgeInsets.all(Sizes.spacing8),
         focusedBorder: UnderlineInputBorder(
           borderSide: Styles.whiteBorder2,
         ),
         enabledBorder: UnderlineInputBorder(
           borderSide: Styles.whiteBorder2,
         ),
-        suffix: Padding(
-          padding: const EdgeInsets.only(
-            left: Sizes.spacing16,
-            right: Sizes.spacing8,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ClearTextButton(
-                isVisible: controller.text.isNotEmpty,
-                onTap: () {
-                  controller.clear();
-                  onChanged?.call();
-                },
-              ),
-              Gaps.h16,
-              if (suffixText != null)
-                Text(suffixText!, style: textTheme.textTitle16),
-            ],
-          ),
-        ),
+        suffix: hasSuffix
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (canClear) ...[
+                    Gaps.h16,
+                    ClearTextButton(
+                      isVisible: controller.text.isNotEmpty,
+                      onTap: () {
+                        controller.clear();
+                        onChanged?.call(controller.text);
+                      },
+                    ),
+                  ],
+                  if (suffixText != null) ...[
+                    Gaps.h16,
+                    Text(suffixText!, style: textTheme.textTitle16),
+                  ],
+                ],
+              )
+            : null,
       ),
-      onChanged: (_) => onChanged?.call(),
+      onChanged: onChanged,
     );
   }
 }

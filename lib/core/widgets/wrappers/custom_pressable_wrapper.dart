@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:noon_body/core/theme/constants/styles.dart';
 
-class CurstomButtonAnimation extends StatefulWidget {
+class CustomPressableWrapper extends StatefulWidget {
   final Widget child;
   final VoidCallback? onPressed;
   final bool isEnabled;
 
-  const CurstomButtonAnimation({
+  const CustomPressableWrapper({
     super.key,
     required this.child,
     required this.onPressed,
@@ -14,10 +14,10 @@ class CurstomButtonAnimation extends StatefulWidget {
   });
 
   @override
-  State<CurstomButtonAnimation> createState() => _CurstomButtonAnimationState();
+  State<CustomPressableWrapper> createState() => _CustomPressableWrapperState();
 }
 
-class _CurstomButtonAnimationState extends State<CurstomButtonAnimation> {
+class _CustomPressableWrapperState extends State<CustomPressableWrapper> {
   bool _isPressed = false;
 
   void _updatePressedState(bool isPressed) {
@@ -34,8 +34,10 @@ class _CurstomButtonAnimationState extends State<CurstomButtonAnimation> {
       child: GestureDetector(
         onTapDown: (_) => _updatePressedState(true),
         onTapUp: (_) {
-          _updatePressedState(false);
-          widget.onPressed?.call();
+          if (widget.isEnabled) {
+            _updatePressedState(false);
+            widget.onPressed?.call();
+          }
         },
         onTapCancel: () => _updatePressedState(false),
         child: AnimatedScale(

@@ -81,7 +81,8 @@ class _VerificationPageState extends State<VerificationPage> {
               LengthLimitingTextInputFormatter(6),
             ],
             autofocus: true,
-            onChanged: () => setState(() {}),
+            canClear: true,
+            onChanged: (_) => setState(() {}),
           ),
           Gaps.v16,
           Row(

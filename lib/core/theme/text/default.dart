@@ -21,6 +21,13 @@ const AppTextTheme defaultTextTheme = AppTextTheme(
   ),
 
   // #####--- Title styles (살짝 Bold감이 있는 작은 텍스트)
+  textTitle20: TextStyle(
+    fontFamily: FontFamily.pretendard,
+    fontSize: Sizes.fontSize20,
+    height: Sizes.lineHeight24 / Sizes.fontSize20,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  ),
   textTitle18: TextStyle(
     fontFamily: FontFamily.pretendard,
     fontSize: Sizes.fontSize18,
@@ -53,6 +60,13 @@ const AppTextTheme defaultTextTheme = AppTextTheme(
   ),
 
   // #####--- Body styles (작은 텍스트)
+  textBody18: TextStyle(
+    fontFamily: FontFamily.pretendard,
+    fontSize: Sizes.fontSize18,
+    height: Sizes.lineHeight24 / Sizes.fontSize18,
+    fontWeight: FontWeight.w500,
+    color: Colors.white,
+  ),
   textBody14: TextStyle(
     fontFamily: FontFamily.pretendard,
     fontSize: Sizes.fontSize14,

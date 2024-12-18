@@ -34,7 +34,8 @@ class _NicknamePageState extends State<NicknamePage> {
         inputFormatters: [
           LengthLimitingTextInputFormatter(8),
         ],
-        onChanged: () => setState(() {}),
+        onChanged: (_) => setState(() {}),
+        canClear: true,
       ),
       guideText: S.of(context).nicknameGuideText,
       bottomButton: OnboardingButton(
