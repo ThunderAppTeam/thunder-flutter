@@ -24,6 +24,13 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "commonConfirm": MessageLookupByLibrary.simpleMessage("확인"),
         "commonLogin": MessageLookupByLibrary.simpleMessage("로그인"),
+        "commonNext": MessageLookupByLibrary.simpleMessage("다음"),
+        "nicknameGuideText": MessageLookupByLibrary.simpleMessage(
+            "닉네임은 프로필에 표시되는 이름입니다. 나중에 다시 변경할 수 있습니다."),
+        "nicknameHint":
+            MessageLookupByLibrary.simpleMessage("닉네임 최소 2글자 최대 8글자"),
+        "nicknameTitle": MessageLookupByLibrary.simpleMessage(
+            "회원등록을 시작할게요!\\n어떤 닉네임을 사용하시겠어요?"),
         "phoneNumberButton": MessageLookupByLibrary.simpleMessage("인증문자 받기"),
         "phoneNumberFlagCode": MessageLookupByLibrary.simpleMessage("🇰🇷 +82"),
         "phoneNumberGuideText": MessageLookupByLibrary.simpleMessage(

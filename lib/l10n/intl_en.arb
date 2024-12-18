@@ -2,6 +2,7 @@
   "@_COMMON": {},
   "commonLogin": "로그인",
   "commonConfirm": "확인",
+  "commonNext": "다음",
   "@_WELCOME": {},
   "welcomeTitle": "⚡Thunder",
   "welcomeDescription": "눈바디를 측정하고\n달라진 나를 확인하세요",
@@ -16,5 +17,9 @@
   "@_VERIFICATION": {},
   "verificationHint": "6자리 숫자",
   "verificationTitle": "문자로 받은\n인증번호 6자리를 입력해주세요",
-  "verificationResend": "인증문자 다시 받기"
+  "verificationResend": "인증문자 다시 받기",
+  "@_NICKNAME": {},
+  "nicknameTitle": "회원등록을 시작할게요!\\n어떤 닉네임을 사용하시겠어요?",
+  "nicknameHint": "닉네임 최소 2글자 최대 8글자",
+  "nicknameGuideText": "닉네임은 프로필에 표시되는 이름입니다. 나중에 다시 변경할 수 있습니다."
 }

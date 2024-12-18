@@ -70,6 +70,16 @@ class S {
     );
   }
 
+  /// `다음`
+  String get commonNext {
+    return Intl.message(
+      '다음',
+      name: 'commonNext',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `⚡Thunder`
   String get welcomeTitle {
     return Intl.message(
@@ -185,6 +195,36 @@ class S {
     return Intl.message(
       '인증문자 다시 받기',
       name: 'verificationResend',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `회원등록을 시작할게요!\n어떤 닉네임을 사용하시겠어요?`
+  String get nicknameTitle {
+    return Intl.message(
+      '회원등록을 시작할게요!\\n어떤 닉네임을 사용하시겠어요?',
+      name: 'nicknameTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `닉네임 최소 2글자 최대 8글자`
+  String get nicknameHint {
+    return Intl.message(
+      '닉네임 최소 2글자 최대 8글자',
+      name: 'nicknameHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `닉네임은 프로필에 표시되는 이름입니다. 나중에 다시 변경할 수 있습니다.`
+  String get nicknameGuideText {
+    return Intl.message(
+      '닉네임은 프로필에 표시되는 이름입니다. 나중에 다시 변경할 수 있습니다.',
+      name: 'nicknameGuideText',
       desc: '',
       args: [],
     );
