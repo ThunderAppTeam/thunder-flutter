@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:noon_body/core/router/routes.dart';
+import 'package:noon_body/core/theme/constants/gaps.dart';
+import 'package:noon_body/features/onboarding/views/widgets/gender_button.dart';
 import 'package:noon_body/features/onboarding/views/widgets/onboarding_button.dart';
 import 'package:noon_body/features/onboarding/views/widgets/onboarding_scaffold.dart';
+import 'package:noon_body/generated/l10n.dart';
+import 'package:noon_body/features/onboarding/views/widgets/bottom_sheets/terms_bottom_sheet.dart';
+
+enum Gender {
+  male,
+  female,
+}
 
 class GenderPage extends StatefulWidget {
   const GenderPage({super.key});
@@ -10,103 +21,56 @@ class GenderPage extends StatefulWidget {
 }
 
 class _GenderPageState extends State<GenderPage> {
-  String? _selectedGender;
-  bool _agreedToTerms = false;
+  Gender? _selectedGender;
 
-  bool get _isValid => _selectedGender != null && _agreedToTerms;
+  bool get _isValid => _selectedGender != null;
 
-  @override
-  Widget build(BuildContext context) {
-    return OnboardingScaffold(
-      title: '성별을\n선택해주세요',
-      content: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.6,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: _GenderButton(
-                    label: '남성',
-                    isSelected: _selectedGender == '남성',
-                    onTap: () => setState(() => _selectedGender = '남성'),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: _GenderButton(
-                    label: '여성',
-                    isSelected: _selectedGender == '여성',
-                    onTap: () => setState(() => _selectedGender = '여성'),
-                  ),
-                ),
-              ],
-            ),
-            const Spacer(),
-            CheckboxListTile(
-              value: _agreedToTerms,
-              onChanged: (value) =>
-                  setState(() => _agreedToTerms = value ?? false),
-              title: const Text(
-                '이용약관 및 개인정보 처리방침에 동의합니다',
-                style: TextStyle(fontSize: 14),
-              ),
-              controlAffinity: ListTileControlAffinity.leading,
-              contentPadding: EdgeInsets.zero,
-            ),
-          ],
-        ),
-      ),
-      bottomButton: OnboardingButton(
-        text: '시작하기',
-        onPressed: () {
-          // TODO: Complete onboarding and navigate to home
+  Future<void> _showTermsBottomSheet() async {
+    final result = await showModalBottomSheet<bool>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => TermsBottomSheet(
+        onAgreed: () {
+          // 약관 동의 후 처리할 로직
+          // 예: 사용자 정보 저장, 다음 페이지로 이동 등
         },
-        isEnabled: _isValid,
       ),
     );
+
+    if (result == true) {
+      context.go(Routes.home.path);
+    }
   }
-}
 
-class _GenderButton extends StatelessWidget {
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _GenderButton({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
+  void _handleNextPress() {
+    _showTermsBottomSheet();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: isSelected
-                ? Theme.of(context).colorScheme.primary
-                : Colors.grey,
-            width: isSelected ? 2 : 1,
+    final nickname = "썬더닉네임999";
+    return OnboardingScaffold(
+      title: S.of(context).genderTitle(nickname),
+      content: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          GenderButton(
+            label: '여성',
+            isSelected: _selectedGender == Gender.female,
+            onTap: () => setState(() => _selectedGender = Gender.female),
           ),
-          borderRadius: BorderRadius.circular(8),
-          color: isSelected
-              ? Theme.of(context).colorScheme.primaryContainer
-              : null,
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: isSelected ? FontWeight.bold : null,
-            color: isSelected ? Theme.of(context).colorScheme.primary : null,
+          Gaps.v16,
+          GenderButton(
+            label: '남성',
+            isSelected: _selectedGender == Gender.male,
+            onTap: () => setState(() => _selectedGender = Gender.male),
           ),
-          textAlign: TextAlign.center,
-        ),
+        ],
+      ),
+      bottomButton: OnboardingButton(
+        text: '확인',
+        onPressed: _handleNextPress,
+        isEnabled: _isValid,
       ),
     );
   }

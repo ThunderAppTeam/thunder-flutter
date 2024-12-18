@@ -1,7 +1,7 @@
 final class Routes {
   static const start = (
     name: 'start',
-    path: '/',
+    path: '/start',
   );
 
   static const phoneNumber = (
@@ -27,5 +27,10 @@ final class Routes {
   static const gender = (
     name: 'gender',
     path: '/gender',
+  );
+
+  static const home = (
+    name: 'home',
+    path: '/',
   );
 }

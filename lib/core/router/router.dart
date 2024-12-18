@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:noon_body/core/router/routes.dart';
+import 'package:noon_body/features/home_page.dart';
 import 'package:noon_body/features/onboarding/views/welcome_page.dart';
 import 'package:noon_body/features/onboarding/views/birthdate_page.dart';
 import 'package:noon_body/features/onboarding/views/gender_page.dart';
@@ -8,8 +10,11 @@ import 'package:noon_body/features/onboarding/views/phone_number_page.dart';
 import 'package:noon_body/features/onboarding/views/verification_page.dart';
 
 final router = GoRouter(
-  initialLocation: Routes.start.path,
+  // initialLocation: Routes.start.path,
+  // TODO: 이후에 배포 후에 주석 해제
+  initialLocation: !kDebugMode ? Routes.start.path : Routes.gender.path,
   routes: [
+    // Onboarding
     GoRoute(
       path: Routes.start.path,
       name: Routes.start.name,
@@ -39,6 +44,12 @@ final router = GoRouter(
       path: Routes.gender.path,
       name: Routes.gender.name,
       builder: (context, state) => const GenderPage(),
+    ),
+
+    GoRoute(
+      path: Routes.home.path,
+      name: Routes.home.name,
+      builder: (context, state) => const HomePage(),
     ),
   ],
 );

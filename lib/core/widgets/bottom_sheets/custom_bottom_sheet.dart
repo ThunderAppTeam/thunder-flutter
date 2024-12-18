@@ -24,40 +24,17 @@ class CustomBottomSheet extends StatelessWidget {
     this.isEnabled = true,
   });
 
-  static Future<T?> show<T>({
-    required BuildContext context,
-    required String title,
-    String? subtitle,
-    Widget? content,
-    required String buttonText,
-    VoidCallback? onPressed,
-    bool isEnabled = true,
-  }) {
-    return showModalBottomSheet<T>(
-      context: context,
-      backgroundColor: ColorName.white,
-      builder: (context) => CustomBottomSheet(
-        title: title,
-        subtitle: subtitle,
-        content: content,
-        buttonText: buttonText,
-        onPressed: onPressed ?? () => Navigator.pop(context),
-        isEnabled: isEnabled,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final textTheme = getTextTheme(context);
-    return SafeArea(
-      child: Container(
-        decoration: const BoxDecoration(
-          color: ColorName.white,
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(Styles.radius24),
-          ),
+    return Container(
+      decoration: const BoxDecoration(
+        color: ColorName.white,
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(Styles.radius24),
         ),
+      ),
+      child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(
             top: Sizes.spacing24,
@@ -85,8 +62,8 @@ class CustomBottomSheet extends StatelessWidget {
                 ),
               ],
               if (content != null) ...[
-                content!,
                 Gaps.v32,
+                content!,
               ],
               Gaps.v32,
               OnboardingButton(

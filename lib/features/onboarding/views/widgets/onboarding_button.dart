@@ -27,19 +27,17 @@ class OnboardingButton extends StatelessWidget {
       onPressed: onPressed,
       isEnabled: isEnabled,
       child: Container(
+        height: Sizes.buttonHeight60,
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(Styles.radius16),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: Sizes.spacing16),
-          child: Center(
-            child: Text(
-              text,
-              style: getTextTheme(context).textTitle18.copyWith(
-                    color: textColor,
-                  ),
-            ),
+        child: Center(
+          child: Text(
+            text,
+            style: getTextTheme(context).textTitle18.copyWith(
+                  color: textColor,
+                ),
           ),
         ),
       ),

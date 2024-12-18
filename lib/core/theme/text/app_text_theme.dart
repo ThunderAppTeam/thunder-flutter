@@ -17,6 +17,7 @@ class AppTextTheme extends ThemeExtension<AppTextTheme> {
 
   // Body
   final TextStyle textBody18;
+  final TextStyle textBody16;
   final TextStyle textBody14;
 
   const AppTextTheme({
@@ -28,6 +29,7 @@ class AppTextTheme extends ThemeExtension<AppTextTheme> {
     required this.textSubtitle14,
     required this.textSubtitle12,
     required this.textBody18,
+    required this.textBody16,
     required this.textBody14,
   });
 
@@ -41,6 +43,7 @@ class AppTextTheme extends ThemeExtension<AppTextTheme> {
     TextStyle? textSubtitle14,
     TextStyle? textSubtitle12,
     TextStyle? textBody18,
+    TextStyle? textBody16,
     TextStyle? textBody14,
   }) {
     return AppTextTheme(
@@ -52,6 +55,7 @@ class AppTextTheme extends ThemeExtension<AppTextTheme> {
       textSubtitle14: textSubtitle14 ?? this.textSubtitle14,
       textSubtitle12: textSubtitle12 ?? this.textSubtitle12,
       textBody18: textBody18 ?? this.textBody18,
+      textBody16: textBody16 ?? this.textBody16,
       textBody14: textBody14 ?? this.textBody14,
     );
   }
@@ -74,6 +78,7 @@ class AppTextTheme extends ThemeExtension<AppTextTheme> {
       textSubtitle14: TextStyle.lerp(textSubtitle14, other.textSubtitle14, t)!,
       textSubtitle12: TextStyle.lerp(textSubtitle12, other.textSubtitle12, t)!,
       textBody18: TextStyle.lerp(textBody18, other.textBody18, t)!,
+      textBody16: TextStyle.lerp(textBody16, other.textBody16, t)!,
       textBody14: TextStyle.lerp(textBody14, other.textBody14, t)!,
     );
   }
