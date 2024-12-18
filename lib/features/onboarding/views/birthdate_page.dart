@@ -88,71 +88,72 @@ class _BirthdatePageState extends State<BirthdatePage> {
     super.dispose();
   }
 
+  Widget _buildDateField({
+    required TextEditingController controller,
+    required FocusNode focusNode,
+    required String hintText,
+    required int maxLength,
+    required int flex,
+    required FocusNode? nextFocus,
+  }) {
+    return Expanded(
+      flex: flex,
+      child: OnboardingTextField(
+        controller: controller,
+        focusNode: focusNode,
+        hintText: hintText,
+        keyboardType: TextInputType.number,
+        inputFormatters: [
+          FilteringTextInputFormatter.digitsOnly,
+          LengthLimitingTextInputFormatter(maxLength),
+        ],
+        onChanged: (value) {
+          setState(() {});
+          _fieldFocusChange(value, maxLength, focusNode, nextFocus);
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final nickname = "썬더닉네임999";
     final textTheme = getTextTheme(context);
-    final divider = Text('/', style: textTheme.textHead24);
+    final divider = [
+      Gaps.h16,
+      Text('/', style: textTheme.textHead24),
+      Gaps.h16,
+    ];
     return OnboardingScaffold(
       title: S.of(context).birthdateTitle(nickname),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Expanded(
+          _buildDateField(
+            controller: _yearController,
+            focusNode: _yearFocus,
+            nextFocus: _monthFocus,
+            hintText: 'YYYY',
+            maxLength: 4,
             flex: 4,
-            child: OnboardingTextField(
-                controller: _yearController,
-                focusNode: _yearFocus,
-                hintText: 'YYYY',
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(4),
-                ],
-                onChanged: (value) {
-                  setState(() {});
-                  _fieldFocusChange(value, 4, _yearFocus, _monthFocus);
-                }),
           ),
-          Gaps.h16,
-          divider,
-          Gaps.h16,
-          Expanded(
+          ...divider,
+          _buildDateField(
+            controller: _monthController,
+            focusNode: _monthFocus,
+            nextFocus: _dayFocus,
+            hintText: 'MM',
+            maxLength: 2,
             flex: 3,
-            child: OnboardingTextField(
-              controller: _monthController,
-              focusNode: _monthFocus,
-              hintText: 'MM',
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(2),
-              ],
-              onChanged: (value) {
-                setState(() {});
-                _fieldFocusChange(value, 2, _monthFocus, _dayFocus);
-              },
-            ),
           ),
-          Gaps.h16,
-          divider,
-          Gaps.h16,
-          Expanded(
+          ...divider,
+          _buildDateField(
+            controller: _dayController,
+            focusNode: _dayFocus,
+            hintText: 'DD',
+            maxLength: 2,
             flex: 3,
-            child: OnboardingTextField(
-              controller: _dayController,
-              focusNode: _dayFocus,
-              hintText: 'DD',
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(2),
-              ],
-              onChanged: (value) {
-                setState(() {});
-                _fieldFocusChange(value, 2, _dayFocus, null);
-              },
-            ),
+            nextFocus: null,
           ),
           Gaps.h16,
           Expanded(flex: 3, child: SizedBox()),
