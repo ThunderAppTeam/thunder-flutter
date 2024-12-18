@@ -249,6 +249,16 @@ class S {
       args: [],
     );
   }
+
+  /// `{nickname}님의\n성별을선택해주세요`
+  String genderTitle(Object nickname) {
+    return Intl.message(
+      '$nickname님의\n성별을선택해주세요',
+      name: 'genderTitle',
+      desc: '',
+      args: [nickname],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

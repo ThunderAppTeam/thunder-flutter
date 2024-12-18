@@ -1,4 +1,4 @@
-abstract class Sizes {
+class Sizes {
   // Spacing (margin, padding)
   static const double spacing4 = 4.0;
   static const double spacing8 = 8.0;
@@ -33,4 +33,7 @@ abstract class Sizes {
 
   // cursor height
   static const double cursorHeight28 = 28.0;
+
+  // button height
+  static const double buttonHeight60 = 60.0;
 }

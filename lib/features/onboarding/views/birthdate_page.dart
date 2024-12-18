@@ -7,7 +7,7 @@ import 'package:noon_body/core/utils/theme_utils.dart';
 import 'package:noon_body/features/onboarding/views/widgets/onboarding_button.dart';
 import 'package:noon_body/features/onboarding/views/widgets/onboarding_scaffold.dart';
 import 'package:noon_body/features/onboarding/views/widgets/onboarding_text_field.dart';
-import 'package:noon_body/core/widgets/bottom_sheets/custom_alert_bottom_sheet.dart';
+import 'package:noon_body/features/onboarding/views/widgets/alert_bottom_sheet.dart';
 import 'package:noon_body/generated/l10n.dart';
 
 class BirthdatePage extends StatefulWidget {
@@ -60,10 +60,11 @@ class _BirthdatePageState extends State<BirthdatePage> {
   }
 
   void _showAgeRestrictionBottomSheet() {
-    CustomAlertBottomSheet.show(
+    AlertBottomSheet.show(
       context: context,
       title: '서비스 이용가능 연령이 아니에요',
       message: '만 18세 미만은 썬더를 이용하실 수 없어요. 나중에 다시 만나요.',
+      buttonText: '확인',
     );
   }
 

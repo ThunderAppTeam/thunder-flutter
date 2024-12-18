@@ -30,5 +30,13 @@
       "example": "썬더닉네임999"
     }
   },
-  "birthdateGuideText": "회원님의 나이 정보가 프로필에 표시됩니다. 생년월일은 공개되지 않습니다."
+  "birthdateGuideText": "회원님의 나이 정보가 프로필에 표시됩니다. 생년월일은 공개되지 않습니다.",
+  "@_GENDER": {},
+  "genderTitle": "{nickname}님의\n성별을선택해주세요",
+  "@genderTitle": {
+    "nickname": {
+      "description": "user.nickname",
+      "example": "썬더닉네임999"
+    }
+  }
 }

@@ -24,5 +24,6 @@
   "nicknameGuideText": "닉네임은 프로필에 표시되는 이름입니다. 나중에 다시 변경할 수 있습니다.",
   "@_BIRTHDATE": {},
   "birthdateTitle": "{nickname}님의\n생년월일은 언제신가요?",
-  "birthdateGuideText": "회원님의 나이 정보가 프로필에 표시됩니다. 생년월일은 공개되지 않습니다."
+  "birthdateGuideText": "회원님의 나이 정보가 프로필에 표시됩니다. 생년월일은 공개되지 않습니다.",
+  "genderTitle": "{nickname}님의\n성별을 알려주세요"
 }

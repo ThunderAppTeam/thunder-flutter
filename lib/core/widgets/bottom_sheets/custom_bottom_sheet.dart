@@ -6,35 +6,43 @@ import 'package:noon_body/core/theme/gen/colors.gen.dart';
 import 'package:noon_body/core/utils/theme_utils.dart';
 import 'package:noon_body/features/onboarding/views/widgets/onboarding_button.dart';
 
-class CustomAlertBottomSheet extends StatelessWidget {
+class CustomBottomSheet extends StatelessWidget {
   final String title;
-  final String message;
+  final String? subtitle;
+  final Widget? content;
   final String buttonText;
   final VoidCallback? onPressed;
+  final bool isEnabled;
 
-  const CustomAlertBottomSheet({
+  const CustomBottomSheet({
     super.key,
     required this.title,
-    required this.message,
-    this.buttonText = '확인',
+    this.subtitle,
+    this.content,
+    required this.buttonText,
     this.onPressed,
+    this.isEnabled = true,
   });
 
-  static Future<void> show({
+  static Future<T?> show<T>({
     required BuildContext context,
     required String title,
-    required String message,
-    String buttonText = '확인',
+    String? subtitle,
+    Widget? content,
+    required String buttonText,
     VoidCallback? onPressed,
+    bool isEnabled = true,
   }) {
-    return showModalBottomSheet(
+    return showModalBottomSheet<T>(
       context: context,
       backgroundColor: ColorName.white,
-      builder: (context) => CustomAlertBottomSheet(
+      builder: (context) => CustomBottomSheet(
         title: title,
-        message: message,
+        subtitle: subtitle,
+        content: content,
         buttonText: buttonText,
         onPressed: onPressed ?? () => Navigator.pop(context),
+        isEnabled: isEnabled,
       ),
     );
   }
@@ -59,31 +67,34 @@ class CustomAlertBottomSheet extends StatelessWidget {
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: textTheme.textTitle20.copyWith(
-                      color: ColorName.black,
-                    ),
-                  ),
-                  Gaps.v12,
-                  Text(
-                    message,
-                    style: textTheme.textBody18.copyWith(
-                      color: ColorName.black,
-                    ),
-                  ),
-                ],
+              Text(
+                title,
+                style: textTheme.textTitle20.copyWith(
+                  color: ColorName.black,
+                ),
               ),
+              if (subtitle != null) ...[
+                Gaps.v12,
+                Text(
+                  subtitle!,
+                  style: textTheme.textBody18.copyWith(
+                    color: ColorName.black,
+                  ),
+                ),
+              ],
+              if (content != null) ...[
+                content!,
+                Gaps.v32,
+              ],
               Gaps.v32,
               OnboardingButton(
                 backgroundColor: ColorName.black,
                 textColor: ColorName.white,
                 text: buttonText,
                 onPressed: onPressed ?? () => Navigator.pop(context),
+                isEnabled: isEnabled,
               ),
             ],
           ),

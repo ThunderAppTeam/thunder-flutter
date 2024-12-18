@@ -22,6 +22,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(nickname) => "${nickname}님의\n생년월일은 언제신가요?";
 
+  static String m1(nickname) => "${nickname}님의\n성별을 알려주세요";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "birthdateGuideText": MessageLookupByLibrary.simpleMessage(
@@ -30,6 +32,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "commonConfirm": MessageLookupByLibrary.simpleMessage("확인"),
         "commonLogin": MessageLookupByLibrary.simpleMessage("로그인"),
         "commonNext": MessageLookupByLibrary.simpleMessage("다음"),
+        "genderTitle": m1,
         "nicknameGuideText": MessageLookupByLibrary.simpleMessage(
             "닉네임은 프로필에 표시되는 이름입니다. 나중에 다시 변경할 수 있습니다."),
         "nicknameHint":
