@@ -28,6 +28,10 @@ dependencies:
   freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0
 
+  #=== Firebase
+  firebase_core: ^3.8.1
+  firebase_auth: ^5.3.4
+
 dev_dependencies:
   #=== Testing
   flutter_test:

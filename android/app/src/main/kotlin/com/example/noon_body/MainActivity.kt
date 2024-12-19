@@ -1,4 +1,4 @@
-package com.example.noon_body
+package dev.thunder.app
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -44,3 +44,23 @@ app.*.map.json
 
 
 /z_docs/
+
+# Firebase
+google-services.json
+GoogleService-Info.plist
+firebase_options.dart
+.firebaserc
+firebase.json
+**/firebase_app_id_file.json
+
+# Firebase Local Emulator
+**/firebase-debug.log
+**/firebase-debug.*.log
+**/ui-debug.log
+.firebase/
+
+# Secret Keys
+**/lib/core/constants/api_keys.dart
+.env
+*.jks
+key.properties
