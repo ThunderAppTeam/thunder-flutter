@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:noon_body/core/theme/constants/gaps.dart';
-import 'package:noon_body/core/theme/constants/sizes.dart';
-import 'package:noon_body/core/theme/constants/styles.dart';
-import 'package:noon_body/core/theme/gen/colors.gen.dart';
-import 'package:noon_body/core/utils/theme_utils.dart';
-import 'package:noon_body/features/onboarding/views/widgets/onboarding_button.dart';
+import 'package:thunder/core/theme/constants/gaps.dart';
+import 'package:thunder/core/theme/constants/sizes.dart';
+import 'package:thunder/core/theme/constants/styles.dart';
+import 'package:thunder/core/theme/gen/colors.gen.dart';
+import 'package:thunder/core/utils/theme_utils.dart';
+import 'package:thunder/features/onboarding/views/widgets/onboarding_button.dart';
 
 class CustomBottomSheet extends StatelessWidget {
   final String title;

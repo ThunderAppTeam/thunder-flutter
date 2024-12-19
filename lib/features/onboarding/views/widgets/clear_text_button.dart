@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:noon_body/core/theme/constants/sizes.dart';
-import 'package:noon_body/core/theme/constants/styles.dart';
-import 'package:noon_body/core/theme/gen/colors.gen.dart';
+import 'package:thunder/core/theme/constants/sizes.dart';
+import 'package:thunder/core/theme/constants/styles.dart';
+import 'package:thunder/core/theme/gen/colors.gen.dart';
 
 class ClearTextButton extends StatelessWidget {
   final bool isVisible;

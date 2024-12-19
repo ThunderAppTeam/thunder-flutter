@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:noon_body/core/theme/constants/sizes.dart';
-import 'package:noon_body/core/theme/constants/styles.dart';
-import 'package:noon_body/core/theme/gen/colors.gen.dart';
-import 'package:noon_body/core/utils/theme_utils.dart';
+import 'package:thunder/core/theme/constants/sizes.dart';
+import 'package:thunder/core/theme/constants/styles.dart';
+import 'package:thunder/core/theme/gen/colors.gen.dart';
+import 'package:thunder/core/utils/theme_utils.dart';
 
 class GenderButton extends StatelessWidget {
   final String label;

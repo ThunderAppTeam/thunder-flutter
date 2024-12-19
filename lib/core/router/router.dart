@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
-import 'package:noon_body/core/router/routes.dart';
-import 'package:noon_body/features/home_page.dart';
-import 'package:noon_body/features/onboarding/views/welcome_page.dart';
-import 'package:noon_body/features/onboarding/views/birthdate_page.dart';
-import 'package:noon_body/features/onboarding/views/gender_page.dart';
-import 'package:noon_body/features/onboarding/views/nickname_page.dart';
-import 'package:noon_body/features/onboarding/views/phone_number_page.dart';
-import 'package:noon_body/features/onboarding/views/verification_page.dart';
+import 'package:thunder/core/router/routes.dart';
+import 'package:thunder/features/home_page.dart';
+import 'package:thunder/features/onboarding/views/welcome_page.dart';
+import 'package:thunder/features/onboarding/views/birthdate_page.dart';
+import 'package:thunder/features/onboarding/views/gender_page.dart';
+import 'package:thunder/features/onboarding/views/nickname_page.dart';
+import 'package:thunder/features/onboarding/views/phone_number_page.dart';
+import 'package:thunder/features/onboarding/views/verification_page.dart';
 
 final router = GoRouter(
   // initialLocation: Routes.start.path,

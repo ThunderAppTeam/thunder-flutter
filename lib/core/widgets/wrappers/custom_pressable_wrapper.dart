@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:noon_body/core/theme/constants/styles.dart';
+import 'package:thunder/core/theme/constants/styles.dart';
 
 class CustomPressableWrapper extends StatefulWidget {
   final Widget child;

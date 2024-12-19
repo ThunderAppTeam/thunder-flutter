@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:noon_body/core/theme/gen/colors.gen.dart';
+import 'package:thunder/core/theme/gen/colors.gen.dart';
 
 abstract class Styles {
   // Opacity

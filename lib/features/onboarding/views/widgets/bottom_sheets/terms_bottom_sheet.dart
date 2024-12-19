@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:noon_body/core/theme/constants/gaps.dart';
-import 'package:noon_body/core/theme/constants/sizes.dart';
-import 'package:noon_body/core/theme/gen/colors.gen.dart';
-import 'package:noon_body/core/utils/theme_utils.dart';
-import 'package:noon_body/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
-import 'package:noon_body/generated/l10n.dart';
+import 'package:thunder/core/theme/constants/gaps.dart';
+import 'package:thunder/core/theme/constants/sizes.dart';
+import 'package:thunder/core/theme/gen/colors.gen.dart';
+import 'package:thunder/core/utils/theme_utils.dart';
+import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
+import 'package:thunder/generated/l10n.dart';
 
 enum Terms {
   service(true),

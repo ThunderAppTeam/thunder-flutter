@@ -1,4 +1,4 @@
-name: noon_body
+name: thunder
 description: "A new Flutter project."
 
 # Prevent accidental publishing to pub.dev
@@ -46,6 +46,9 @@ dev_dependencies:
   freezed: ^2.5.7
   json_serializable: ^6.9.0
   flutter_gen_runner: ^5.8.0
+
+  #=== Package
+  change_app_package_name: ^1.4.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

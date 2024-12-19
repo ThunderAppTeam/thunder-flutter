@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:noon_body/core/router/routes.dart';
-import 'package:noon_body/features/onboarding/views/widgets/onboarding_button.dart';
-import 'package:noon_body/features/onboarding/views/widgets/onboarding_scaffold.dart';
-import 'package:noon_body/features/onboarding/views/widgets/onboarding_text_field.dart';
-import 'package:noon_body/generated/l10n.dart';
+import 'package:thunder/core/router/routes.dart';
+import 'package:thunder/features/onboarding/views/widgets/onboarding_button.dart';
+import 'package:thunder/features/onboarding/views/widgets/onboarding_scaffold.dart';
+import 'package:thunder/features/onboarding/views/widgets/onboarding_text_field.dart';
+import 'package:thunder/generated/l10n.dart';
 
 class NicknamePage extends StatefulWidget {
   const NicknamePage({super.key});

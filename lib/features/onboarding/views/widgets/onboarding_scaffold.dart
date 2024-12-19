@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:noon_body/core/extensions/text_style.dart';
-import 'package:noon_body/core/theme/constants/gaps.dart';
-import 'package:noon_body/core/theme/constants/styles.dart';
-import 'package:noon_body/core/theme/constants/sizes.dart';
-import 'package:noon_body/core/utils/theme_utils.dart';
+import 'package:thunder/core/extensions/text_style.dart';
+import 'package:thunder/core/theme/constants/gaps.dart';
+import 'package:thunder/core/theme/constants/styles.dart';
+import 'package:thunder/core/theme/constants/sizes.dart';
+import 'package:thunder/core/utils/theme_utils.dart';
 
 class OnboardingScaffold extends StatelessWidget {
   final String title;

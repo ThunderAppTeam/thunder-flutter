@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:noon_body/core/extensions/text_style.dart';
-import 'package:noon_body/core/theme/constants/gaps.dart';
-import 'package:noon_body/core/theme/constants/sizes.dart';
-import 'package:noon_body/core/theme/constants/styles.dart';
-import 'package:noon_body/core/theme/gen/colors.gen.dart';
-import 'package:noon_body/core/utils/theme_utils.dart';
-import 'package:noon_body/features/onboarding/views/widgets/clear_text_button.dart';
+import 'package:thunder/core/extensions/text_style.dart';
+import 'package:thunder/core/theme/constants/gaps.dart';
+import 'package:thunder/core/theme/constants/sizes.dart';
+import 'package:thunder/core/theme/constants/styles.dart';
+import 'package:thunder/core/theme/gen/colors.gen.dart';
+import 'package:thunder/core/utils/theme_utils.dart';
+import 'package:thunder/features/onboarding/views/widgets/clear_text_button.dart';
 
 class OnboardingTextField extends StatelessWidget {
   final TextEditingController controller;

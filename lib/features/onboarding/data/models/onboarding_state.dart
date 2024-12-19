@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:noon_body/features/user/models/user_profile.dart';
+import 'package:thunder/features/user/models/user_profile.dart';
 
 part 'onboarding_state.freezed.dart';
 
