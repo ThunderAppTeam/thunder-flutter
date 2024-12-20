@@ -1,4 +1,4 @@
-package dev.thunder.app
+package com.thunder.app
 
 import io.flutter.embedding.android.FlutterActivity
 

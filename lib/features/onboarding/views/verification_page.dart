@@ -72,6 +72,11 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
     return '$minutes:${seconds.toString().padLeft(2, '0')}';
   }
 
+  void _onResendPressed() {
+    _startTimer();
+    _sendVerificationCode();
+  }
+
   void _onButtonPressed() {
     // TODO: 인증번호 검증 후 틀렸을 때 처리, 맞으면 닉네임 페이지로 이동
     context.pushNamed(Routes.nickname.name);
@@ -110,11 +115,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
             children: [
               OnboardingSmallButton(
                 text: S.of(context).verificationResend,
-                onPressed: _canResend
-                    ? () {
-                        _startTimer();
-                      }
-                    : null,
+                onPressed: _onResendPressed,
                 isEnabled: _canResend,
               ),
             ],
