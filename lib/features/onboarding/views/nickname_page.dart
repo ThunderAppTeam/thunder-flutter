@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thunder/core/router/routes.dart';
+import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_button.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_scaffold.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_text_field.dart';
 import 'package:thunder/generated/l10n.dart';
 
-class NicknamePage extends StatefulWidget {
+class NicknamePage extends ConsumerStatefulWidget {
   const NicknamePage({super.key});
 
   @override
-  State<NicknamePage> createState() => _NicknamePageState();
+  ConsumerState<NicknamePage> createState() => _NicknamePageState();
 }
 
-class _NicknamePageState extends State<NicknamePage> {
+class _NicknamePageState extends ConsumerState<NicknamePage> {
   final _controller = TextEditingController();
   bool get _isValid => _controller.text.length >= 2;
+
+  void _onButtonPressed() {
+    ref.read(onboardingProvider.notifier).setNickname(_controller.text);
+    context.pushNamed(Routes.birthdate.name);
+  }
 
   @override
   void dispose() {
@@ -40,7 +47,7 @@ class _NicknamePageState extends State<NicknamePage> {
       guideText: S.of(context).nicknameGuideText,
       bottomButton: OnboardingButton(
         text: S.of(context).commonNext,
-        onPressed: () => context.pushNamed(Routes.birthdate.name),
+        onPressed: _onButtonPressed,
         isEnabled: _isValid,
       ),
     );

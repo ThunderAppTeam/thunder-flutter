@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thunder/core/router/routes.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
+import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_button.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_scaffold.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_text_field.dart';
 import 'package:thunder/generated/l10n.dart';
 
-class BirthdatePage extends StatefulWidget {
+class BirthdatePage extends ConsumerStatefulWidget {
   const BirthdatePage({super.key});
 
   @override
-  State<BirthdatePage> createState() => _BirthdatePageState();
+  ConsumerState<BirthdatePage> createState() => _BirthdatePageState();
 }
 
-class _BirthdatePageState extends State<BirthdatePage> {
+class _BirthdatePageState extends ConsumerState<BirthdatePage> {
   final _yearController = TextEditingController();
   final _monthController = TextEditingController();
   final _dayController = TextEditingController();
@@ -120,7 +122,7 @@ class _BirthdatePageState extends State<BirthdatePage> {
 
   @override
   Widget build(BuildContext context) {
-    final nickname = "썬더닉네임999";
+    final nickname = ref.read(onboardingProvider).nickname!;
     final textTheme = getTextTheme(context);
     final divider = [
       Gaps.h16,

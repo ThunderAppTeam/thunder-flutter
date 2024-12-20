@@ -16,10 +16,10 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$OnboardingState {
-  OnboardingStep get currentStep => throw _privateConstructorUsedError;
-  UserProfile get user => throw _privateConstructorUsedError;
-  bool get isLoading => throw _privateConstructorUsedError;
-  String? get error => throw _privateConstructorUsedError;
+  String? get phoneNumber => throw _privateConstructorUsedError;
+  String? get nickname => throw _privateConstructorUsedError;
+  DateTime? get birthday => throw _privateConstructorUsedError;
+  Gender? get gender => throw _privateConstructorUsedError;
 
   /// Create a copy of OnboardingState
   /// with the given fields replaced by the non-null parameter values.
@@ -35,12 +35,10 @@ abstract class $OnboardingStateCopyWith<$Res> {
       _$OnboardingStateCopyWithImpl<$Res, OnboardingState>;
   @useResult
   $Res call(
-      {OnboardingStep currentStep,
-      UserProfile user,
-      bool isLoading,
-      String? error});
-
-  $UserProfileCopyWith<$Res> get user;
+      {String? phoneNumber,
+      String? nickname,
+      DateTime? birthday,
+      Gender? gender});
 }
 
 /// @nodoc
@@ -58,39 +56,29 @@ class _$OnboardingStateCopyWithImpl<$Res, $Val extends OnboardingState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? currentStep = null,
-    Object? user = null,
-    Object? isLoading = null,
-    Object? error = freezed,
+    Object? phoneNumber = freezed,
+    Object? nickname = freezed,
+    Object? birthday = freezed,
+    Object? gender = freezed,
   }) {
     return _then(_value.copyWith(
-      currentStep: null == currentStep
-          ? _value.currentStep
-          : currentStep // ignore: cast_nullable_to_non_nullable
-              as OnboardingStep,
-      user: null == user
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
-              as UserProfile,
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      error: freezed == error
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
+      phoneNumber: freezed == phoneNumber
+          ? _value.phoneNumber
+          : phoneNumber // ignore: cast_nullable_to_non_nullable
               as String?,
+      nickname: freezed == nickname
+          ? _value.nickname
+          : nickname // ignore: cast_nullable_to_non_nullable
+              as String?,
+      birthday: freezed == birthday
+          ? _value.birthday
+          : birthday // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      gender: freezed == gender
+          ? _value.gender
+          : gender // ignore: cast_nullable_to_non_nullable
+              as Gender?,
     ) as $Val);
-  }
-
-  /// Create a copy of OnboardingState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $UserProfileCopyWith<$Res> get user {
-    return $UserProfileCopyWith<$Res>(_value.user, (value) {
-      return _then(_value.copyWith(user: value) as $Val);
-    });
   }
 }
 
@@ -103,13 +91,10 @@ abstract class _$$OnboardingStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {OnboardingStep currentStep,
-      UserProfile user,
-      bool isLoading,
-      String? error});
-
-  @override
-  $UserProfileCopyWith<$Res> get user;
+      {String? phoneNumber,
+      String? nickname,
+      DateTime? birthday,
+      Gender? gender});
 }
 
 /// @nodoc
@@ -125,28 +110,28 @@ class __$$OnboardingStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? currentStep = null,
-    Object? user = null,
-    Object? isLoading = null,
-    Object? error = freezed,
+    Object? phoneNumber = freezed,
+    Object? nickname = freezed,
+    Object? birthday = freezed,
+    Object? gender = freezed,
   }) {
     return _then(_$OnboardingStateImpl(
-      currentStep: null == currentStep
-          ? _value.currentStep
-          : currentStep // ignore: cast_nullable_to_non_nullable
-              as OnboardingStep,
-      user: null == user
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
-              as UserProfile,
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      error: freezed == error
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
+      phoneNumber: freezed == phoneNumber
+          ? _value.phoneNumber
+          : phoneNumber // ignore: cast_nullable_to_non_nullable
               as String?,
+      nickname: freezed == nickname
+          ? _value.nickname
+          : nickname // ignore: cast_nullable_to_non_nullable
+              as String?,
+      birthday: freezed == birthday
+          ? _value.birthday
+          : birthday // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      gender: freezed == gender
+          ? _value.gender
+          : gender // ignore: cast_nullable_to_non_nullable
+              as Gender?,
     ));
   }
 }
@@ -155,26 +140,20 @@ class __$$OnboardingStateImplCopyWithImpl<$Res>
 
 class _$OnboardingStateImpl implements _OnboardingState {
   const _$OnboardingStateImpl(
-      {this.currentStep = OnboardingStep.start,
-      this.user = const UserProfile(),
-      this.isLoading = false,
-      this.error});
+      {this.phoneNumber, this.nickname, this.birthday, this.gender});
 
   @override
-  @JsonKey()
-  final OnboardingStep currentStep;
+  final String? phoneNumber;
   @override
-  @JsonKey()
-  final UserProfile user;
+  final String? nickname;
   @override
-  @JsonKey()
-  final bool isLoading;
+  final DateTime? birthday;
   @override
-  final String? error;
+  final Gender? gender;
 
   @override
   String toString() {
-    return 'OnboardingState(currentStep: $currentStep, user: $user, isLoading: $isLoading, error: $error)';
+    return 'OnboardingState(phoneNumber: $phoneNumber, nickname: $nickname, birthday: $birthday, gender: $gender)';
   }
 
   @override
@@ -182,17 +161,18 @@ class _$OnboardingStateImpl implements _OnboardingState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$OnboardingStateImpl &&
-            (identical(other.currentStep, currentStep) ||
-                other.currentStep == currentStep) &&
-            (identical(other.user, user) || other.user == user) &&
-            (identical(other.isLoading, isLoading) ||
-                other.isLoading == isLoading) &&
-            (identical(other.error, error) || other.error == error));
+            (identical(other.phoneNumber, phoneNumber) ||
+                other.phoneNumber == phoneNumber) &&
+            (identical(other.nickname, nickname) ||
+                other.nickname == nickname) &&
+            (identical(other.birthday, birthday) ||
+                other.birthday == birthday) &&
+            (identical(other.gender, gender) || other.gender == gender));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, currentStep, user, isLoading, error);
+      Object.hash(runtimeType, phoneNumber, nickname, birthday, gender);
 
   /// Create a copy of OnboardingState
   /// with the given fields replaced by the non-null parameter values.
@@ -206,19 +186,19 @@ class _$OnboardingStateImpl implements _OnboardingState {
 
 abstract class _OnboardingState implements OnboardingState {
   const factory _OnboardingState(
-      {final OnboardingStep currentStep,
-      final UserProfile user,
-      final bool isLoading,
-      final String? error}) = _$OnboardingStateImpl;
+      {final String? phoneNumber,
+      final String? nickname,
+      final DateTime? birthday,
+      final Gender? gender}) = _$OnboardingStateImpl;
 
   @override
-  OnboardingStep get currentStep;
+  String? get phoneNumber;
   @override
-  UserProfile get user;
+  String? get nickname;
   @override
-  bool get isLoading;
+  DateTime? get birthday;
   @override
-  String? get error;
+  Gender? get gender;
 
   /// Create a copy of OnboardingState
   /// with the given fields replaced by the non-null parameter values.

@@ -1,24 +1,28 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thunder/core/router/routes.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
+import 'package:thunder/features/auth/providers/auth_view_model.dart';
+import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_button.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_scaffold.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_small_button.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_text_field.dart';
 import 'package:thunder/generated/l10n.dart';
 
-class VerificationPage extends StatefulWidget {
+class VerificationPage extends ConsumerStatefulWidget {
   const VerificationPage({super.key});
 
   @override
-  State<VerificationPage> createState() => _VerificationPageState();
+  ConsumerState<VerificationPage> createState() => _VerificationPageState();
 }
 
-class _VerificationPageState extends State<VerificationPage> {
+class _VerificationPageState extends ConsumerState<VerificationPage> {
   final _controller = TextEditingController();
   Timer? _timer;
   int _remainingSeconds = 180; // 3분 = 180초
@@ -31,13 +35,12 @@ class _VerificationPageState extends State<VerificationPage> {
   void initState() {
     super.initState();
     _startTimer();
-  }
 
-  @override
-  void dispose() {
-    _timer?.cancel();
-    _controller.dispose();
-    super.dispose();
+    if (Platform.isAndroid) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _sendVerificationCode();
+      });
+    }
   }
 
   void _startTimer() {
@@ -58,10 +61,27 @@ class _VerificationPageState extends State<VerificationPage> {
     );
   }
 
+  void _sendVerificationCode() {
+    final phoneNumber = ref.read(onboardingProvider).phoneNumber!;
+    ref.read(authProvider.notifier).sendVerificationCode(phoneNumber);
+  }
+
   String get _formattedTime {
     final minutes = _remainingSeconds ~/ 60;
     final seconds = _remainingSeconds % 60;
     return '$minutes:${seconds.toString().padLeft(2, '0')}';
+  }
+
+  void _onButtonPressed() {
+    // TODO: 인증번호 검증 후 틀렸을 때 처리, 맞으면 닉네임 페이지로 이동
+    context.pushNamed(Routes.nickname.name);
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -103,7 +123,7 @@ class _VerificationPageState extends State<VerificationPage> {
       ),
       bottomButton: OnboardingButton(
         text: S.of(context).commonConfirm,
-        onPressed: () => context.pushNamed(Routes.nickname.name),
+        onPressed: _onButtonPressed,
         isEnabled: _isValid,
       ),
     );
