@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thunder/core/router/routes.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
+import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/features/auth/providers/auth_view_model.dart';
 import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_button.dart';
@@ -28,7 +29,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
   int _remainingSeconds = 180; // 3분 = 180초
   static const int _cooldownSeconds = 175; // 180 - 5 = 175초
 
-  bool get _isValid => _controller.text.length == 6;
+  bool get _isValid => _controller.text.length == 6 && _remainingSeconds > 0;
   bool get _canResend => _remainingSeconds <= _cooldownSeconds; // 5초 이하로 남았을 때
 
   @override
@@ -77,9 +78,23 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
     _sendVerificationCode();
   }
 
-  void _onButtonPressed() {
+  void _onButtonPressed() async {
     // TODO: 인증번호 검증 후 틀렸을 때 처리, 맞으면 닉네임 페이지로 이동
-    context.pushNamed(Routes.nickname.name);
+    final smsCode = _controller.text;
+    final success = await ref.read(authProvider.notifier).verifyCode(smsCode);
+    if (mounted) {
+      if (success) {
+        context.pushNamed(Routes.nickname.name);
+      } else {
+        showModalBottomSheet(
+          context: context,
+          builder: (context) => CustomBottomSheet(
+            title: "인증번호가 틀렸습니다.",
+            buttonText: S.of(context).commonConfirm,
+          ),
+        );
+      }
+    }
   }
 
   @override
