@@ -42,6 +42,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "nicknameTitle": MessageLookupByLibrary.simpleMessage(
             "회원등록을 시작할게요!\n어떤 닉네임을 사용하시겠어요?"),
         "phoneNumberButton": MessageLookupByLibrary.simpleMessage("인증문자 받기"),
+        "phoneNumberErrorSubtitle": MessageLookupByLibrary.simpleMessage(
+            "입력하신 휴대폰 번호가 올바른 형식이 아닙니다. 입력하신 정보를 다시 한 번 확인해주세요."),
+        "phoneNumberErrorTitle":
+            MessageLookupByLibrary.simpleMessage("올바른 휴대폰 번호를 입력해주세요"),
         "phoneNumberFlagCode": MessageLookupByLibrary.simpleMessage("🇰🇷 +82"),
         "phoneNumberGuideText": MessageLookupByLibrary.simpleMessage(
             "아래 버튼을 누르면 위에 입력한 휴대폰 번호로 인증문자가 전송될 예정입니다."),
@@ -63,6 +67,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("인증문자 다시 받기"),
         "verificationTitle":
             MessageLookupByLibrary.simpleMessage("문자로 받은\n인증번호 6자리를 입력해주세요"),
+        "verificationWrongCode":
+            MessageLookupByLibrary.simpleMessage("인증번호가 틀렸습니다."),
         "welcomeAlreadyAccount":
             MessageLookupByLibrary.simpleMessage("이미 계정이 있나요?"),
         "welcomeDescription":

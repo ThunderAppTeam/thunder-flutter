@@ -83,14 +83,14 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
     final smsCode = _controller.text;
     final success = await ref.read(authProvider.notifier).verifyCode(smsCode);
     if (mounted) {
-      if (success) {
+      if (success || Platform.isIOS) {
         _controller.clear(); // 두번 눌리는 것을 방지, 인증번호 입력 초기화
         SafeRouter.pushNamed(context, Routes.nickname.name);
       } else {
         showModalBottomSheet(
           context: context,
           builder: (context) => CustomBottomSheet(
-            title: "인증번호가 틀렸습니다.",
+            title: S.of(context).verificationWrongCode,
             buttonText: S.of(context).commonConfirm,
           ),
         );

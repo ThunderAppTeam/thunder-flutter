@@ -53,7 +53,8 @@ class _PhoneNumberPageState extends ConsumerState<PhoneNumberPage> {
       showModalBottomSheet(
         context: context,
         builder: (context) => CustomBottomSheet(
-          title: "전화번호가 올바르지 않습니다.",
+          title: S.of(context).phoneNumberErrorTitle,
+          subtitle: S.of(context).phoneNumberErrorSubtitle,
           buttonText: S.of(context).commonConfirm,
         ),
       );

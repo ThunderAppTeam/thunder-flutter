@@ -190,6 +190,26 @@ class S {
     );
   }
 
+  /// `올바른 휴대폰 번호를 입력해주세요`
+  String get phoneNumberErrorTitle {
+    return Intl.message(
+      '올바른 휴대폰 번호를 입력해주세요',
+      name: 'phoneNumberErrorTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `입력하신 휴대폰 번호가 올바른 형식이 아닙니다. 입력하신 정보를 다시 한 번 확인해주세요.`
+  String get phoneNumberErrorSubtitle {
+    return Intl.message(
+      '입력하신 휴대폰 번호가 올바른 형식이 아닙니다. 입력하신 정보를 다시 한 번 확인해주세요.',
+      name: 'phoneNumberErrorSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `6자리 숫자`
   String get verificationHint {
     return Intl.message(
@@ -215,6 +235,16 @@ class S {
     return Intl.message(
       '인증문자 다시 받기',
       name: 'verificationResend',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `인증번호가 틀렸습니다.`
+  String get verificationWrongCode {
+    return Intl.message(
+      '인증번호가 틀렸습니다.',
+      name: 'verificationWrongCode',
       desc: '',
       args: [],
     );
