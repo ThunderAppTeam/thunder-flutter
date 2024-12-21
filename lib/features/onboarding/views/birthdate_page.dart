@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:thunder/core/constants/validation_constants.dart';
+import 'package:thunder/core/constants/age_consts.dart';
 import 'package:thunder/core/router/routes.dart';
 import 'package:thunder/core/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
@@ -75,8 +75,8 @@ class _BirthdatePageState extends ConsumerState<BirthdatePage> {
     // 미래 날짜 체크
     if (date.isAfter(today)) return false;
     // 너무 먼 과거 체크
-    final maxAge = today.subtract(Duration(
-        days: ValidationConstants.maxAge * ValidationConstants.daysInYear));
+    final maxAge =
+        today.subtract(Duration(days: AgeConsts.maxAge * AgeConsts.daysInYear));
     if (date.isBefore(maxAge)) return false;
     return true;
   }
@@ -91,7 +91,7 @@ class _BirthdatePageState extends ConsumerState<BirthdatePage> {
         (today.month == date.month && today.day < date.day)) {
       age--;
     }
-    return age >= ValidationConstants.minAge;
+    return age >= AgeConsts.minAge;
   }
 
   void _handleNextPress() {

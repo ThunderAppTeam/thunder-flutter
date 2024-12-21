@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/core/constants/time_consts.dart';
 import 'package:thunder/core/router/routes.dart';
 import 'package:thunder/core/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
@@ -26,18 +27,18 @@ class VerificationPage extends ConsumerStatefulWidget {
 class _VerificationPageState extends ConsumerState<VerificationPage> {
   final _controller = TextEditingController();
   Timer? _timer;
-  int _remainingSeconds = 180; // 3분 = 180초
-  static const int _cooldownSeconds = 175; // 180 - 5 = 175초
-
+  int _remainingSeconds = TimeConsts.verificationTimeLimit;
+  final int _cooldownSeconds =
+      TimeConsts.verificationTimeLimit - TimeConsts.verificationResendDelay;
   bool get _isValid => _controller.text.length == 6 && _remainingSeconds > 0;
-  bool get _canResend => _remainingSeconds <= _cooldownSeconds; // 5초 이하로 남았을 때
+  bool get _canResend => _remainingSeconds <= _cooldownSeconds;
   bool get _isLoading => ref.watch(authProvider).isLoading;
 
   @override
   void initState() {
     super.initState();
     _startTimer();
-
+    // TODO: 애플 디벨로퍼 신청 이후에는 플랫폼 상관 없이 처리
     if (Platform.isAndroid) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _sendVerificationCode();
@@ -47,10 +48,10 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
 
   void _startTimer() {
     _timer?.cancel();
-    setState(() => _remainingSeconds = 180);
+    setState(() => _remainingSeconds = TimeConsts.verificationTimeLimit);
 
     _timer = Timer.periodic(
-      const Duration(seconds: 1),
+      const Duration(seconds: TimeConsts.second),
       (timer) {
         if (_remainingSeconds == 0) {
           timer.cancel();
@@ -69,8 +70,8 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
   }
 
   String get _formattedTime {
-    final minutes = _remainingSeconds ~/ 60;
-    final seconds = _remainingSeconds % 60;
+    final minutes = _remainingSeconds ~/ TimeConsts.minute;
+    final seconds = _remainingSeconds % TimeConsts.minute;
     return '$minutes:${seconds.toString().padLeft(2, '0')}';
   }
 

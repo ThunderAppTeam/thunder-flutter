@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thunder/core/router/routes.dart';
 import 'package:thunder/core/router/safe_router.dart';
+import 'package:thunder/core/widgets/web_view_page.dart';
 import 'package:thunder/features/home_page.dart';
 import 'package:thunder/features/onboarding/views/welcome_page.dart';
 import 'package:thunder/features/onboarding/views/birthdate_page.dart';
@@ -13,7 +14,7 @@ import 'package:thunder/features/onboarding/views/verification_page.dart';
 final router = GoRouter(
   // initialLocation: Routes.start.path,
   // TODO: 이후에 배포 후에 주석 해제
-  initialLocation: !kDebugMode ? Routes.start.path : Routes.start.path,
+  initialLocation: !kDebugMode ? Routes.start.path : Routes.verification.path,
   observers: [
     SafeNavigatorObserver(),
   ],
@@ -49,7 +50,13 @@ final router = GoRouter(
       name: Routes.gender.name,
       builder: (context, state) => const GenderPage(),
     ),
-
+    GoRoute(
+      path: Routes.webView.path,
+      name: Routes.webView.name,
+      builder: (context, state) => WebViewPage(
+        url: state.extra as String,
+      ),
+    ),
     GoRoute(
       path: Routes.home.path,
       name: Routes.home.name,

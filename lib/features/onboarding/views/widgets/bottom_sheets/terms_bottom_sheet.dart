@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:thunder/core/constants/url_consts.dart';
+import 'package:thunder/core/router/routes.dart';
+import 'package:thunder/core/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
@@ -7,21 +10,18 @@ import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/generated/l10n.dart';
 
 enum Terms {
-  service(true),
-  privacy(true),
-  marketing(false);
+  service(true, UrlConsts.termsOfService),
+  privacy(true, UrlConsts.privacyPolicy),
+  marketing(false, null);
 
   final bool isRequired;
-
-  const Terms(this.isRequired);
+  final String? url;
+  const Terms(this.isRequired, this.url);
 }
 
 class TermsBottomSheet extends StatefulWidget {
-  final VoidCallback? onAgreed;
-
   const TermsBottomSheet({
     super.key,
-    this.onAgreed,
   });
 
   @override
@@ -68,7 +68,14 @@ class _TermsBottomSheetState extends State<TermsBottomSheet> {
 
   void _handleAgree() {
     Navigator.pop(context, true);
-    widget.onAgreed?.call();
+  }
+
+  void _showTermDetails(Terms term) {
+    SafeRouter.pushNamed(
+      context,
+      Routes.webView.name,
+      extra: term.url,
+    );
   }
 
   Widget _buildAllAgreeCheckbox() {
@@ -131,17 +138,15 @@ class _TermsBottomSheetState extends State<TermsBottomSheet> {
           ),
         ),
         // 상세보기 영역
-        GestureDetector(
-          onTap: () {
-            // TODO: 약관 상세 페이지로 이동
-            debugPrint('Show details for ${term.name}');
-          },
-          child: Icon(
-            Icons.chevron_right,
-            color: ColorName.gray500,
-            size: Sizes.icon24,
+        if (term.url != null)
+          GestureDetector(
+            onTap: () => _showTermDetails(term),
+            child: Icon(
+              Icons.chevron_right,
+              color: ColorName.gray500,
+              size: Sizes.icon24,
+            ),
           ),
-        ),
       ],
     );
   }
@@ -171,7 +176,7 @@ class _TermsBottomSheetState extends State<TermsBottomSheet> {
         ],
       ),
       buttonText: S.of(context).termsConfirm,
-      onPressed: _isValid ? _handleAgree : null,
+      onPressed: _handleAgree,
       isEnabled: _isValid,
     );
   }

@@ -28,12 +28,7 @@ class _GenderPageState extends ConsumerState<GenderPage> {
     final result = await showModalBottomSheet<bool>(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (context) => TermsBottomSheet(
-        onAgreed: () {
-          // 약관 동의 후 처리할 로직
-          // 예: 사용자 정보 저장, 다음 페이지로 이동 등
-        },
-      ),
+      builder: (context) => TermsBottomSheet(),
     );
     if (result == true) {
       if (mounted) {

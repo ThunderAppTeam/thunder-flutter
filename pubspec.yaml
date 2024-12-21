@@ -23,6 +23,7 @@ dependencies:
   #=== Core
   flutter_riverpod: ^2.6.1
   go_router: ^14.6.2
+  webview_flutter: ^4.10.0
 
   #=== Utils
   freezed_annotation: ^2.4.4

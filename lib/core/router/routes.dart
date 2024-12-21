@@ -33,4 +33,9 @@ final class Routes {
     name: 'home',
     path: '/',
   );
+
+  static const webView = (
+    name: 'webView',
+    path: '/webview',
+  );
 }
