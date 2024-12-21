@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:thunder/core/router/routes.dart';
+import 'package:thunder/core/router/safe_router.dart';
 import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_button.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_scaffold.dart';
@@ -22,7 +22,7 @@ class _NicknamePageState extends ConsumerState<NicknamePage> {
 
   void _onButtonPressed() {
     ref.read(onboardingProvider.notifier).setNickname(_controller.text);
-    context.pushNamed(Routes.birthdate.name);
+    SafeRouter.pushNamed(context, Routes.birthdate.name);
   }
 
   @override

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:thunder/core/router/routes.dart';
+import 'package:thunder/core/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
@@ -55,7 +55,7 @@ class _BirthdatePageState extends ConsumerState<BirthdatePage> {
 
   void _handleNextPress() {
     if (_isAgeValid) {
-      context.pushNamed(Routes.gender.name);
+      SafeRouter.pushNamed(context, Routes.gender.name);
     } else {
       _showAgeRestrictionBottomSheet();
     }

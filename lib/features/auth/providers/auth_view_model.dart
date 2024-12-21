@@ -13,12 +13,11 @@ class AuthViewModel extends AsyncNotifier<String?> {
 
   Future<void> sendVerificationCode(String phoneNumber) async {
     state = const AsyncValue.loading();
-    final result = await AsyncValue.guard(() async {
+    state = await AsyncValue.guard(() async {
       final repository = ref.read(authRepositoryProvider);
       _verificationId = await repository.sendVerificationCode(phoneNumber);
       return _verificationId;
     });
-    state = result;
     if (state.hasError) {
       log('Failed to send verification code ${state.error}');
     }
@@ -28,15 +27,13 @@ class AuthViewModel extends AsyncNotifier<String?> {
     if (_verificationId == null) return false;
 
     state = const AsyncValue.loading();
-    final result = await AsyncValue.guard(() async {
+    state = await AsyncValue.guard(() async {
       final repository = ref.read(authRepositoryProvider);
       final success = await repository.verifyCode(_verificationId!, smsCode);
       if (!success) throw Exception('Invalid verification code');
       return _verificationId;
     });
-
-    state = result;
-    return !result.hasError;
+    return !state.hasError;
   }
 }
 

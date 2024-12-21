@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:thunder/core/formatters/phone_number_formatter.dart';
 import 'package:thunder/core/router/routes.dart';
+import 'package:thunder/core/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/constants/styles.dart';
@@ -61,7 +61,7 @@ class _PhoneNumberPageState extends ConsumerState<PhoneNumberPage> {
     }
     final formattedPhoneNumber = _formatToE164(_phoneNumber);
     ref.read(onboardingProvider.notifier).setPhoneNumber(formattedPhoneNumber);
-    context.pushNamed(Routes.verification.name);
+    SafeRouter.pushNamed(context, Routes.verification.name);
   }
 
   @override

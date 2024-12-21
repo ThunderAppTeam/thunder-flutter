@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:thunder/core/enums/gender.dart';
 import 'package:thunder/core/extensions/gender_extension.dart';
 import 'package:thunder/core/router/routes.dart';
+import 'package:thunder/core/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
 import 'package:thunder/features/onboarding/views/widgets/gender_button.dart';
@@ -36,11 +36,13 @@ class _GenderPageState extends ConsumerState<GenderPage> {
       ),
     );
     if (result == true) {
-      context.go(Routes.home.path);
+      if (mounted) {
+        SafeRouter.pushNamed(context, Routes.home.name);
+      }
     }
   }
 
-  void _handleNextPress() {
+  void handleNextPress() {
     ref.read(onboardingProvider.notifier).setGender(_selectedGender!);
     _showTermsBottomSheet();
   }
@@ -68,7 +70,7 @@ class _GenderPageState extends ConsumerState<GenderPage> {
       ),
       bottomButton: OnboardingButton(
         text: S.of(context).commonConfirm,
-        onPressed: _handleNextPress,
+        onPressed: handleNextPress,
         isEnabled: _isValid,
       ),
     );

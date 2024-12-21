@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thunder/core/router/routes.dart';
+import 'package:thunder/core/router/safe_router.dart';
 import 'package:thunder/features/home_page.dart';
 import 'package:thunder/features/onboarding/views/welcome_page.dart';
 import 'package:thunder/features/onboarding/views/birthdate_page.dart';
@@ -13,6 +14,9 @@ final router = GoRouter(
   // initialLocation: Routes.start.path,
   // TODO: 이후에 배포 후에 주석 해제
   initialLocation: !kDebugMode ? Routes.start.path : Routes.start.path,
+  observers: [
+    SafeNavigatorObserver(),
+  ],
   routes: [
     // Onboarding
     GoRoute(

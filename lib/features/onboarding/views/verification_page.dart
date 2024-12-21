@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:thunder/core/router/routes.dart';
+import 'package:thunder/core/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/features/auth/providers/auth_view_model.dart';
@@ -31,6 +31,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
 
   bool get _isValid => _controller.text.length == 6 && _remainingSeconds > 0;
   bool get _canResend => _remainingSeconds <= _cooldownSeconds; // 5초 이하로 남았을 때
+  bool get _isLoading => ref.watch(authProvider).isLoading;
 
   @override
   void initState() {
@@ -79,12 +80,12 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
   }
 
   void _onButtonPressed() async {
-    // TODO: 인증번호 검증 후 틀렸을 때 처리, 맞으면 닉네임 페이지로 이동
     final smsCode = _controller.text;
     final success = await ref.read(authProvider.notifier).verifyCode(smsCode);
     if (mounted) {
       if (success) {
-        context.pushNamed(Routes.nickname.name);
+        _controller.clear(); // 두번 눌리는 것을 방지, 인증번호 입력 초기화
+        SafeRouter.pushNamed(context, Routes.nickname.name);
       } else {
         showModalBottomSheet(
           context: context,
@@ -140,7 +141,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
       bottomButton: OnboardingButton(
         text: S.of(context).commonConfirm,
         onPressed: _onButtonPressed,
-        isEnabled: _isValid,
+        isEnabled: _isValid && !_isLoading && !SafeRouter.isNavigating,
       ),
     );
   }
