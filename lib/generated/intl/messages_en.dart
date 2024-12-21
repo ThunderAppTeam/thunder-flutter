@@ -28,6 +28,14 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "birthdateGuideText": MessageLookupByLibrary.simpleMessage(
             "회원님의 나이 정보가 프로필에 표시됩니다. 생년월일은 공개되지 않습니다."),
+        "birthdateInvalidAgeSubtitle": MessageLookupByLibrary.simpleMessage(
+            "만 18세 미만은 썬더를 이용하실 수 없어요. 나중에 다시 만나요."),
+        "birthdateInvalidAgeTitle":
+            MessageLookupByLibrary.simpleMessage("서비스 이용가능 연령이 아니에요"),
+        "birthdateInvalidDateSubtitle": MessageLookupByLibrary.simpleMessage(
+            "입력하신 생년월일이 올바른 날짜가 아닙니다. 입력하신 정보를 다시 한 번 확인해주세요."),
+        "birthdateInvalidDateTitle":
+            MessageLookupByLibrary.simpleMessage("올바른 날짜를 입력해주세요"),
         "birthdateTitle": m0,
         "commonConfirm": MessageLookupByLibrary.simpleMessage("확인"),
         "commonFemale": MessageLookupByLibrary.simpleMessage("여성"),

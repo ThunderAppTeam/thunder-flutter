@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:thunder/core/constants/validation_constants.dart';
 import 'package:thunder/core/router/routes.dart';
 import 'package:thunder/core/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
@@ -12,6 +14,20 @@ import 'package:thunder/features/onboarding/views/widgets/onboarding_scaffold.da
 import 'package:thunder/features/onboarding/views/widgets/onboarding_text_field.dart';
 import 'package:thunder/generated/l10n.dart';
 
+enum DateField {
+  year(hintText: 'YYYY', maxLength: 4),
+  month(hintText: 'MM', maxLength: 2),
+  day(hintText: 'DD', maxLength: 2);
+
+  final String hintText;
+  final int maxLength;
+
+  const DateField({
+    required this.hintText,
+    required this.maxLength,
+  });
+}
+
 class BirthdatePage extends ConsumerStatefulWidget {
   const BirthdatePage({super.key});
 
@@ -20,104 +36,131 @@ class BirthdatePage extends ConsumerStatefulWidget {
 }
 
 class _BirthdatePageState extends ConsumerState<BirthdatePage> {
-  final _yearController = TextEditingController();
-  final _monthController = TextEditingController();
-  final _dayController = TextEditingController();
-  // FocusNode
-  final _yearFocus = FocusNode();
-  final _monthFocus = FocusNode();
-  final _dayFocus = FocusNode();
+  final Map<DateField, TextEditingController> _controllers = {};
+  final Map<DateField, FocusNode> _focusNodes = {};
 
-  bool get _isButtonEnabled {
-    return _yearController.text.length == 4 &&
-        _monthController.text.length == 2 &&
-        _dayController.text.length == 2;
-  }
-
-  bool get _isAgeValid {
-    final year = int.tryParse(_yearController.text);
-    final month = int.tryParse(_monthController.text);
-    final day = int.tryParse(_dayController.text);
-
-    if (year == null || month == null || day == null) return false;
-
-    final birthDate = DateTime(year, month, day);
-    final today = DateTime.now();
-    final age = today.year - birthDate.year;
-    final monthDiff = today.month - birthDate.month;
-
-    // 생일이 아직 지나지 않았다면 나이에서 1을 빼줌
-    if (monthDiff < 0 || (monthDiff == 0 && today.day < birthDate.day)) {
-      return age - 1 >= 18;
-    }
-    return age >= 18;
-  }
-
-  void _handleNextPress() {
-    if (_isAgeValid) {
-      SafeRouter.pushNamed(context, Routes.gender.name);
-    } else {
-      _showAgeRestrictionBottomSheet();
-    }
-  }
-
-  void _showAgeRestrictionBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => CustomBottomSheet(
-        title: '서비스 이용가능 연령이 아니에요',
-        subtitle: '만 18세 미만은 썬더를 이용하실 수 없어요. 나중에 다시 만나요.',
-        buttonText: '확인',
-      ),
-    );
-  }
-
-  void _fieldFocusChange(String value, int maxLength, FocusNode currentFocus,
-      FocusNode? nextFocus) {
-    if (value.length == maxLength) {
-      currentFocus.unfocus();
-      nextFocus?.requestFocus();
+  @override
+  void initState() {
+    super.initState();
+    for (final field in DateField.values) {
+      _controllers[field] = TextEditingController();
+      _focusNodes[field] = FocusNode();
     }
   }
 
   @override
   void dispose() {
-    _yearController.dispose();
-    _monthController.dispose();
-    _dayController.dispose();
-
-    _yearFocus.dispose();
-    _monthFocus.dispose();
-    _dayFocus.dispose();
-
+    for (final field in DateField.values) {
+      _controllers[field]!.dispose();
+      _focusNodes[field]!.dispose();
+    }
     super.dispose();
   }
 
-  Widget _buildDateField({
-    required TextEditingController controller,
-    required FocusNode focusNode,
-    required String hintText,
-    required int maxLength,
-    required int flex,
-    required FocusNode? nextFocus,
-  }) {
-    return Expanded(
-      flex: flex,
+  DateTime? get _selectedDate {
+    final year = _controllers[DateField.year]!.text;
+    final month = _controllers[DateField.month]!.text;
+    final day = _controllers[DateField.day]!.text;
+    try {
+      return DateFormat('yyyy-MM-dd').parseStrict('$year-$month-$day');
+    } catch (e) {
+      return null;
+    }
+  }
+
+  bool get _isDateValid {
+    final date = _selectedDate;
+    if (date == null) return false;
+    final today = DateTime.now();
+    // 미래 날짜 체크
+    if (date.isAfter(today)) return false;
+    // 너무 먼 과거 체크
+    final maxAge = today.subtract(Duration(
+        days: ValidationConstants.maxAge * ValidationConstants.daysInYear));
+    if (date.isBefore(maxAge)) return false;
+    return true;
+  }
+
+  bool get _isAgeValid {
+    final date = _selectedDate;
+    if (date == null) return false;
+    final today = DateTime.now();
+    // 만 나이 계산
+    int age = today.year - date.year;
+    if (today.month < date.month ||
+        (today.month == date.month && today.day < date.day)) {
+      age--;
+    }
+    return age >= ValidationConstants.minAge;
+  }
+
+  void _handleNextPress() {
+    if (!_isDateValid) {
+      _showAlertBottomSheet(
+        title: S.of(context).birthdateInvalidDateTitle,
+        subtitle: S.of(context).birthdateInvalidDateSubtitle,
+      );
+      return;
+    }
+    if (!_isAgeValid) {
+      _showAlertBottomSheet(
+        title: S.of(context).birthdateInvalidAgeTitle,
+        subtitle: S.of(context).birthdateInvalidAgeSubtitle,
+      );
+      return;
+    }
+    SafeRouter.pushNamed(context, Routes.gender.name);
+  }
+
+  void _showAlertBottomSheet(
+      {required String title, required String subtitle}) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => CustomBottomSheet(
+        title: title,
+        subtitle: subtitle,
+        buttonText: S.of(context).commonConfirm,
+      ),
+    );
+  }
+
+  void _fieldFocusChange(String value, DateField current) {
+    if (value.length == current.maxLength) {
+      _focusNodes[current]!.unfocus();
+      final nextIndex = DateField.values.indexOf(current) + 1;
+      if (nextIndex < DateField.values.length) {
+        _focusNodes[DateField.values[nextIndex]]!.requestFocus();
+      }
+    }
+  }
+
+  Widget _buildDateField(DateField field) {
+    return IntrinsicWidth(
       child: OnboardingTextField(
-        controller: controller,
-        focusNode: focusNode,
-        hintText: hintText,
+        controller: _controllers[field]!,
+        focusNode: _focusNodes[field]!,
+        hintText: field.hintText,
         keyboardType: TextInputType.number,
         inputFormatters: [
           FilteringTextInputFormatter.digitsOnly,
-          LengthLimitingTextInputFormatter(maxLength),
+          LengthLimitingTextInputFormatter(field.maxLength),
         ],
         onChanged: (value) {
           setState(() {});
-          _fieldFocusChange(value, maxLength, focusNode, nextFocus);
+          _fieldFocusChange(value, field);
         },
       ),
     );
+  }
+
+  bool _isFieldFilled(DateField field) {
+    return _controllers[field]!.text.length == field.maxLength;
+  }
+
+  bool get _isButtonEnabled {
+    return _isFieldFilled(DateField.year) &&
+        _isFieldFilled(DateField.month) &&
+        _isFieldFilled(DateField.day);
   }
 
   @override
@@ -134,34 +177,11 @@ class _BirthdatePageState extends ConsumerState<BirthdatePage> {
       content: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          _buildDateField(
-            controller: _yearController,
-            focusNode: _yearFocus,
-            nextFocus: _monthFocus,
-            hintText: 'YYYY',
-            maxLength: 4,
-            flex: 4,
-          ),
+          _buildDateField(DateField.year),
           ...divider,
-          _buildDateField(
-            controller: _monthController,
-            focusNode: _monthFocus,
-            nextFocus: _dayFocus,
-            hintText: 'MM',
-            maxLength: 2,
-            flex: 3,
-          ),
+          _buildDateField(DateField.month),
           ...divider,
-          _buildDateField(
-            controller: _dayController,
-            focusNode: _dayFocus,
-            hintText: 'DD',
-            maxLength: 2,
-            flex: 3,
-            nextFocus: null,
-          ),
-          Gaps.h16,
-          Expanded(flex: 3, child: SizedBox()),
+          _buildDateField(DateField.day),
         ],
       ),
       guideText: S.of(context).birthdateGuideText,

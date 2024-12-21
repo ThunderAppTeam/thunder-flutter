@@ -36,6 +36,10 @@
     }
   },
   "birthdateGuideText": "회원님의 나이 정보가 프로필에 표시됩니다. 생년월일은 공개되지 않습니다.",
+  "birthdateInvalidDateTitle": "올바른 날짜를 입력해주세요",
+  "birthdateInvalidDateSubtitle": "입력하신 생년월일이 올바른 날짜가 아닙니다. 입력하신 정보를 다시 한 번 확인해주세요.",
+  "birthdateInvalidAgeTitle": "서비스 이용가능 연령이 아니에요",
+  "birthdateInvalidAgeSubtitle": "만 18세 미만은 썬더를 이용하실 수 없어요. 나중에 다시 만나요.",
   "@_GENDER": {},
   "genderTitle": "{nickname}님의\n성별을선택해주세요",
   "@genderTitle": {

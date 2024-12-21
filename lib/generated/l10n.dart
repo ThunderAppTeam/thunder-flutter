@@ -300,6 +300,46 @@ class S {
     );
   }
 
+  /// `올바른 날짜를 입력해주세요`
+  String get birthdateInvalidDateTitle {
+    return Intl.message(
+      '올바른 날짜를 입력해주세요',
+      name: 'birthdateInvalidDateTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `입력하신 생년월일이 올바른 날짜가 아닙니다. 입력하신 정보를 다시 한 번 확인해주세요.`
+  String get birthdateInvalidDateSubtitle {
+    return Intl.message(
+      '입력하신 생년월일이 올바른 날짜가 아닙니다. 입력하신 정보를 다시 한 번 확인해주세요.',
+      name: 'birthdateInvalidDateSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `서비스 이용가능 연령이 아니에요`
+  String get birthdateInvalidAgeTitle {
+    return Intl.message(
+      '서비스 이용가능 연령이 아니에요',
+      name: 'birthdateInvalidAgeTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `만 18세 미만은 썬더를 이용하실 수 없어요. 나중에 다시 만나요.`
+  String get birthdateInvalidAgeSubtitle {
+    return Intl.message(
+      '만 18세 미만은 썬더를 이용하실 수 없어요. 나중에 다시 만나요.',
+      name: 'birthdateInvalidAgeSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `{nickname}님의\n성별을선택해주세요`
   String genderTitle(Object nickname) {
     return Intl.message(

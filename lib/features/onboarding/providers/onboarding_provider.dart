@@ -3,7 +3,10 @@ import 'package:thunder/core/enums/gender.dart';
 import 'package:thunder/features/onboarding/models/onboarding_state.dart';
 
 class OnboardingNotifier extends StateNotifier<OnboardingState> {
-  OnboardingNotifier() : super(const OnboardingState());
+  OnboardingNotifier()
+      : super(const OnboardingState(
+          nickname: 'Default',
+        ));
 
   void setPhoneNumber(String phoneNumber) {
     state = state.copyWith(phoneNumber: phoneNumber);
