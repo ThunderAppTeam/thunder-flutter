@@ -63,6 +63,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("계정을 만들기 위해\n휴대폰 번호를 입력해주세요"),
         "termsAllAgree": MessageLookupByLibrary.simpleMessage("모두 동의"),
         "termsConfirm": MessageLookupByLibrary.simpleMessage("동의하고 시작하기"),
+        "termsErrorTitle":
+            MessageLookupByLibrary.simpleMessage("계정 생성 중 오류가 발생했습니다."),
         "termsMarketing": MessageLookupByLibrary.simpleMessage("마케팅 정보 수신 동의"),
         "termsOptional": MessageLookupByLibrary.simpleMessage("선택"),
         "termsPrivacy": MessageLookupByLibrary.simpleMessage("개인정보 수집 및 이용"),

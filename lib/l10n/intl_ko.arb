@@ -44,5 +44,6 @@
   "termsOptional": "선택",
   "termsService": "서비스 이용약관",
   "termsPrivacy": "개인정보 수집 및 이용",
-  "termsMarketing": "마케팅 정보 수신 동의"
+  "termsMarketing": "마케팅 정보 수신 동의",
+  "termsErrorTitle": "계정 생성 중 오류가 발생했습니다."
 }

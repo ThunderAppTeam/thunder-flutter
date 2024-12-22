@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/constants/url_consts.dart';
 import 'package:thunder/core/router/routes.dart';
 import 'package:thunder/core/router/safe_router.dart';
@@ -7,6 +8,7 @@ import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
+import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
 import 'package:thunder/generated/l10n.dart';
 
 enum Terms {
@@ -19,16 +21,18 @@ enum Terms {
   const Terms(this.isRequired, this.url);
 }
 
-class TermsBottomSheet extends StatefulWidget {
+class TermsBottomSheet extends ConsumerStatefulWidget {
+  final Function(bool) onAgree;
   const TermsBottomSheet({
     super.key,
+    required this.onAgree,
   });
 
   @override
-  State<TermsBottomSheet> createState() => _TermsBottomSheetState();
+  ConsumerState<TermsBottomSheet> createState() => _TermsBottomSheetState();
 }
 
-class _TermsBottomSheetState extends State<TermsBottomSheet> {
+class _TermsBottomSheetState extends ConsumerState<TermsBottomSheet> {
   String _getTermLabel(Terms term, BuildContext context) {
     switch (term) {
       case Terms.service:
@@ -67,7 +71,8 @@ class _TermsBottomSheetState extends State<TermsBottomSheet> {
   }
 
   void _handleAgree() {
-    Navigator.pop(context, true);
+    final marketingAgreed = _agreements[Terms.marketing] ?? false;
+    widget.onAgree(marketingAgreed);
   }
 
   void _showTermDetails(Terms term) {
@@ -153,6 +158,7 @@ class _TermsBottomSheetState extends State<TermsBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(onboardingProvider).isLoading;
     return CustomBottomSheet(
       title: S.of(context).termsTitle,
       content: Column(
@@ -177,7 +183,7 @@ class _TermsBottomSheetState extends State<TermsBottomSheet> {
       ),
       buttonText: S.of(context).termsConfirm,
       onPressed: _handleAgree,
-      isEnabled: _isValid,
+      isEnabled: _isValid && !isLoading,
     );
   }
 }

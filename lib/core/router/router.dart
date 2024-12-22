@@ -14,7 +14,7 @@ import 'package:thunder/features/onboarding/views/verification_page.dart';
 final router = GoRouter(
   // initialLocation: Routes.start.path,
   // TODO: 이후에 배포 후에 주석 해제
-  initialLocation: !kDebugMode ? Routes.start.path : Routes.verification.path,
+  initialLocation: !kDebugMode ? Routes.start.path : Routes.start.path,
   observers: [
     SafeNavigatorObserver(),
   ],

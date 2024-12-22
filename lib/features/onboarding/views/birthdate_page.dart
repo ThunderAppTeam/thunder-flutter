@@ -109,6 +109,7 @@ class _BirthdatePageState extends ConsumerState<BirthdatePage> {
       );
       return;
     }
+    ref.read(onboardingProvider.notifier).setBirthdate(_selectedDate!);
     SafeRouter.pushNamed(context, Routes.gender.name);
   }
 

@@ -18,8 +18,9 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$OnboardingState {
   String? get phoneNumber => throw _privateConstructorUsedError;
   String? get nickname => throw _privateConstructorUsedError;
-  DateTime? get birthday => throw _privateConstructorUsedError;
+  DateTime? get birthdate => throw _privateConstructorUsedError;
   Gender? get gender => throw _privateConstructorUsedError;
+  bool get isLoading => throw _privateConstructorUsedError;
 
   /// Create a copy of OnboardingState
   /// with the given fields replaced by the non-null parameter values.
@@ -37,8 +38,9 @@ abstract class $OnboardingStateCopyWith<$Res> {
   $Res call(
       {String? phoneNumber,
       String? nickname,
-      DateTime? birthday,
-      Gender? gender});
+      DateTime? birthdate,
+      Gender? gender,
+      bool isLoading});
 }
 
 /// @nodoc
@@ -58,8 +60,9 @@ class _$OnboardingStateCopyWithImpl<$Res, $Val extends OnboardingState>
   $Res call({
     Object? phoneNumber = freezed,
     Object? nickname = freezed,
-    Object? birthday = freezed,
+    Object? birthdate = freezed,
     Object? gender = freezed,
+    Object? isLoading = null,
   }) {
     return _then(_value.copyWith(
       phoneNumber: freezed == phoneNumber
@@ -70,14 +73,18 @@ class _$OnboardingStateCopyWithImpl<$Res, $Val extends OnboardingState>
           ? _value.nickname
           : nickname // ignore: cast_nullable_to_non_nullable
               as String?,
-      birthday: freezed == birthday
-          ? _value.birthday
-          : birthday // ignore: cast_nullable_to_non_nullable
+      birthdate: freezed == birthdate
+          ? _value.birthdate
+          : birthdate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       gender: freezed == gender
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
               as Gender?,
+      isLoading: null == isLoading
+          ? _value.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -93,8 +100,9 @@ abstract class _$$OnboardingStateImplCopyWith<$Res>
   $Res call(
       {String? phoneNumber,
       String? nickname,
-      DateTime? birthday,
-      Gender? gender});
+      DateTime? birthdate,
+      Gender? gender,
+      bool isLoading});
 }
 
 /// @nodoc
@@ -112,8 +120,9 @@ class __$$OnboardingStateImplCopyWithImpl<$Res>
   $Res call({
     Object? phoneNumber = freezed,
     Object? nickname = freezed,
-    Object? birthday = freezed,
+    Object? birthdate = freezed,
     Object? gender = freezed,
+    Object? isLoading = null,
   }) {
     return _then(_$OnboardingStateImpl(
       phoneNumber: freezed == phoneNumber
@@ -124,14 +133,18 @@ class __$$OnboardingStateImplCopyWithImpl<$Res>
           ? _value.nickname
           : nickname // ignore: cast_nullable_to_non_nullable
               as String?,
-      birthday: freezed == birthday
-          ? _value.birthday
-          : birthday // ignore: cast_nullable_to_non_nullable
+      birthdate: freezed == birthdate
+          ? _value.birthdate
+          : birthdate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       gender: freezed == gender
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
               as Gender?,
+      isLoading: null == isLoading
+          ? _value.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -140,20 +153,27 @@ class __$$OnboardingStateImplCopyWithImpl<$Res>
 
 class _$OnboardingStateImpl implements _OnboardingState {
   const _$OnboardingStateImpl(
-      {this.phoneNumber, this.nickname, this.birthday, this.gender});
+      {this.phoneNumber,
+      this.nickname,
+      this.birthdate,
+      this.gender,
+      this.isLoading = false});
 
   @override
   final String? phoneNumber;
   @override
   final String? nickname;
   @override
-  final DateTime? birthday;
+  final DateTime? birthdate;
   @override
   final Gender? gender;
+  @override
+  @JsonKey()
+  final bool isLoading;
 
   @override
   String toString() {
-    return 'OnboardingState(phoneNumber: $phoneNumber, nickname: $nickname, birthday: $birthday, gender: $gender)';
+    return 'OnboardingState(phoneNumber: $phoneNumber, nickname: $nickname, birthdate: $birthdate, gender: $gender, isLoading: $isLoading)';
   }
 
   @override
@@ -165,14 +185,16 @@ class _$OnboardingStateImpl implements _OnboardingState {
                 other.phoneNumber == phoneNumber) &&
             (identical(other.nickname, nickname) ||
                 other.nickname == nickname) &&
-            (identical(other.birthday, birthday) ||
-                other.birthday == birthday) &&
-            (identical(other.gender, gender) || other.gender == gender));
+            (identical(other.birthdate, birthdate) ||
+                other.birthdate == birthdate) &&
+            (identical(other.gender, gender) || other.gender == gender) &&
+            (identical(other.isLoading, isLoading) ||
+                other.isLoading == isLoading));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, phoneNumber, nickname, birthday, gender);
+  int get hashCode => Object.hash(
+      runtimeType, phoneNumber, nickname, birthdate, gender, isLoading);
 
   /// Create a copy of OnboardingState
   /// with the given fields replaced by the non-null parameter values.
@@ -188,17 +210,20 @@ abstract class _OnboardingState implements OnboardingState {
   const factory _OnboardingState(
       {final String? phoneNumber,
       final String? nickname,
-      final DateTime? birthday,
-      final Gender? gender}) = _$OnboardingStateImpl;
+      final DateTime? birthdate,
+      final Gender? gender,
+      final bool isLoading}) = _$OnboardingStateImpl;
 
   @override
   String? get phoneNumber;
   @override
   String? get nickname;
   @override
-  DateTime? get birthday;
+  DateTime? get birthdate;
   @override
   Gender? get gender;
+  @override
+  bool get isLoading;
 
   /// Create a copy of OnboardingState
   /// with the given fields replaced by the non-null parameter values.

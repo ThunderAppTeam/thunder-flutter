@@ -8,8 +8,8 @@ class OnboardingState with _$OnboardingState {
   const factory OnboardingState({
     String? phoneNumber,
     String? nickname,
-    DateTime? birthday,
+    DateTime? birthdate,
     Gender? gender,
-    // @Default(false) bool isLoading,
+    @Default(false) bool isLoading,
   }) = _OnboardingState;
 }

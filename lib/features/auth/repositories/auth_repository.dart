@@ -8,6 +8,9 @@ class AuthRepository {
 
   AuthRepository(this._auth);
 
+  User? get currentUser => _auth.currentUser;
+  bool get isLoggedIn => currentUser != null;
+
   Future<String> sendVerificationCode(String phoneNumber) async {
     final completer = Completer<String>();
 
@@ -40,6 +43,6 @@ class AuthRepository {
   }
 }
 
-final authRepositoryProvider = Provider<AuthRepository>((ref) {
+final authRepoProvider = Provider<AuthRepository>((ref) {
   return AuthRepository(FirebaseAuth.instance);
 });

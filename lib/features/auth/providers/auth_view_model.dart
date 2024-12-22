@@ -14,7 +14,7 @@ class AuthViewModel extends AsyncNotifier<String?> {
   Future<void> sendVerificationCode(String phoneNumber) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      final repository = ref.read(authRepositoryProvider);
+      final repository = ref.read(authRepoProvider);
       _verificationId = await repository.sendVerificationCode(phoneNumber);
       return _verificationId;
     });
@@ -28,7 +28,7 @@ class AuthViewModel extends AsyncNotifier<String?> {
 
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      final repository = ref.read(authRepositoryProvider);
+      final repository = ref.read(authRepoProvider);
       final success = await repository.verifyCode(_verificationId!, smsCode);
       if (!success) throw Exception('Invalid verification code');
       return _verificationId;

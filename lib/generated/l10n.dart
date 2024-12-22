@@ -429,6 +429,16 @@ class S {
       args: [],
     );
   }
+
+  /// `계정 생성 중 오류가 발생했습니다.`
+  String get termsErrorTitle {
+    return Intl.message(
+      '계정 생성 중 오류가 발생했습니다.',
+      name: 'termsErrorTitle',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

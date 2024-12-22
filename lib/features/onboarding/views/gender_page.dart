@@ -5,6 +5,7 @@ import 'package:thunder/core/extensions/gender_extension.dart';
 import 'package:thunder/core/router/routes.dart';
 import 'package:thunder/core/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
+import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
 import 'package:thunder/features/onboarding/views/widgets/gender_button.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_button.dart';
@@ -25,16 +26,34 @@ class _GenderPageState extends ConsumerState<GenderPage> {
   bool get _isValid => _selectedGender != null;
 
   Future<void> _showTermsBottomSheet() async {
-    final result = await showModalBottomSheet<bool>(
+    showModalBottomSheet<bool>(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (context) => TermsBottomSheet(),
+      builder: (context) => TermsBottomSheet(
+        onAgree: (marketingAgreed) async {
+          try {
+            await ref
+                .read(onboardingProvider.notifier)
+                .completeOnboarding(marketingAgreed: marketingAgreed);
+
+            if (context.mounted) {
+              SafeRouter.pushNamed(context, Routes.home.name);
+            }
+          } catch (e) {
+            if (context.mounted) {
+              showModalBottomSheet(
+                context: context,
+                builder: (context) => CustomBottomSheet(
+                  title: S.of(context).termsErrorTitle,
+                  subtitle: e.toString(),
+                  buttonText: S.of(context).commonConfirm,
+                ),
+              );
+            }
+          }
+        },
+      ),
     );
-    if (result == true) {
-      if (mounted) {
-        SafeRouter.pushNamed(context, Routes.home.name);
-      }
-    }
   }
 
   void handleNextPress() {
