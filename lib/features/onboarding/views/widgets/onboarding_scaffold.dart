@@ -10,7 +10,6 @@ class OnboardingScaffold extends StatelessWidget {
   final String? guideText;
   final Widget content;
   final Widget bottomButton;
-  final bool showAppBar;
 
   const OnboardingScaffold({
     super.key,
@@ -18,18 +17,21 @@ class OnboardingScaffold extends StatelessWidget {
     this.guideText, // 안내 텍스트, 존재하면 gap과 함
     required this.content,
     required this.bottomButton,
-    this.showAppBar = true,
   });
 
   @override
   Widget build(BuildContext context) {
     final textTheme = getTextTheme(context);
     return Scaffold(
-      appBar: showAppBar
-          ? AppBar(
-              backgroundColor: Colors.transparent,
-            )
-          : null,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        toolbarHeight: Sizes.appBarHeight48,
+        leading: IconButton(
+          iconSize: Sizes.icon32,
+          icon: const Icon(Icons.chevron_left),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: Sizes.spacing20),

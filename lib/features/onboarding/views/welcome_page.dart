@@ -3,7 +3,6 @@ import 'package:thunder/core/router/routes.dart';
 import 'package:thunder/core/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/gen/assets.gen.dart';
-import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_button.dart';
@@ -14,11 +13,6 @@ class WelcomePage extends StatelessWidget {
 
   void _onStartPressed(BuildContext context) {
     SafeRouter.pushNamed(context, Routes.phoneNumber.name);
-  }
-
-  void _onLoginTap() {
-    // pressed가 아닌 이유, 바로 tap했을 시에 발생하는 이벤트
-    // TODO-Feat: 로그인 버튼 눌렀을 때 로직 추가
   }
 
   @override
@@ -69,29 +63,6 @@ class WelcomePage extends StatelessWidget {
                       onPressed: () => _onStartPressed(context),
                     ),
                     Gaps.v8,
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: Sizes.spacing16),
-                      // 두가지 색깔이 다른 텍스트 (이미 계정이 있나요? 로그인), 로그인은 색상이 다르며, 눌렀을 때 로그인 페이지로 이동
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            S.of(context).welcomeAlreadyAccount,
-                            style: textTheme.textTitle16,
-                          ),
-                          Gaps.h8,
-                          GestureDetector(
-                            onTap: _onLoginTap,
-                            child: Text(
-                              S.of(context).commonLogin,
-                              style: textTheme.textTitle16.copyWith(
-                                color: ColorName.accentRed,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
               ],
