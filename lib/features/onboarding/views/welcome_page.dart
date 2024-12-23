@@ -18,55 +18,67 @@ class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = getTextTheme(context);
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: Sizes.spacing20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: Sizes.spacing40,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight,
                   ),
-                  child: Text(
-                    S.of(context).welcomeTitle,
-                    style: textTheme.textHead32,
-                    textAlign: TextAlign.center,
+                  child: IntrinsicHeight(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        top: Sizes.spacing40,
+                        left: Sizes.spacing20,
+                        right: Sizes.spacing20,
+                        bottom: Sizes.spacing8,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            S.of(context).welcomeTitle,
+                            style: textTheme.textHead32,
+                            textAlign: TextAlign.center,
+                          ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                // TODO-UI: 이미지 사이즈 지정
+                                width: 322,
+                                height: 387,
+                                child: Assets.images.welcomeMain.image(),
+                              ),
+                              Gaps.v32,
+                              Text(
+                                S.of(context).welcomeDescription,
+                                style: textTheme.textHead24,
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(top: Sizes.spacing32),
+                            child: OnboardingButton(
+                              text: S.of(context).welcomeStart,
+                              onPressed: () => _onStartPressed(context),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-                Column(
-                  children: [
-                    // TODO-UI: 이미지 사이즈 지정
-                    SizedBox(
-                      width: 322,
-                      height: 387,
-                      child: Assets.images.welcomeMain.image(),
-                    ),
-                    Gaps.v32,
-                    // TODO-UI: 텍스트 사이즈를 지정해야함, 혹은 줄바꿈 로직 추가
-                    Text(
-                      S.of(context).welcomeDescription,
-                      style: textTheme.textHead24,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    OnboardingButton(
-                      text: S.of(context).welcomeStart,
-                      onPressed: () => _onStartPressed(context),
-                    ),
-                    Gaps.v8,
-                  ],
-                ),
-              ],
-            ),
+              );
+            },
           ),
         ),
       ),
