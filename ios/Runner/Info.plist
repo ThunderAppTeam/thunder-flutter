@@ -36,7 +36,7 @@
 			<string></string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>app-1-105057982066-ios-6cc9c1a9ad3250c7ba94eb</string>
+				<string>app-1-105057982066-ios-4a58430dccd7b7f0ba94eb</string>
 			</array>
 		</dict>
 	</array>
@@ -48,6 +48,7 @@
 	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
