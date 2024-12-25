@@ -78,6 +78,10 @@ class AuthRepository {
   Future<void> deleteUser() async {
     await currentUser?.delete();
   }
+
+  Future<void> signOut() async {
+    await _auth.signOut();
+  }
 }
 
 final authRepoProvider = Provider<AuthRepository>((ref) {

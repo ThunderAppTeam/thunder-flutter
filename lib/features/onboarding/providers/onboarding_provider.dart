@@ -11,13 +11,11 @@ import 'package:thunder/features/onboarding/views/gender_page.dart';
 import 'package:thunder/features/onboarding/views/nickname_page.dart';
 import 'package:thunder/features/onboarding/views/phone_number_page.dart';
 import 'package:thunder/features/onboarding/views/verification_page.dart';
-import 'package:thunder/features/onboarding/views/welcome_page.dart';
 
 import 'package:thunder/features/users/models/user_profile.dart';
 import 'package:thunder/features/users/repositories/user_repository.dart';
 
 enum OnboardingStep {
-  welcome,
   phoneNumber,
   verification,
   nickname,
@@ -28,7 +26,6 @@ enum OnboardingStep {
 extension OnboardingStepX on OnboardingStep {
   Widget get page {
     return switch (this) {
-      OnboardingStep.welcome => const WelcomePage(),
       OnboardingStep.phoneNumber => const PhoneNumberPage(),
       OnboardingStep.verification => const VerificationPage(),
       OnboardingStep.nickname => const NicknamePage(),
@@ -77,7 +74,6 @@ class OnboardingNotifier extends StateNotifier<OnboardingState> {
 
   OnboardingStep? _getNextStep(OnboardingStep step) {
     return switch (step) {
-      OnboardingStep.welcome => OnboardingStep.phoneNumber,
       OnboardingStep.phoneNumber => OnboardingStep.verification,
       OnboardingStep.verification => OnboardingStep.nickname,
       OnboardingStep.nickname => OnboardingStep.birthdate,
