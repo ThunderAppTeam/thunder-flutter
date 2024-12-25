@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:thunder/core/router/routes.dart';
-import 'package:thunder/core/router/safe_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/gen/assets.gen.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
+import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_button.dart';
 import 'package:thunder/generated/l10n.dart';
 
-class WelcomePage extends StatelessWidget {
+class WelcomePage extends ConsumerWidget {
   const WelcomePage({super.key});
 
-  void _onStartPressed(BuildContext context) {
-    SafeRouter.pushNamed(context, Routes.phoneNumber.name);
+  void _onStartPressed(BuildContext context, WidgetRef ref) {
+    final notifier = ref.read(onboardingProvider.notifier);
+    notifier.pushNextStep(
+      context: context,
+      currentStep: OnboardingStep.welcome,
+    );
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = getTextTheme(context);
 
     return GestureDetector(
@@ -69,7 +74,7 @@ class WelcomePage extends StatelessWidget {
                                 const EdgeInsets.only(top: Sizes.spacing32),
                             child: OnboardingButton(
                               text: S.of(context).welcomeStart,
-                              onPressed: () => _onStartPressed(context),
+                              onPressed: () => _onStartPressed(context, ref),
                             ),
                           ),
                         ],

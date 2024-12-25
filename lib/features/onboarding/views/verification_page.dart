@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/constants/time_consts.dart';
-import 'package:thunder/core/router/routes.dart';
 import 'package:thunder/core/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
@@ -94,7 +93,11 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
     switch (next.status) {
       case AuthStatus.verified:
         _controller.clear();
-        SafeRouter.goNamed(context, Routes.nickname.name);
+        final notifier = ref.read(onboardingProvider.notifier);
+        notifier.pushNextStep(
+          context: context,
+          currentStep: OnboardingStep.verification,
+        );
         break;
       case AuthStatus.failed:
         if (next.failureReason != null) {

@@ -3,8 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:thunder/core/constants/age_consts.dart';
-import 'package:thunder/core/router/routes.dart';
-import 'package:thunder/core/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
@@ -109,8 +107,12 @@ class _BirthdatePageState extends ConsumerState<BirthdatePage> {
       );
       return;
     }
-    ref.read(onboardingProvider.notifier).setBirthdate(_selectedDate!);
-    SafeRouter.pushNamed(context, Routes.gender.name);
+    final notifier = ref.read(onboardingProvider.notifier);
+    notifier.setBirthdate(_selectedDate!);
+    notifier.pushNextStep(
+      context: context,
+      currentStep: OnboardingStep.birthdate,
+    );
   }
 
   void _showAlertBottomSheet(

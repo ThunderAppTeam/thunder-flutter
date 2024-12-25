@@ -1,32 +1,8 @@
 final class Routes {
-  static const start = (
-    name: 'start',
-    path: '/start',
-  );
-
-  static const phoneNumber = (
-    name: 'phoneNumber',
-    path: '/phone-number',
-  );
-
-  static const verification = (
-    name: 'verification',
-    path: '/verification',
-  );
-
-  static const nickname = (
-    name: 'nickname',
-    path: '/nickname',
-  );
-
-  static const birthdate = (
-    name: 'birthdate',
-    path: '/birthdate',
-  );
-
-  static const gender = (
-    name: 'gender',
-    path: '/gender',
+  // 온보딩 페이지
+  static const onboarding = (
+    name: 'onboarding',
+    path: '/onboarding',
   );
 
   static const home = (

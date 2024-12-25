@@ -16,9 +16,9 @@ class HomePage extends ConsumerWidget {
             Text('Home Page (로그인 완료)'),
             TextButton(
               onPressed: () {
-                ref.read(authRepoProvider).signOut();
+                ref.read(authRepoProvider).deleteUser();
               },
-              child: const Text('로그아웃'),
+              child: const Text('회원탈퇴, firebase 삭제'),
             ),
           ],
         ),

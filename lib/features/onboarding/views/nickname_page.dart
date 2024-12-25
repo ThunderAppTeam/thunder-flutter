@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thunder/core/router/routes.dart';
-import 'package:thunder/core/router/safe_router.dart';
 import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_button.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_scaffold.dart';
@@ -21,8 +19,12 @@ class _NicknamePageState extends ConsumerState<NicknamePage> {
   bool get _isValid => _controller.text.length >= 2;
 
   void _onButtonPressed() {
-    ref.read(onboardingProvider.notifier).setNickname(_controller.text);
-    SafeRouter.pushNamed(context, Routes.birthdate.name);
+    final notifier = ref.read(onboardingProvider.notifier);
+    notifier.setNickname(_controller.text);
+    notifier.pushNextStep(
+      context: context,
+      currentStep: OnboardingStep.nickname,
+    );
   }
 
   @override

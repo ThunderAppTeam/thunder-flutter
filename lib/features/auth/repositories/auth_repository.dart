@@ -75,8 +75,8 @@ class AuthRepository {
     return await _auth.signInWithCredential(credential);
   }
 
-  Future<void> signOut() async {
-    await _auth.signOut();
+  Future<void> deleteUser() async {
+    await currentUser?.delete();
   }
 }
 
