@@ -5,21 +5,21 @@ import 'package:thunder/core/theme/constants/styles.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_button.dart';
+import 'package:thunder/generated/l10n.dart';
 
 class CustomBottomSheet extends StatelessWidget {
   final String title;
   final String? subtitle;
   final Widget? content;
-  final String buttonText;
+  final String? buttonText;
   final VoidCallback? onPressed;
   final bool isEnabled;
-
   const CustomBottomSheet({
     super.key,
     required this.title,
     this.subtitle,
     this.content,
-    required this.buttonText,
+    this.buttonText,
     this.onPressed,
     this.isEnabled = true,
   });
@@ -69,7 +69,7 @@ class CustomBottomSheet extends StatelessWidget {
               OnboardingButton(
                 backgroundColor: ColorName.black,
                 textColor: ColorName.white,
-                text: buttonText,
+                text: buttonText ?? S.of(context).commonConfirm,
                 onPressed: onPressed ?? () => Navigator.pop(context),
                 isEnabled: isEnabled,
               ),

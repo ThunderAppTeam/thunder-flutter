@@ -1,42 +1,74 @@
-import 'dart:developer';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/features/auth/models/auth_state.dart';
 import 'package:thunder/features/auth/repositories/auth_repository.dart';
 
-class AuthViewModel extends AsyncNotifier<String?> {
-  String? _verificationId;
+class AuthViewModel extends StateNotifier<AuthState> {
+  final AuthRepository _authRepo;
 
-  @override
-  Future<String?> build() async {
-    return null;
-  }
+  AuthViewModel(this._authRepo) : super(const AuthState());
 
-  Future<void> sendVerificationCode(String phoneNumber) async {
-    state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() async {
-      final repository = ref.read(authRepoProvider);
-      _verificationId = await repository.sendVerificationCode(phoneNumber);
-      return _verificationId;
-    });
-    if (state.hasError) {
-      log('Failed to send verification code ${state.error}');
+  Future<void> executeSendVerificationCode(String phoneNumber) async {
+    state = state.copyWith(
+      status: AuthStatus.codeSending,
+    );
+    try {
+      await _authRepo.sendVerificationCode(
+        phoneNumber: phoneNumber,
+        onAutoVerified: (smsCode) {
+          state = state.copyWith(
+            status: AuthStatus.autoVerified,
+            smsCode: smsCode,
+          );
+        },
+        onFailed: (reason) {
+          state = state.copyWith(
+            status: AuthStatus.failed,
+            failureReason: reason,
+          );
+        },
+        onCodeSent: (verificationId) {
+          state = state.copyWith(
+            status: AuthStatus.codeSent,
+            verificationId: verificationId,
+          );
+        },
+      );
+    } catch (err) {
+      state = state.copyWith(
+        status: AuthStatus.failed,
+        failureReason: AuthFailureReason.unknown,
+      );
     }
   }
 
-  Future<bool> verifyCode(String smsCode) async {
-    if (_verificationId == null) return false;
-
-    state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() async {
-      final repository = ref.read(authRepoProvider);
-      final success = await repository.verifyCode(_verificationId!, smsCode);
-      if (!success) throw Exception('Invalid verification code');
-      return _verificationId;
-    });
-    return !state.hasError;
+  Future<void> executeVerifyCode(String smsCode) async {
+    state = state.copyWith(
+      status: AuthStatus.verifying,
+    );
+    if (state.verificationId == null) {
+      state = state.copyWith(
+        status: AuthStatus.failed,
+        failureReason: AuthFailureReason.codeNotSent,
+      );
+      return;
+    }
+    try {
+      await _authRepo.verifyCode(
+        state.verificationId!,
+        smsCode,
+      );
+      state = state.copyWith(status: AuthStatus.verified);
+    } catch (err) {
+      // 확인된 에러: 1. 인증번호 불일치
+      state = state.copyWith(
+        status: AuthStatus.failed,
+        failureReason: AuthFailureReason.invalidSmsCode,
+      );
+    }
   }
 }
 
-final authProvider = AsyncNotifierProvider<AuthViewModel, String?>(() {
-  return AuthViewModel();
+final authProvider = StateNotifierProvider<AuthViewModel, AuthState>((ref) {
+  final authRepo = ref.watch(authRepoProvider);
+  return AuthViewModel(authRepo);
 });

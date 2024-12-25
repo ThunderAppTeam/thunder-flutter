@@ -17,17 +17,16 @@ class SafeRouter {
 
   static bool get isNavigating => _isNavigating;
 
-  static Future<T?> push<T>(BuildContext context, String location,
-      {Object? extra}) async {
-    if (_isNavigating) return null;
-    _isNavigating = true;
-    return context.push<T>(location, extra: extra);
-  }
-
   static Future<T?> pushNamed<T>(BuildContext context, String name,
       {Object? extra}) async {
     if (_isNavigating) return null;
     _isNavigating = true;
     return context.pushNamed<T>(name, extra: extra);
+  }
+
+  static void goNamed(BuildContext context, String name, {Object? extra}) {
+    if (_isNavigating) return;
+    _isNavigating = true;
+    context.goNamed(name, extra: extra);
   }
 }

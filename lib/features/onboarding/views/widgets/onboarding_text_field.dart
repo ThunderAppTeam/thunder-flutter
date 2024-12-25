@@ -57,7 +57,7 @@ class OnboardingTextField extends StatelessWidget {
         enabledBorder: UnderlineInputBorder(
           borderSide: Styles.whiteBorder2,
         ),
-        suffix: hasSuffix
+        suffixIcon: hasSuffix
             ? Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -70,10 +70,12 @@ class OnboardingTextField extends StatelessWidget {
                         onChanged?.call(controller.text);
                       },
                     ),
+                    Gaps.h8,
                   ],
                   if (suffixText != null) ...[
                     Gaps.h16,
                     Text(suffixText!, style: textTheme.textTitle16),
+                    Gaps.h8,
                   ],
                 ],
               )

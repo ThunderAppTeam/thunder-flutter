@@ -34,6 +34,7 @@ class _NicknamePageState extends ConsumerState<NicknamePage> {
   @override
   Widget build(BuildContext context) {
     return OnboardingScaffold(
+      showBackButton: false,
       title: S.of(context).nicknameTitle,
       content: OnboardingTextField(
         controller: _controller,
