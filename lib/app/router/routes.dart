@@ -10,13 +10,23 @@ final class Routes {
     path: '/onboarding',
   );
 
+  static const webView = (
+    name: 'webView',
+    path: '/webview',
+  );
+
+  // 메인 네비게이션
   static const home = (
     name: 'home',
     path: '/',
   );
+  static const profile = (
+    name: 'profile',
+    path: '/profile',
+  );
 
-  static const webView = (
-    name: 'webView',
-    path: '/webview',
+  static const camera = (
+    name: 'camera',
+    path: '/camera',
   );
 }

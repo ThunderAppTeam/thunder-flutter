@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/constants/time_consts.dart';
-import 'package:thunder/core/router/safe_router.dart';
+import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/features/auth/models/auth_state.dart';

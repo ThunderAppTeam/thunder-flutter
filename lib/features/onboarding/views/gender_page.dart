@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/enums/gender.dart';
 import 'package:thunder/core/extensions/gender_extension.dart';
-import 'package:thunder/core/router/routes.dart';
-import 'package:thunder/core/router/safe_router.dart';
+import 'package:thunder/app/router/routes.dart';
+import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
@@ -35,9 +35,8 @@ class _GenderPageState extends ConsumerState<GenderPage> {
             await ref
                 .read(onboardingProvider.notifier)
                 .completeOnboarding(marketingAgreed: marketingAgreed);
-
             if (context.mounted) {
-              SafeRouter.pushNamed(context, Routes.home.name);
+              SafeRouter.goNamed(context, Routes.home.name);
             }
           } catch (e) {
             if (context.mounted) {

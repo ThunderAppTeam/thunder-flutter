@@ -24,9 +24,10 @@ class SafeRouter {
     return context.pushNamed<T>(name, extra: extra);
   }
 
-  static void goNamed(BuildContext context, String name, {Object? extra}) {
+  static void goNamed(BuildContext context, String name,
+      {Map<String, String>? pathParameters, Object? extra}) {
     if (_isNavigating) return;
     _isNavigating = true;
-    context.goNamed(name, extra: extra);
+    context.goNamed(name, pathParameters: pathParameters ?? {}, extra: extra);
   }
 }
