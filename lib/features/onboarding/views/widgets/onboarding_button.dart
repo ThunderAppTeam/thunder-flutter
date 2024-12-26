@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:thunder/core/widgets/wrappers/custom_pressable_wrapper.dart';
+import 'package:thunder/core/theme/constants/sizes.dart';
+import 'package:thunder/core/theme/constants/styles.dart';
+import 'package:thunder/core/theme/gen/colors.gen.dart';
+import 'package:thunder/core/utils/theme_utils.dart';
 
-class OnboardingButton extends StatefulWidget {
+class OnboardingButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
   final bool isEnabled;
@@ -12,55 +17,27 @@ class OnboardingButton extends StatefulWidget {
     required this.text,
     required this.onPressed,
     this.isEnabled = true,
-    this.backgroundColor = Colors.white,
-    this.textColor = Colors.black,
+    this.backgroundColor = ColorName.white,
+    this.textColor = ColorName.black,
   });
 
   @override
-  State<OnboardingButton> createState() => _OnboardingButtonState();
-}
-
-class _OnboardingButtonState extends State<OnboardingButton> {
-  bool _isPressed = false;
-
-  void _updatePressedState(bool isPressed) {
-    if (widget.isEnabled) {
-      setState(() => _isPressed = isPressed);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return AnimatedOpacity(
-      duration: const Duration(milliseconds: 200),
-      opacity: widget.isEnabled ? 1.0 : 0.3,
-      child: GestureDetector(
-        onTapDown: (_) => _updatePressedState(true),
-        onTapUp: (_) {
-          _updatePressedState(false);
-          widget.onPressed?.call();
-        },
-        onTapCancel: () => _updatePressedState(false),
-        child: AnimatedScale(
-          scale: _isPressed ? 0.95 : 1.0,
-          duration: const Duration(milliseconds: 100),
-          child: Container(
-            decoration: BoxDecoration(
-              color: widget.backgroundColor,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Center(
-                child: Text(
-                  widget.text,
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: widget.textColor,
-                  ),
+    return CustomPressableWrapper(
+      onPressed: onPressed,
+      isEnabled: isEnabled,
+      child: Container(
+        height: Sizes.buttonHeight60,
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(Styles.radius16),
+        ),
+        child: Center(
+          child: Text(
+            text,
+            style: getTextTheme(context).textTitle18.copyWith(
+                  color: textColor,
                 ),
-              ),
-            ),
           ),
         ),
       ),

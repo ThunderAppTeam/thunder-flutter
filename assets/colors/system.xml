@@ -1,0 +1,23 @@
+<!-- assets/color/colors.xml -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base Colors -->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+
+    <!-- Gray Scale -->
+    <color name="gray_900">#1A1A1A</color>
+    <color name="gray_800">#333333</color>
+    <color name="gray_700">#4D4D4D</color>
+    <color name="gray_600">#666666</color>
+    <color name="gray_500">#808080</color>
+    <color name="gray_400">#999999</color>
+    <color name="gray_300">#B3B3B3</color>
+    <color name="gray_200">#CCCCCC</color>
+    <color name="gray_100">#E6E6E6</color>
+    <color name="gray_50">#F2F2F2</color>
+
+    <!-- Accent -->
+    <color name="accent_red">#FE2C55</color>
+    <color name="accent_blue">#007AFF</color>
+</resources>

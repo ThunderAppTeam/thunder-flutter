@@ -1,19 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:noon_body/core/router/routes.dart';
-import 'package:noon_body/features/onboarding/views/widgets/onboarding_button.dart';
-import 'package:noon_body/features/onboarding/views/widgets/onboarding_scaffold.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
+import 'package:thunder/features/onboarding/views/widgets/onboarding_button.dart';
+import 'package:thunder/features/onboarding/views/widgets/onboarding_scaffold.dart';
+import 'package:thunder/features/onboarding/views/widgets/onboarding_text_field.dart';
+import 'package:thunder/generated/l10n.dart';
 
-class NicknamePage extends StatefulWidget {
+class NicknamePage extends ConsumerStatefulWidget {
   const NicknamePage({super.key});
 
   @override
-  State<NicknamePage> createState() => _NicknamePageState();
+  ConsumerState<NicknamePage> createState() => _NicknamePageState();
 }
 
-class _NicknamePageState extends State<NicknamePage> {
+class _NicknamePageState extends ConsumerState<NicknamePage> {
   final _controller = TextEditingController();
   bool get _isValid => _controller.text.length >= 2;
+
+  void _onButtonPressed() {
+    final notifier = ref.read(onboardingProvider.notifier);
+    notifier.setNickname(_controller.text);
+    notifier.pushNextStep(
+      context: context,
+      currentStep: OnboardingStep.nickname,
+    );
+  }
 
   @override
   void dispose() {
@@ -24,19 +36,21 @@ class _NicknamePageState extends State<NicknamePage> {
   @override
   Widget build(BuildContext context) {
     return OnboardingScaffold(
-      title: '닉네임을\n입력해주세요',
-      subtitle: '다른 사용자들에게 보여질 이름입니다',
-      content: TextFormField(
+      showBackButton: false,
+      title: S.of(context).nicknameTitle,
+      content: OnboardingTextField(
         controller: _controller,
-        decoration: const InputDecoration(
-          hintText: '닉네임 입력 (2-10자)',
-        ),
-        maxLength: 10,
+        hintText: S.of(context).nicknameHint,
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(8),
+        ],
         onChanged: (_) => setState(() {}),
+        canClear: true,
       ),
+      guideText: S.of(context).nicknameGuideText,
       bottomButton: OnboardingButton(
-        text: '다음',
-        onPressed: () => context.pushNamed(Routes.birthdate.name),
+        text: S.of(context).commonNext,
+        onPressed: _onButtonPressed,
         isEnabled: _isValid,
       ),
     );

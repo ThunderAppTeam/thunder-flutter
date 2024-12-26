@@ -1,65 +1,84 @@
 import 'package:flutter/material.dart';
-import 'package:noon_body/core/theme/gen/fonts.gen.dart';
+import 'package:thunder/core/theme/gen/fonts.gen.dart';
+import 'package:thunder/core/theme/constants/sizes.dart';
 import 'app_text_theme.dart';
 
-const AppTextTheme defaultTheme = AppTextTheme(
-  // Body styles
-  textBody16: TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.w400,
-  ),
-  textBody14: TextStyle(
+const AppTextTheme defaultTextTheme = AppTextTheme(
+  // #####--- Heading styles (큰 텍스트, 화면 제목 및 메인 글자)
+  textHead32: TextStyle(
     fontFamily: FontFamily.pretendard,
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
+    fontSize: Sizes.fontSize32,
+    height: Sizes.lineHeight48 / Sizes.fontSize32,
+    fontWeight: FontWeight.w700,
+    color: Colors.white,
   ),
-  textBody12: TextStyle(
+  textHead24: TextStyle(
     fontFamily: FontFamily.pretendard,
-    fontSize: 12,
-    fontWeight: FontWeight.w400,
+    fontSize: Sizes.fontSize24,
+    height: Sizes.lineHeight36 / Sizes.fontSize24,
+    fontWeight: FontWeight.w700,
+    color: Colors.white,
   ),
 
-  // Subtitle styles
-  textSubtitle24: TextStyle(
+  // #####--- Title styles (살짝 Bold감이 있는 작은 텍스트)
+  textTitle20: TextStyle(
     fontFamily: FontFamily.pretendard,
-    fontSize: 24,
-    height: 36 / 24,
+    fontSize: Sizes.fontSize20,
+    height: Sizes.lineHeight24 / Sizes.fontSize20,
     fontWeight: FontWeight.w600,
+    color: Colors.white,
   ),
-  textSubtitle16: TextStyle(
+  textTitle18: TextStyle(
     fontFamily: FontFamily.pretendard,
-    fontSize: 16,
-    height: 24 / 16,
+    fontSize: Sizes.fontSize18,
+    height: Sizes.lineHeight24 / Sizes.fontSize18,
     fontWeight: FontWeight.w600,
+    color: Colors.white,
   ),
+  textTitle16: TextStyle(
+    fontFamily: FontFamily.pretendard,
+    fontSize: Sizes.fontSize16,
+    height: Sizes.lineHeight22 / Sizes.fontSize16,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  ),
+
+  // #####--- Subtitle styles (Bold감이 있는 작은 텍스트)
   textSubtitle14: TextStyle(
     fontFamily: FontFamily.pretendard,
-    fontSize: 14,
+    fontSize: Sizes.fontSize14,
+    height: Sizes.lineHeight21 / Sizes.fontSize14,
     fontWeight: FontWeight.w600,
+    color: Colors.white,
   ),
   textSubtitle12: TextStyle(
     fontFamily: FontFamily.pretendard,
-    fontSize: 12,
+    fontSize: Sizes.fontSize12,
+    height: Sizes.lineHeight18 / Sizes.fontSize12,
     fontWeight: FontWeight.w600,
+    color: Colors.white,
   ),
 
-  // Heading styles
-  textHead32: TextStyle(
+  // #####--- Body styles (작은 텍스트)
+  textBody18: TextStyle(
     fontFamily: FontFamily.pretendard,
-    fontSize: 32,
-    height: 48 / 32,
-    fontWeight: FontWeight.w700,
+    fontSize: Sizes.fontSize18,
+    height: Sizes.lineHeight24 / Sizes.fontSize18,
+    fontWeight: FontWeight.w500,
+    color: Colors.white,
   ),
-  textHead18: TextStyle(
+  textBody16: TextStyle(
     fontFamily: FontFamily.pretendard,
-    fontSize: 18,
-    height: 27 / 18,
-    fontWeight: FontWeight.w700,
+    fontSize: Sizes.fontSize16,
+    height: Sizes.lineHeight24 / Sizes.fontSize16,
+    fontWeight: FontWeight.w500,
+    color: Colors.white,
   ),
-  textHead16: TextStyle(
+  textBody14: TextStyle(
     fontFamily: FontFamily.pretendard,
-    fontSize: 16,
-    height: 24 / 16,
-    fontWeight: FontWeight.w700,
+    fontSize: Sizes.fontSize14,
+    height: Sizes.lineHeight20 / Sizes.fontSize14,
+    fontWeight: FontWeight.w400,
+    color: Colors.white,
   ),
 );
