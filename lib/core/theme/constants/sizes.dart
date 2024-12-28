@@ -1,4 +1,6 @@
 class Sizes {
+  static const double zero = 0.0;
+
   // Spacing (margin, padding)
   static const double spacing4 = 4.0;
   static const double spacing8 = 8.0;

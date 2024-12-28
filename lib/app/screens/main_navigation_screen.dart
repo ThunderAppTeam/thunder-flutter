@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
+import 'package:thunder/core/theme/constants/sizes.dart';
+import 'package:thunder/core/theme/gen/assets.gen.dart';
+import 'package:thunder/core/theme/gen/colors.gen.dart';
 
 class MainNavigationScreen extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
@@ -22,32 +25,90 @@ class MainNavigationScreen extends StatelessWidget {
   }
 
   int _getSelectedIndex() {
-    // 브랜치 인덱스를 탭 인덱스로 변환
+    // 브랜치 인덱스를 탭 인덱스로 변환 (카메라 탭을 건너뛰고 매핑)
     final branchIndex = navigationShell.currentIndex;
     return branchIndex >= 1 ? branchIndex + 1 : branchIndex;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: navigationShell,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _getSelectedIndex(),
-        onTap: (index) => _onTap(context, index),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '홈',
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          centerTitle: false,
+          title: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: Sizes.spacing16,
+              vertical: Sizes.spacing8,
+            ),
+            child: Assets.images.thunderLogotypeSmallW.svg(),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.camera),
-            label: '카메라',
+          titleSpacing: Sizes.zero,
+        ),
+        body: navigationShell,
+        bottomNavigationBar: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Sizes.spacing16,
+            vertical: Sizes.spacing8,
+          ), // 전체 좌우 패딩
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center, // 가운데 정렬
+            children: [
+              _NavigationBarItem(
+                icon: Icons.home_outlined,
+                activeIcon: Icons.home,
+                isSelected: _getSelectedIndex() == 0,
+                onTap: () => _onTap(context, 0),
+              ),
+              _NavigationBarItem(
+                icon: Icons.add_box_outlined,
+                activeIcon: Icons.add_box,
+                isSelected: _getSelectedIndex() == 1,
+                onTap: () => _onTap(context, 1),
+              ),
+              _NavigationBarItem(
+                icon: Icons.person_outline,
+                activeIcon: Icons.person,
+                isSelected: _getSelectedIndex() == 2,
+                onTap: () => _onTap(context, 2),
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: '프로필',
-          ),
-        ],
+        ),
+      ),
+    );
+  }
+}
+
+class _NavigationBarItem extends StatelessWidget {
+  final IconData icon;
+  final IconData activeIcon;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _NavigationBarItem({
+    required this.icon,
+    required this.activeIcon,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: Sizes.spacing40,
+          vertical: Sizes.spacing6,
+        ),
+        child: Icon(
+          size: Sizes.icon24,
+          isSelected ? activeIcon : icon,
+          color: ColorName.white,
+        ),
       ),
     );
   }

@@ -20,6 +20,9 @@ dependencies:
     sdk: flutter
   intl_utils: ^2.8.7
 
+  #=== UI & Styles & Assets
+  flutter_svg: ^2.0.16
+
   #=== Core
   flutter_riverpod: ^2.6.1
   go_router: ^14.6.2
@@ -98,6 +101,8 @@ flutter:
   # see https://flutter.dev/to/font-from-package
 
 flutter_gen:
+  integrations:
+    flutter_svg: true
   output: lib/core/theme/gen
   line_length: 80
 
