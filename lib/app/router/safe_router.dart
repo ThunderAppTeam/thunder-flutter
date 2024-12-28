@@ -7,7 +7,7 @@ class SafeNavigatorObserver extends NavigatorObserver {
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) async {
     super.didPush(route, previousRoute);
     // 0.1초 정도 navigation이 완료되기 전에 다시 네비게이션을 시도하는 것을 방지
-    await Future.delayed(Duration(milliseconds: TimeConsts.navigationDelay));
+    await Future.delayed(TimeConsts.navigationDuration);
     SafeRouter._isNavigating = false;
   }
 }

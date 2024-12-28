@@ -67,8 +67,7 @@ class OnboardingNotifier extends StateNotifier<OnboardingState> {
         builder: (context) => nextStep.page,
       ),
     );
-    await Future.delayed(
-        const Duration(milliseconds: TimeConsts.navigationDelay));
+    await Future.delayed(TimeConsts.navigationDuration);
     _isNavigating = false;
   }
 

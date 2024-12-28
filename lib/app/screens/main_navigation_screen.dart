@@ -1,18 +1,47 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
+import 'package:thunder/core/constants/time_consts.dart';
+import 'package:thunder/core/services/permission_service.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/assets.gen.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 
-class MainNavigationScreen extends StatelessWidget {
+class MainNavigationScreen extends ConsumerStatefulWidget {
   final StatefulNavigationShell navigationShell;
 
   const MainNavigationScreen({
     super.key,
     required this.navigationShell,
   });
+
+  @override
+  ConsumerState<MainNavigationScreen> createState() =>
+      _MainNavigationScreenState();
+}
+
+class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _requestPermissions();
+    });
+  }
+
+  Future<void> _requestPermissions() async {
+    // 알림 권한 요청
+    await ref.read(permissionServiceProvider).requestNotificationPermission();
+    // 앱 추적 권한 요청 (iOS only)
+    if (Platform.isIOS) {
+      await Future.delayed(TimeConsts.permissionPopupDuration);
+      await ref.read(permissionServiceProvider).requestTrackingPermission();
+    }
+  }
 
   void _onTap(BuildContext context, int index) {
     if (index == 1) {
@@ -21,12 +50,12 @@ class MainNavigationScreen extends StatelessWidget {
     }
     // 카메라 탭을 건너뛰고 매핑
     final adjustedIndex = index > 1 ? index - 1 : index;
-    navigationShell.goBranch(adjustedIndex);
+    widget.navigationShell.goBranch(adjustedIndex);
   }
 
   int _getSelectedIndex() {
     // 브랜치 인덱스를 탭 인덱스로 변환 (카메라 탭을 건너뛰고 매핑)
-    final branchIndex = navigationShell.currentIndex;
+    final branchIndex = widget.navigationShell.currentIndex;
     return branchIndex >= 1 ? branchIndex + 1 : branchIndex;
   }
 
@@ -46,7 +75,7 @@ class MainNavigationScreen extends StatelessWidget {
           ),
           titleSpacing: Sizes.zero,
         ),
-        body: navigationShell,
+        body: widget.navigationShell,
         bottomNavigationBar: Container(
           padding: const EdgeInsets.symmetric(
             horizontal: Sizes.spacing16,

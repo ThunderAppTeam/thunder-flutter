@@ -68,5 +68,10 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<!-- Permission -->
+	<key>NSNotificationUsageDescription</key>
+	<string>경고, 사운드 및 아이콘 배지가 알림에 포함될 수 있습니다. 설정에서 이를 구성할 수 있습니다.</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>허용을 누르면 불필요한 내용의 광고가 아닌 관심사 기반 맞춤형 정보를 제공해드려요.</string>
 </dict>
 </plist>
