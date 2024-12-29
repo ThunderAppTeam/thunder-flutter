@@ -2,11 +2,12 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:thunder/core/theme/constants/sizes.dart';
+import 'package:thunder/core/theme/constants/styles.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/features/camera/controllers/camera_controller.dart';
 import 'package:thunder/features/camera/models/camera_state.dart';
-import 'package:thunder/features/camera/views/widgets/camera_icon.dart';
+import 'package:thunder/features/camera/views/widgets/camera_app_bar.dart';
+import 'package:thunder/features/camera/views/widgets/camera_bottom_controls.dart';
 
 class CameraPage extends ConsumerStatefulWidget {
   const CameraPage({super.key});
@@ -56,37 +57,11 @@ class _CameraPageState extends ConsumerState<CameraPage> {
     ref.listen(cameraStateNotifierProvider, _onCameraStateChanged);
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.transparent,
-          toolbarHeight: Sizes.appBarHeight48,
-          title: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: Sizes.spacing16,
-              vertical: Sizes.spacing8,
-            ),
-            child: Row(
-              children: [
-                const Expanded(child: SizedBox()),
-                CameraIcon(
-                  icon: cameraState.flashMode.icon,
-                  onTap: () => ref
-                      .read(cameraStateNotifierProvider.notifier)
-                      .cycleFlashMode(),
-                ),
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: CameraIcon(
-                      icon: Icons.close,
-                      onTap: () => Navigator.pop(context),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          titleSpacing: 0,
+        appBar: CameraAppBar(
+          onClose: () => Navigator.pop(context),
+          onFlash: () =>
+              ref.read(cameraStateNotifierProvider.notifier).cycleFlashMode(),
+          flashIcon: cameraState.flashMode.icon,
         ),
         body: Stack(
           children: [
@@ -94,11 +69,10 @@ class _CameraPageState extends ConsumerState<CameraPage> {
             if (cameraState.isInitialized)
               Center(
                 child: AspectRatio(
-                  aspectRatio: 9 / 16,
+                  aspectRatio: Styles.cameraPreviewAspectRatio,
                   child: CameraPreview(_controller.controller),
                 ),
               ),
-
             // 권한 없을 때 오버레이
             if (!cameraState.hasPermission)
               Center(
@@ -113,6 +87,22 @@ class _CameraPageState extends ConsumerState<CameraPage> {
                   ],
                 ),
               ),
+            // 하단 Row에 세 개 의 버튼을 배치, 갤러리, 촬영, 화면 전환
+            // 카메라 권한이 없을때는 촬영, 화면 전환 버튼 비활성화
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: CameraBottomControls(
+                onGalleryTap: () {
+                  print('gallery');
+                },
+                onCaptureTap: () {
+                  print('capture');
+                },
+                onSwitchCameraTap: () {
+                  print('switch');
+                },
+              ),
+            ),
           ],
         ),
       ),

@@ -19,12 +19,35 @@ class $AssetsImagesGen {
   SvgGenImage get thunderLogotypeSmallW =>
       const SvgGenImage('assets/images/Thunder_Logotype_small_w.svg');
 
+  /// Directory path: assets/images/camera
+  $AssetsImagesCameraGen get camera => const $AssetsImagesCameraGen();
+
   /// File path: assets/images/welcome_main.png
   AssetGenImage get welcomeMain =>
       const AssetGenImage('assets/images/welcome_main.png');
 
   /// List of all assets
   List<dynamic> get values => [thunderLogotypeSmallW, welcomeMain];
+}
+
+class $AssetsImagesCameraGen {
+  const $AssetsImagesCameraGen();
+
+  /// File path: assets/images/camera/Camera_Button.svg
+  SvgGenImage get cameraButton =>
+      const SvgGenImage('assets/images/camera/Camera_Button.svg');
+
+  /// File path: assets/images/camera/Camera_Reverse_Button.svg
+  SvgGenImage get cameraReverseButton =>
+      const SvgGenImage('assets/images/camera/Camera_Reverse_Button.svg');
+
+  /// File path: assets/images/camera/Gallery_Button.svg
+  SvgGenImage get galleryButton =>
+      const SvgGenImage('assets/images/camera/Gallery_Button.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values =>
+      [cameraButton, cameraReverseButton, galleryButton];
 }
 
 class Assets {

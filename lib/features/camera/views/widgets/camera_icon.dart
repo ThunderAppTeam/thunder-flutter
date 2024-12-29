@@ -5,6 +5,8 @@ import 'package:thunder/core/theme/gen/colors.gen.dart';
 class CameraIcon extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;
+
+  /// 상단바에서 사용되는 아이콘
   const CameraIcon({super.key, required this.icon, required this.onTap});
 
   @override

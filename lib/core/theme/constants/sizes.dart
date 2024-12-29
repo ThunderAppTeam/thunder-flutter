@@ -37,6 +37,8 @@ class Sizes {
   static const double icon24 = 24.0;
   static const double icon28 = 28.0;
   static const double icon32 = 32.0;
+  static const double icon48 = 48.0;
+  static const double icon80 = 80.0;
 
   // cursor height
   static const double cursorHeight28 = 28.0;

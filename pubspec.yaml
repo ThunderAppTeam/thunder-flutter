@@ -80,6 +80,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/camera/
 
   fonts:
     - family: Pretendard

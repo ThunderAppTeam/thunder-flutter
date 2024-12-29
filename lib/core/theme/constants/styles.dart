@@ -33,4 +33,7 @@ abstract class Styles {
   // Duration
   static const Duration duration100 = Duration(milliseconds: 100);
   static const Duration duration200 = Duration(milliseconds: 200);
+
+  // Camera
+  static const double cameraPreviewAspectRatio = 9 / 16;
 }
