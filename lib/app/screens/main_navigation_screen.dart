@@ -43,9 +43,16 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
     }
   }
 
+  void _onCameraTap() async {
+    await ref.read(permissionServiceProvider).requestCameraPermission();
+    if (mounted) {
+      SafeRouter.pushNamed(context, Routes.camera.name);
+    }
+  }
+
   void _onTap(BuildContext context, int index) {
     if (index == 1) {
-      SafeRouter.pushNamed(context, Routes.camera.name);
+      _onCameraTap();
       return;
     }
     // 카메라 탭을 건너뛰고 매핑

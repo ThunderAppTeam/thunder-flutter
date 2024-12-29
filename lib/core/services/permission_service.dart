@@ -21,6 +21,16 @@ class PermissionService {
     // 알림 권한 초기화를 위해 앱 설정으로 이동
     await openAppSettings();
   }
+
+  Future<PermissionStatus> requestCameraPermission() async {
+    final status = await Permission.camera.request();
+    return status;
+  }
+
+  Future<bool> checkCameraPermission() async {
+    final status = await Permission.camera.status;
+    return status.isGranted;
+  }
 }
 
 final permissionServiceProvider = Provider<PermissionService>((ref) {
