@@ -8,6 +8,9 @@ enum CameraError {
   initializationFailed,
   flashModeChangeFailed,
   settingsOpenFailed,
+  imagePickFailed,
+  captureError,
+  switchCameraFailed,
 }
 
 enum CameraFlashMode {
@@ -35,8 +38,11 @@ class CameraState with _$CameraState {
   const factory CameraState({
     @Default(false) bool hasPermission,
     @Default(false) bool isInitialized,
+    @Default(false) bool isCapturing,
+    @Default(false) bool isSwitching,
     @Default(CameraFlashMode.auto) CameraFlashMode flashMode,
     @Default(CameraLensDirection.back) CameraLensDirection lensDirection,
+    String? selectedImagePath,
     CameraError? error,
   }) = _CameraState;
 }

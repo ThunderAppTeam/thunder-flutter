@@ -28,6 +28,9 @@ dependencies:
   go_router: ^14.6.2
   webview_flutter: ^4.10.0
   camera: ^0.11.0+2
+  image_picker: ^1.1.2
+  photo_manager: ^3.6.3
+  image: ^4.3.0
 
   #=== Permission
   permission_handler: ^11.3.1
