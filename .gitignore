@@ -64,3 +64,11 @@ firebase.json
 .env
 *.jks
 key.properties
+
+# Generated
+*.freezed.dart
+*.g.dart
+*.gen.dart
+
+# intl generated
+lib/generated/
