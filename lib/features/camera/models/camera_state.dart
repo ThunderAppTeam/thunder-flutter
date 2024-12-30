@@ -7,6 +7,7 @@ part 'camera_state.freezed.dart';
 enum CameraError {
   initializationFailed,
   flashModeChangeFailed,
+  settingsOpenFailed,
 }
 
 enum CameraFlashMode {

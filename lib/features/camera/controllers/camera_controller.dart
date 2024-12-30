@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:thunder/core/services/permission_service.dart';
 import 'package:thunder/features/camera/models/camera_state.dart';
 
@@ -11,9 +12,11 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   CameraController? _controller;
   List<CameraDescription> _cameras = [];
 
+  CameraController get controller => _controller!;
+
   Future<void> checkPermissionAndInitialize() async {
     final isGranted = await _permissionService.checkCameraPermission();
-    if (isGranted) {
+    if (!isGranted) {
       state = state.copyWith(hasPermission: true);
       if (_controller == null) {
         await _initializeCamera();
@@ -53,7 +56,18 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
     }
   }
 
-  CameraController get controller => _controller!;
+  Future<void> openPermissionSettings() async {
+    try {
+      final isOpened = await openAppSettings();
+      if (!isOpened) {
+        throw Exception('Failed to open permission settings');
+      }
+    } catch (e) {
+      state = state.copyWith(
+        error: CameraError.settingsOpenFailed,
+      );
+    }
+  }
 
   @override
   void dispose() {

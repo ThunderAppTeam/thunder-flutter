@@ -24,7 +24,7 @@ const AppTextTheme defaultTextTheme = AppTextTheme(
   textTitle20: TextStyle(
     fontFamily: FontFamily.pretendard,
     fontSize: Sizes.fontSize20,
-    height: Sizes.lineHeight24 / Sizes.fontSize20,
+    height: Sizes.lineHeight22 / Sizes.fontSize20,
     fontWeight: FontWeight.w600,
     color: Colors.white,
   ),

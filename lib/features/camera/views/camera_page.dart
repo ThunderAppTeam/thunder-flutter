@@ -1,8 +1,11 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:thunder/core/theme/constants/gaps.dart';
+import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/constants/styles.dart';
+import 'package:thunder/core/theme/gen/colors.gen.dart';
+import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/features/camera/controllers/camera_controller.dart';
 import 'package:thunder/features/camera/models/camera_state.dart';
@@ -36,6 +39,7 @@ class _CameraPageState extends ConsumerState<CameraPage> {
     final errorMessage = switch (error) {
       CameraError.initializationFailed => '카메라 초기화 실패',
       CameraError.flashModeChangeFailed => '플래시 모드 변경 실패',
+      CameraError.settingsOpenFailed => '카메라 접근 권한 설정 실패',
     };
     showModalBottomSheet(
       context: context,
@@ -55,6 +59,7 @@ class _CameraPageState extends ConsumerState<CameraPage> {
   Widget build(BuildContext context) {
     final cameraState = ref.watch(cameraStateNotifierProvider);
     ref.listen(cameraStateNotifierProvider, _onCameraStateChanged);
+    final textTheme = getTextTheme(context);
     return SafeArea(
       child: Scaffold(
         appBar: CameraAppBar(
@@ -62,10 +67,10 @@ class _CameraPageState extends ConsumerState<CameraPage> {
           onFlash: () =>
               ref.read(cameraStateNotifierProvider.notifier).cycleFlashMode(),
           flashIcon: cameraState.flashMode.icon,
+          hasPermission: cameraState.hasPermission,
         ),
         body: Stack(
           children: [
-            // 카메라 프리뷰 (initialized 상태에 따라)
             if (cameraState.isInitialized)
               Center(
                 child: AspectRatio(
@@ -73,35 +78,58 @@ class _CameraPageState extends ConsumerState<CameraPage> {
                   child: CameraPreview(_controller.controller),
                 ),
               ),
-            // 권한 없을 때 오버레이
-            if (!cameraState.hasPermission)
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('카메라 권한이 필요합니다'),
-                    TextButton(
-                      onPressed: () => openAppSettings(),
-                      child: const Text('설정으로 이동'),
-                    ),
-                  ],
+            Column(
+              children: [
+                Expanded(
+                  // 권한 없을 때 오버레이
+                  child: !cameraState.hasPermission
+                      ? Container(
+                          color: ColorName.iosDarkGray,
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: Sizes.spacing16,
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Thunder 앱에서 사진을 촬영하기 위해\n카메라 접근 권한을 허용해주세요',
+                                    style: textTheme.textTitle20,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  Gaps.v32,
+                                  TextButton(
+                                    onPressed: () =>
+                                        _controller.openPermissionSettings(),
+                                    child: Text(
+                                      '카메라 접근 권한 허용하기',
+                                      style: textTheme.textTitle20.copyWith(
+                                        color: ColorName.iosBlue,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+                      : const SizedBox(),
                 ),
-              ),
-            // 하단 Row에 세 개 의 버튼을 배치, 갤러리, 촬영, 화면 전환
-            // 카메라 권한이 없을때는 촬영, 화면 전환 버튼 비활성화
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: CameraBottomControls(
-                onGalleryTap: () {
-                  print('gallery');
-                },
-                onCaptureTap: () {
-                  print('capture');
-                },
-                onSwitchCameraTap: () {
-                  print('switch');
-                },
-              ),
+                // 하단 Row에 세 개 의 버튼을 배치, 갤러리, 촬영, 화면 전환
+                CameraBottomControls(
+                  hasPermission: cameraState.hasPermission,
+                  onGalleryTap: () {
+                    print('gallery');
+                  },
+                  onCaptureTap: () {
+                    print('capture');
+                  },
+                  onSwitchCameraTap: () {
+                    print('switch');
+                  },
+                ),
+              ],
             ),
           ],
         ),

@@ -20,4 +20,8 @@
     <!-- Accent -->
     <color name="accent_red">#FE2C55</color>
     <color name="accent_blue">#007AFF</color>
+
+    <!-- IOS -->
+    <color name="ios_blue">#007AFF</color>
+    <color name="ios_dark_gray">#1C1C1C</color>
 </resources>

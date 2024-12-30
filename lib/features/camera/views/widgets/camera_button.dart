@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
+import 'package:thunder/core/theme/constants/styles.dart';
 
 class CameraButton extends StatefulWidget {
   final VoidCallback onTap;
   final Widget child;
   final double size;
+  final bool isEnabled;
 
   const CameraButton({
     super.key,
     required this.onTap,
     required this.child,
     this.size = Sizes.icon48,
+    this.isEnabled = true,
   });
 
   @override
@@ -30,11 +33,14 @@ class _CameraButtonState extends State<CameraButton>
       color: Colors.transparent,
       child: InkWell(
         customBorder: CircleBorder(),
-        onTap: widget.onTap,
+        onTap: widget.isEnabled ? widget.onTap : null,
         child: SizedBox(
           width: widget.size,
           height: widget.size,
-          child: widget.child,
+          child: Opacity(
+            opacity: widget.isEnabled ? Styles.opacity100 : Styles.opacity0,
+            child: widget.child,
+          ),
         ),
       ),
     );

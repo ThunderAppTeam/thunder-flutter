@@ -52,6 +52,12 @@ class ColorName {
   /// Color: #1A1A1A
   static const Color gray900 = Color(0xFF1A1A1A);
 
+  /// Color: #007AFF
+  static const Color iosBlue = Color(0xFF007AFF);
+
+  /// Color: #1C1C1C
+  static const Color iosDarkGray = Color(0xFF1C1C1C);
+
   /// Color: #FFFFFF
   static const Color white = Color(0xFFFFFFFF);
 }
