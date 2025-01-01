@@ -13,11 +13,10 @@ import 'package:image/image.dart' as img;
 class CameraStateNotifier extends StateNotifier<CameraState> {
   CameraStateNotifier(ref) : super(const CameraState()) {
     _permissionService = ref.read(permissionServiceProvider);
-    _imagePicker = ImagePicker();
   }
 
   late final PermissionService _permissionService;
-  late final ImagePicker _imagePicker;
+  final ImagePicker _imagePicker = ImagePicker();
   CameraController? _controller;
   List<CameraDescription> _cameras = [];
 
@@ -44,7 +43,7 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
     if (_cameras.isEmpty) return;
     _controller = CameraController(
       _cameras[0],
-      ResolutionPreset.high,
+      ResolutionPreset.veryHigh,
       enableAudio: false,
     );
     try {
@@ -54,10 +53,15 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
     }
   }
 
+  // 카메라 화면으로 돌아올 때 호출
+  Future<void> reinitializeCamera() async {
+    if (!state.hasPermission || state.isInitialized) return;
+    await _initializeCamera();
+  }
+
   Future<void> _initController(CameraController controller) async {
     await controller.initialize();
     await controller.lockCaptureOrientation(DeviceOrientation.portraitUp);
-    await controller.setFocusMode(FocusMode.auto);
     await controller.setFlashMode(state.flashMode.flashMode);
     await _initZoomLevels(controller);
     state = state.copyWith(
@@ -68,6 +72,7 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   // ##### --------- Camera Function --------- #####
 
   Future<void> switchCamera() async {
+    if (!state.isInitialized) return;
     if (_cameras.length < 2) return; // 카메라가 2개 이상이 아니면 반환
     final CameraLensDirection nextDirection =
         state.lensDirection == CameraLensDirection.back
@@ -154,19 +159,26 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
     }
   }
 
-  Future<void> takePicture() async {
+  Future<void> setFocusExposurePoint(double x, double y) async {
     if (_controller?.value.isInitialized != true) return;
+    try {
+      await _controller!.setFocusPoint(Offset(x, y));
+      await _controller!.setExposurePoint(Offset(x, y));
+    } catch (e) {
+      log('setFocusPoint error: $e');
+    }
+  }
+
+  Future<void> takePicture() async {
+    if (!state.isInitialized) return;
     try {
       state = state.copyWith(isCapturing: true);
       final photo = await _controller!.takePicture();
-
       String imagePath = photo.path;
-
       if (state.lensDirection == CameraLensDirection.front) {
         final flippedFile = await flipImageHorizontally(photo.path);
         imagePath = flippedFile.path;
       }
-
       state = state.copyWith(
         isCapturing: false,
         selectedImagePath: imagePath,
@@ -191,6 +203,8 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   }
 
   Future<void> pickImage() async {
+    if (!state.isInitialized) return;
+    cleanUp();
     try {
       final XFile? image = await _imagePicker.pickImage(
         source: ImageSource.gallery,
@@ -198,6 +212,8 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
       );
       if (image != null) {
         state = state.copyWith(selectedImagePath: image.path);
+      } else {
+        await _initializeCamera();
       }
     } catch (e) {
       state = state.copyWith(error: CameraError.imagePickFailed);
@@ -212,9 +228,9 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
     state = state.copyWith(error: null);
   }
 
-  Future<void> cleanUp() async {
+  void cleanUp() async {
     if (_controller != null) {
-      await _controller!.dispose();
+      _controller!.dispose();
       _controller = null;
       state = state.copyWith(
         isInitialized: false,

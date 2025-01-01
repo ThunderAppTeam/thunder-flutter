@@ -39,6 +39,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
   @override
   void dispose() {
     _controller.cleanUp();
+    _shutterController.dispose();
     super.dispose();
   }
 
@@ -63,8 +64,23 @@ class _CameraPageState extends ConsumerState<CameraPage>
     );
   }
 
-  void _onCameraStateChanged(CameraState? prev, CameraState next) {
-    if (next.error != null) {
+  Future<void> _onFocusTap(
+    TapUpDetails details,
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    final RenderBox box = context.findRenderObject() as RenderBox;
+    final Offset localPoint = box.globalToLocal(details.globalPosition);
+
+    // 프리뷰 크기를 기준으로 상대 좌표 계산
+    final double x = localPoint.dx / box.size.width;
+    final double y = localPoint.dy / box.size.height;
+
+    await _controller.setFocusExposurePoint(x, y);
+  }
+
+  void _onCameraStateChanged(CameraState? prev, CameraState next) async {
+    if (prev?.error == null && next.error != null) {
       _showErrorBottomSheet(next.error!);
     }
 
@@ -77,17 +93,20 @@ class _CameraPageState extends ConsumerState<CameraPage>
 
     if (next.selectedImagePath != null &&
         prev?.selectedImagePath != next.selectedImagePath) {
+      _controller.cleanUp();
       // 새로운 이미지가 선택되었을 때 미리보기 페이지로 이동
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PhotoPreviewPage(
-            imagePath: next.selectedImagePath!,
+      if (mounted) {
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PhotoPreviewPage(
+              imagePath: next.selectedImagePath!,
+            ),
           ),
-        ),
-      ).then((_) {
+        );
         _controller.clearSelectedImage();
-      });
+        _controller.reinitializeCamera();
+      }
     }
   }
 
@@ -109,11 +128,12 @@ class _CameraPageState extends ConsumerState<CameraPage>
             if (cameraState.isInitialized)
               Center(
                 child: GestureDetector(
+                  onTapUp: (details) => _onFocusTap(details, context, ref),
                   onScaleStart: (_) => _controller.onScaleStart(),
                   onScaleUpdate: (details) =>
                       _controller.setZoomLevel(details.scale),
                   child: AspectRatio(
-                    aspectRatio: Styles.cameraPreviewAspectRatio,
+                    aspectRatio: Styles.imageAspectRatio,
                     child: Stack(
                       children: [
                         CameraPreview(_controller.previewController),
