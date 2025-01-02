@@ -38,8 +38,8 @@ class CameraState with _$CameraState {
   const factory CameraState({
     @Default(false) bool hasPermission,
     @Default(false) bool isInitialized,
+    @Default(false) bool isEnabled, // 버튼 활성 여부
     @Default(false) bool isCapturing,
-    @Default(false) bool isSwitching,
     @Default(CameraFlashMode.auto) CameraFlashMode flashMode,
     @Default(CameraLensDirection.back) CameraLensDirection lensDirection,
     String? selectedImagePath,

@@ -3,9 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:image/image.dart' as img;
+import 'package:thunder/app/router/routes.dart';
+import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/styles.dart';
+import 'package:thunder/core/utils/%08image_utils.dart';
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
-import 'package:thunder/features/camera/views/cropped_image_preview_page.dart';
+import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 
 class PhotoPreviewPage extends StatefulWidget {
   final String imagePath;
@@ -28,7 +31,7 @@ class _PhotoPreviewPageState extends State<PhotoPreviewPage> {
         appBar: CustomAppBar(
           title: '사진 미리보기',
           actionText: '완료',
-          onAction: () => _cropImage(context),
+          onAction: () => _cropImage(widget.imagePath),
         ),
         body: Center(
           child: AspectRatio(
@@ -56,7 +59,7 @@ class _PhotoPreviewPageState extends State<PhotoPreviewPage> {
     );
   }
 
-  Future<void> _cropImage(BuildContext context) async {
+  Future<void> _cropImage(String imagePath) async {
     final editorState = _editorKey.currentState;
     if (editorState == null) return;
 
@@ -65,12 +68,11 @@ class _PhotoPreviewPageState extends State<PhotoPreviewPage> {
     if (cropRect == null) return;
 
     // 원본 이미지 불러오기
-    final file = File(widget.imagePath);
+    final file = File(imagePath);
     final rawImage = await file.readAsBytes();
     final image = img.decodeImage(rawImage);
 
     if (image == null) return;
-
     // 크롭된 이미지 생성
     final croppedImage = img.copyCrop(
       image,
@@ -79,33 +81,16 @@ class _PhotoPreviewPageState extends State<PhotoPreviewPage> {
       width: cropRect.width.toInt(),
       height: cropRect.height.toInt(),
     );
-
-    // 리사이즈
-    img.Image resizedImage = croppedImage;
-    if (croppedImage.width > 1080 || croppedImage.height > 1920) {
-      resizedImage = img.copyResize(
-        croppedImage,
-        width: 1080,
-        height: 1920,
-      );
-    }
-    // 압축하여 저장
-    final compressedFilePath =
-        '${file.path}_compressed${DateTime.now().millisecondsSinceEpoch}.jpg';
-    final compressedFile = File(compressedFilePath)
-      ..writeAsBytesSync(img.encodeJpg(resizedImage, quality: 75));
-
-    // 다음 화면으로 이동하며 데이터 전달
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CroppedImagePreviewPage(
-          compressedFile: compressedFile,
-          originalImage: image,
-          croppedImage: croppedImage,
-          resizedImage: resizedImage,
+    if (mounted) {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) => CustomBottomSheet(
+          title: '사진 미리보기',
+          subtitle:
+              '이미지 용량: ${formatFileSize(croppedImage.length)}\n이미지 크기: ${croppedImage.width}x${croppedImage.height}',
         ),
-      ),
-    );
+      );
+      // SafeRouter.goNamed(context, Routes.home.name);
+    }
   }
 }

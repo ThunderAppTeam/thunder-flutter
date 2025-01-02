@@ -3,7 +3,7 @@ import 'package:thunder/core/theme/constants/styles.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 
 class IOSStyleCaptureButton extends StatefulWidget {
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final double size;
   final Color color;
   final double borderWidth;

@@ -10,6 +10,12 @@ class SafeNavigatorObserver extends NavigatorObserver {
     await Future.delayed(TimeConsts.navigationDuration);
     SafeRouter._isNavigating = false;
   }
+
+  @override
+  void didPop(Route route, Route? previousRoute) {
+    super.didPop(route, previousRoute);
+    SafeRouter._isNavigating = false;
+  }
 }
 
 class SafeRouter {

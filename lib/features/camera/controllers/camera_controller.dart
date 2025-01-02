@@ -3,9 +3,11 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:thunder/core/constants/camera_consts.dart';
 import 'package:thunder/core/services/permission_service.dart';
 import 'package:thunder/features/camera/models/camera_state.dart';
 import 'package:image/image.dart' as img;
@@ -50,6 +52,8 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
       _initController(_controller!);
     } catch (e) {
       state = state.copyWith(error: CameraError.initializationFailed);
+    } finally {
+      state = state.copyWith(isEnabled: true);
     }
   }
 
@@ -72,8 +76,9 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   // ##### --------- Camera Function --------- #####
 
   Future<void> switchCamera() async {
-    if (!state.isInitialized) return;
+    if (!state.isEnabled) return;
     if (_cameras.length < 2) return; // 카메라가 2개 이상이 아니면 반환
+    state = state.copyWith(isEnabled: false);
     final CameraLensDirection nextDirection =
         state.lensDirection == CameraLensDirection.back
             ? CameraLensDirection.front
@@ -81,7 +86,6 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
     state = state.copyWith(
       lensDirection: nextDirection,
       isInitialized: false,
-      isSwitching: true,
     );
     try {
       await _controller!.dispose();
@@ -94,10 +98,10 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
     } catch (e) {
       state = state.copyWith(
         error: CameraError.switchCameraFailed,
-        isSwitching: false,
       );
+    } finally {
+      state = state.copyWith(isEnabled: true);
     }
-    state = state.copyWith(isSwitching: false);
   }
 
   /// 촬영된 이미지를 좌우 반전 후 새로운 파일로 저장
@@ -170,22 +174,20 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   }
 
   Future<void> takePicture() async {
-    if (!state.isInitialized) return;
+    if (!state.isEnabled) return;
     try {
-      state = state.copyWith(isCapturing: true);
+      state = state.copyWith(isCapturing: true, isEnabled: false);
       final photo = await _controller!.takePicture();
       String imagePath = photo.path;
       if (state.lensDirection == CameraLensDirection.front) {
         final flippedFile = await flipImageHorizontally(photo.path);
         imagePath = flippedFile.path;
       }
-      state = state.copyWith(
-        isCapturing: false,
-        selectedImagePath: imagePath,
-      );
+      state = state.copyWith(selectedImagePath: imagePath);
     } catch (e) {
-      state =
-          state.copyWith(error: CameraError.captureError, isCapturing: false);
+      state = state.copyWith(error: CameraError.captureError);
+    } finally {
+      state = state.copyWith(isCapturing: false, isEnabled: true);
     }
   }
 
@@ -203,20 +205,41 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   }
 
   Future<void> pickImage() async {
-    if (!state.isInitialized) return;
-    cleanUp();
+    if (!state.isEnabled) return;
     try {
+      state = state.copyWith(isEnabled: false);
       final XFile? image = await _imagePicker.pickImage(
         source: ImageSource.gallery,
         requestFullMetadata: false, // 제한된 메타데이터만 요청 권한 요청 안함
       );
-      if (image != null) {
-        state = state.copyWith(selectedImagePath: image.path);
-      } else {
-        await _initializeCamera();
-      }
+      if (image == null) return;
+      final compressedFile = await _resizeAndCompressImage(image.path);
+      state = state.copyWith(
+        selectedImagePath: compressedFile!.path,
+      );
     } catch (e) {
-      state = state.copyWith(error: CameraError.imagePickFailed);
+      state = state.copyWith(
+        error: CameraError.imagePickFailed,
+      );
+    } finally {
+      state = state.copyWith(isEnabled: true);
+    }
+  }
+
+  Future<File?> _resizeAndCompressImage(String imagePath) async {
+    try {
+      final file = File(imagePath);
+      final bytes = await file.readAsBytes();
+      final compressed = await FlutterImageCompress.compressWithList(
+        bytes,
+        minWidth: CameraConsts.targetWidth,
+        minHeight: CameraConsts.targetHeight,
+        quality: CameraConsts.targetQuality,
+      );
+      await file.writeAsBytes(compressed);
+      return file;
+    } catch (e) {
+      return null;
     }
   }
 
@@ -228,9 +251,10 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
     state = state.copyWith(error: null);
   }
 
-  void cleanUp() async {
-    if (_controller != null) {
-      _controller!.dispose();
+  Future<void> cleanUp() async {
+    if (_controller?.value.isInitialized == true) {
+      log("cleanUp");
+      await _controller!.dispose();
       _controller = null;
       state = state.copyWith(
         isInitialized: false,
@@ -241,8 +265,8 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   }
 
   @override
-  void dispose() {
-    cleanUp();
+  void dispose() async {
+    await cleanUp();
     super.dispose();
   }
 }

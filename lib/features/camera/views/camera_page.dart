@@ -93,7 +93,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
 
     if (next.selectedImagePath != null &&
         prev?.selectedImagePath != next.selectedImagePath) {
-      _controller.cleanUp();
+      //  _controller.cleanUp(); 메모리 관리 필요시에 주석 해제
       // 새로운 이미지가 선택되었을 때 미리보기 페이지로 이동
       if (mounted) {
         await Navigator.push(
@@ -156,17 +156,10 @@ class _CameraPageState extends ConsumerState<CameraPage>
                 ),
                 CameraBottomControls(
                   hasPermission: cameraState.hasPermission,
+                  buttonsEnabled: cameraState.isEnabled,
                   onGalleryTap: () => _controller.pickImage(),
-                  onCaptureTap: () {
-                    if (!cameraState.isCapturing) {
-                      _controller.takePicture();
-                    }
-                  },
-                  onSwitchCameraTap: () {
-                    if (!cameraState.isSwitching) {
-                      _controller.switchCamera();
-                    }
-                  },
+                  onCaptureTap: () => _controller.takePicture(),
+                  onSwitchCameraTap: () => _controller.switchCamera(),
                 ),
               ],
             ),

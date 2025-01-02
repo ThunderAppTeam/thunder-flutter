@@ -3,7 +3,7 @@ import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/constants/styles.dart';
 
 class CameraButton extends StatefulWidget {
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final Widget child;
   final double size;
   final bool isEnabled;
