@@ -9,7 +9,7 @@ import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/features/auth/models/auth_state.dart';
 import 'package:thunder/features/auth/providers/auth_view_model.dart';
 import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
-import 'package:thunder/features/onboarding/views/widgets/onboarding_button.dart';
+import 'package:thunder/core/widgets/buttons/custom_wide_button.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_scaffold.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_small_button.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_text_field.dart';
@@ -161,7 +161,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
           ),
         ],
       ),
-      bottomButton: OnboardingButton(
+      bottomButton: CustomWideButton(
         text: S.of(context).commonConfirm,
         onPressed: _onButtonPressed,
         isEnabled: _isValid && !_isVerifying && !SafeRouter.isNavigating,

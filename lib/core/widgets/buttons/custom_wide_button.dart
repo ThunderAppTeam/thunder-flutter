@@ -5,14 +5,14 @@ import 'package:thunder/core/theme/constants/styles.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 
-class OnboardingButton extends StatelessWidget {
+class CustomWideButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
   final bool isEnabled;
   final Color backgroundColor;
   final Color textColor;
 
-  const OnboardingButton({
+  const CustomWideButton({
     super.key,
     required this.text,
     required this.onPressed,
