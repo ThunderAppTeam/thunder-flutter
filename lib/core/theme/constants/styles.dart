@@ -33,8 +33,4 @@ abstract class Styles {
   // Duration
   static const Duration duration100 = Duration(milliseconds: 100);
   static const Duration duration200 = Duration(milliseconds: 200);
-
-  // Camera
-  static const double imageAspectRatio = 9 / 16;
-  static const Duration cameraFlashDuration = Duration(milliseconds: 100);
 }

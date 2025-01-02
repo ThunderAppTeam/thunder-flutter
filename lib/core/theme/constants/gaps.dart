@@ -10,6 +10,7 @@ abstract class Gaps {
   static const v32 = SizedBox(height: Sizes.spacing32);
 
   // Horizontal
+  static const h4 = SizedBox(width: Sizes.spacing4);
   static const h8 = SizedBox(width: Sizes.spacing8);
   static const h12 = SizedBox(width: Sizes.spacing12);
   static const h16 = SizedBox(width: Sizes.spacing16);

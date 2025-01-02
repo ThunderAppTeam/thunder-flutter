@@ -7,7 +7,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:thunder/core/constants/camera_consts.dart';
+import 'package:thunder/core/constants/image_consts.dart';
 import 'package:thunder/core/services/permission_service.dart';
 import 'package:thunder/features/camera/models/camera_state.dart';
 import 'package:image/image.dart' as img;
@@ -57,12 +57,6 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
     }
   }
 
-  // 카메라 화면으로 돌아올 때 호출
-  Future<void> reinitializeCamera() async {
-    if (!state.hasPermission || state.isInitialized) return;
-    await _initializeCamera();
-  }
-
   Future<void> _initController(CameraController controller) async {
     await controller.initialize();
     await controller.lockCaptureOrientation(DeviceOrientation.portraitUp);
@@ -76,7 +70,7 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   // ##### --------- Camera Function --------- #####
 
   Future<void> switchCamera() async {
-    if (!state.isEnabled) return;
+    if (!state.isEnabled || !state.isInitialized) return;
     if (_cameras.length < 2) return; // 카메라가 2개 이상이 아니면 반환
     state = state.copyWith(isEnabled: false);
     final CameraLensDirection nextDirection =
@@ -174,7 +168,7 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   }
 
   Future<void> takePicture() async {
-    if (!state.isEnabled) return;
+    if (!state.isEnabled || !state.isInitialized) return;
     try {
       state = state.copyWith(isCapturing: true, isEnabled: false);
       final photo = await _controller!.takePicture();
@@ -205,7 +199,7 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   }
 
   Future<void> pickImage() async {
-    if (!state.isEnabled) return;
+    if (!state.isEnabled || !state.isInitialized) return;
     try {
       state = state.copyWith(isEnabled: false);
       final XFile? image = await _imagePicker.pickImage(
@@ -232,9 +226,9 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
       final bytes = await file.readAsBytes();
       final compressed = await FlutterImageCompress.compressWithList(
         bytes,
-        minWidth: CameraConsts.targetWidth,
-        minHeight: CameraConsts.targetHeight,
-        quality: CameraConsts.targetQuality,
+        minWidth: ImageConsts.targetWidth,
+        minHeight: ImageConsts.targetHeight,
+        quality: ImageConsts.targetQuality,
       );
       await file.writeAsBytes(compressed);
       return file;
@@ -251,27 +245,15 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
     state = state.copyWith(error: null);
   }
 
-  Future<void> cleanUp() async {
-    if (_controller?.value.isInitialized == true) {
-      log("cleanUp");
-      await _controller!.dispose();
-      _controller = null;
-      state = state.copyWith(
-        isInitialized: false,
-        error: null,
-        selectedImagePath: null,
-      );
-    }
-  }
-
   @override
   void dispose() async {
-    await cleanUp();
+    log('camera dispose');
+    await _controller!.dispose();
     super.dispose();
   }
 }
 
 final cameraStateNotifierProvider =
-    StateNotifierProvider<CameraStateNotifier, CameraState>((ref) {
+    StateNotifierProvider.autoDispose<CameraStateNotifier, CameraState>((ref) {
   return CameraStateNotifier(ref);
 });

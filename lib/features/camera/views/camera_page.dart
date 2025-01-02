@@ -1,9 +1,10 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/core/constants/image_consts.dart';
+import 'package:thunder/core/constants/time_consts.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
-import 'package:thunder/core/theme/constants/styles.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
@@ -31,14 +32,13 @@ class _CameraPageState extends ConsumerState<CameraPage>
     _controller = ref.read(cameraStateNotifierProvider.notifier);
     _controller.checkPermissionAndInitialize();
     _shutterController = AnimationController(
-      duration: Styles.cameraFlashDuration,
+      duration: TimeConsts.cameraFlashDuration,
       vsync: this,
     );
   }
 
   @override
   void dispose() {
-    _controller.cleanUp();
     _shutterController.dispose();
     super.dispose();
   }
@@ -105,7 +105,6 @@ class _CameraPageState extends ConsumerState<CameraPage>
           ),
         );
         _controller.clearSelectedImage();
-        _controller.reinitializeCamera();
       }
     }
   }
@@ -113,12 +112,15 @@ class _CameraPageState extends ConsumerState<CameraPage>
   @override
   Widget build(BuildContext context) {
     final cameraState = ref.watch(cameraStateNotifierProvider);
-
     ref.listen(cameraStateNotifierProvider, _onCameraStateChanged);
     return SafeArea(
       child: Scaffold(
         appBar: CameraAppBar(
-          onClose: () => Navigator.pop(context),
+          onClose: () async {
+            if (cameraState.isInitialized) {
+              Navigator.pop(context);
+            }
+          },
           onFlash: () => _controller.cycleFlashMode(),
           flashIcon: cameraState.flashMode.icon,
           hasPermission: cameraState.hasPermission,
@@ -133,7 +135,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
                   onScaleUpdate: (details) =>
                       _controller.setZoomLevel(details.scale),
                   child: AspectRatio(
-                    aspectRatio: Styles.imageAspectRatio,
+                    aspectRatio: ImageConsts.aspectRatio,
                     child: Stack(
                       children: [
                         CameraPreview(_controller.previewController),

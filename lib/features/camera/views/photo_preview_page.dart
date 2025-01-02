@@ -2,24 +2,24 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image/image.dart' as img;
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
-import 'package:thunder/core/theme/constants/styles.dart';
-import 'package:thunder/core/utils/%08image_utils.dart';
+import 'package:thunder/core/constants/image_consts.dart';
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
-import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
+import 'package:thunder/features/noonbody/view_models/noonbody_view_model.dart';
 
-class PhotoPreviewPage extends StatefulWidget {
+class PhotoPreviewPage extends ConsumerStatefulWidget {
   final String imagePath;
 
   const PhotoPreviewPage({super.key, required this.imagePath});
 
   @override
-  State<PhotoPreviewPage> createState() => _PhotoPreviewPageState();
+  ConsumerState<PhotoPreviewPage> createState() => _PhotoPreviewPageState();
 }
 
-class _PhotoPreviewPageState extends State<PhotoPreviewPage> {
+class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
   final GlobalKey<ExtendedImageEditorState> _editorKey =
       GlobalKey<ExtendedImageEditorState>();
 
@@ -31,11 +31,11 @@ class _PhotoPreviewPageState extends State<PhotoPreviewPage> {
         appBar: CustomAppBar(
           title: '사진 미리보기',
           actionText: '완료',
-          onAction: () => _cropImage(widget.imagePath),
+          onAction: () => _onComplete(widget.imagePath, ref),
         ),
         body: Center(
           child: AspectRatio(
-            aspectRatio: Styles.imageAspectRatio,
+            aspectRatio: ImageConsts.aspectRatio,
             child: ExtendedImage.file(
               file,
               fit: BoxFit.contain,
@@ -45,7 +45,7 @@ class _PhotoPreviewPageState extends State<PhotoPreviewPage> {
                 return EditorConfig(
                   cropRectPadding: EdgeInsets.zero,
                   initCropRectType: InitCropRectType.layoutRect,
-                  cropAspectRatio: Styles.imageAspectRatio,
+                  cropAspectRatio: ImageConsts.aspectRatio,
                   maxScale: 4.0, // 최대 확대 배율
                   cornerColor: Colors.transparent,
                   lineColor: Colors.transparent,
@@ -59,7 +59,7 @@ class _PhotoPreviewPageState extends State<PhotoPreviewPage> {
     );
   }
 
-  Future<void> _cropImage(String imagePath) async {
+  Future<void> _onComplete(String imagePath, WidgetRef ref) async {
     final editorState = _editorKey.currentState;
     if (editorState == null) return;
 
@@ -81,16 +81,21 @@ class _PhotoPreviewPageState extends State<PhotoPreviewPage> {
       width: cropRect.width.toInt(),
       height: cropRect.height.toInt(),
     );
+
+    // 크롭된 이미지를 새로운 경로로 저장
+    final String croppedImagePath =
+        '${file.parent.path}/${DateTime.now().millisecondsSinceEpoch}_cropped.jpg';
+    final croppedFile = File(croppedImagePath);
+    await croppedFile.writeAsBytes(img.encodeJpg(croppedImage));
+
+    await ref.read(noonbodyProvider.notifier).uploadImage(croppedImagePath);
     if (mounted) {
-      showModalBottomSheet(
-        context: context,
-        builder: (context) => CustomBottomSheet(
-          title: '사진 미리보기',
-          subtitle:
-              '이미지 용량: ${formatFileSize(croppedImage.length)}\n이미지 크기: ${croppedImage.width}x${croppedImage.height}',
-        ),
+      // 자른 이미지의 path를 전달
+      SafeRouter.goNamed(
+        context,
+        Routes.noonbody.name,
+        extra: croppedImagePath,
       );
-      // SafeRouter.goNamed(context, Routes.home.name);
     }
   }
 }

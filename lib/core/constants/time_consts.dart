@@ -10,4 +10,7 @@ class TimeConsts {
 
   static const Duration navigationDuration = Duration(milliseconds: 100);
   static const Duration permissionPopupDuration = Duration(milliseconds: 500);
+
+  // camera
+  static const Duration cameraFlashDuration = Duration(milliseconds: 100);
 }

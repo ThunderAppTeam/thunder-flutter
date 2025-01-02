@@ -29,4 +29,9 @@ final class Routes {
     name: 'camera',
     path: '/camera',
   );
+
+  static const noonbody = (
+    name: 'noonbody',
+    path: '/noonbody',
+  );
 }
