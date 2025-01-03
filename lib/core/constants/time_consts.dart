@@ -8,7 +8,7 @@ class TimeConsts {
   static const int verificationTimeLimit = 120; // 2분
   static const int verificationResendDelay = 5; // 5초 후 재전송 가능
 
-  static const Duration navigationDuration = Duration(milliseconds: 100);
+  static const Duration navigationDuration = Duration(milliseconds: 500);
   static const Duration permissionPopupDuration = Duration(milliseconds: 500);
 
   // camera

@@ -1,8 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thunder/app/screens/main_navigation_screen.dart';
 import 'package:thunder/app/router/routes.dart';
-import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/widgets/web_view_page.dart';
 import 'package:thunder/features/auth/repositories/auth_repository.dart';
 import 'package:thunder/features/camera/views/camera_page.dart';
@@ -15,8 +15,8 @@ import 'package:thunder/features/welcome/views/welcome_page.dart';
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     debugLogDiagnostics: true,
-    initialLocation: Routes.home.path,
-    observers: [SafeNavigatorObserver()],
+    // initialLocation: Routes.home.path,
+    initialLocation: !kDebugMode ? Routes.home.path : Routes.home.path,
     redirect: (context, state) {
       final isLoggedIn = ref.watch(authRepoProvider).isLoggedIn;
 

@@ -44,8 +44,9 @@ class _NoonbodyWaitingPageState extends ConsumerState<NoonbodyWaitingPage> {
           title: '내 눈바디',
           actionIcon: Icons.more_horiz,
           onAction: () {},
-          onBack: () =>
-              SafeRouter.goNamed(context, Routes.home.name, extra: true),
+          onBack: () => ref
+              .read(safeRouterProvider)
+              .goNamed(context, Routes.home.name, extra: true),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: Sizes.spacing16),

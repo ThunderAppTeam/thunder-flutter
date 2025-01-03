@@ -46,7 +46,7 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
   void _onCameraTap() async {
     await ref.read(permissionServiceProvider).requestCameraPermission();
     if (mounted) {
-      SafeRouter.pushNamed(context, Routes.camera.name);
+      ref.read(safeRouterProvider).pushNamed(context, Routes.camera.name);
     }
   }
 

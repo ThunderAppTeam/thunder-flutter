@@ -164,7 +164,9 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
       bottomButton: CustomWideButton(
         text: S.of(context).commonConfirm,
         onPressed: _onButtonPressed,
-        isEnabled: _isValid && !_isVerifying && !SafeRouter.isNavigating,
+        isEnabled: _isValid &&
+            !_isVerifying &&
+            !ref.read(safeRouterProvider).isNavigating,
       ),
     );
   }

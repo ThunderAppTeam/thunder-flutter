@@ -36,7 +36,7 @@ class _GenderPageState extends ConsumerState<GenderPage> {
                 .read(onboardingProvider.notifier)
                 .completeOnboarding(marketingAgreed: marketingAgreed);
             if (context.mounted) {
-              SafeRouter.goNamed(context, Routes.home.name);
+              ref.read(safeRouterProvider).goNamed(context, Routes.home.name);
             }
           } catch (e) {
             if (context.mounted) {

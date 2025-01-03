@@ -1,39 +1,57 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thunder/core/constants/time_consts.dart';
 
-class SafeNavigatorObserver extends NavigatorObserver {
-  @override
-  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) async {
-    super.didPush(route, previousRoute);
-    // 0.1초 정도 navigation이 완료되기 전에 다시 네비게이션을 시도하는 것을 방지
-    await Future.delayed(TimeConsts.navigationDuration);
-    SafeRouter._isNavigating = false;
-  }
-
-  @override
-  void didPop(Route route, Route? previousRoute) {
-    super.didPop(route, previousRoute);
-    SafeRouter._isNavigating = false;
-  }
-}
-
+// SafeRouter Notifier
 class SafeRouter {
-  static bool _isNavigating = false;
+  bool _isNavigating = false;
 
-  static bool get isNavigating => _isNavigating;
+  bool get isNavigating => _isNavigating;
 
-  static Future<T?> pushNamed<T>(BuildContext context, String name,
-      {Object? extra}) async {
+  Future<T?> pushNamed<T>(
+    BuildContext context,
+    String name, {
+    Object? extra,
+  }) async {
     if (_isNavigating) return null;
     _isNavigating = true;
-    return context.pushNamed<T>(name, extra: extra);
+    try {
+      return context.pushNamed<T>(name, extra: extra);
+    } finally {
+      await Future.delayed(TimeConsts.navigationDuration);
+      _isNavigating = false;
+    }
   }
 
-  static void goNamed(BuildContext context, String name,
-      {Map<String, String>? pathParameters, Object? extra}) {
+  void goNamed(
+    BuildContext context,
+    String name, {
+    Map<String, String>? pathParameters,
+    Object? extra,
+  }) {
     if (_isNavigating) return;
     _isNavigating = true;
-    context.goNamed(name, pathParameters: pathParameters ?? {}, extra: extra);
+    try {
+      context.goNamed(name, pathParameters: pathParameters ?? {}, extra: extra);
+    } finally {
+      Future.delayed(TimeConsts.navigationDuration, () {
+        _isNavigating = false;
+      });
+    }
+  }
+
+  void pop(BuildContext context) {
+    if (_isNavigating) return;
+    _isNavigating = true;
+    context.pop();
+    Future.delayed(TimeConsts.navigationDuration, () {
+      _isNavigating = false;
+    });
   }
 }
+
+// SafeRouter Provider
+final safeRouterProvider = Provider<SafeRouter>((ref) {
+  return SafeRouter();
+});

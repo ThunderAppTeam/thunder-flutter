@@ -9,7 +9,6 @@ class CameraBottomControls extends StatelessWidget {
   final VoidCallback onCaptureTap;
   final VoidCallback onSwitchCameraTap;
   final bool hasPermission;
-  final bool buttonsEnabled;
 
   const CameraBottomControls({
     super.key,
@@ -17,7 +16,6 @@ class CameraBottomControls extends StatelessWidget {
     required this.onCaptureTap,
     required this.onSwitchCameraTap,
     required this.hasPermission,
-    required this.buttonsEnabled,
   });
 
   @override
@@ -31,15 +29,15 @@ class CameraBottomControls extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CameraButton(
-            onTap: buttonsEnabled ? onGalleryTap : null,
+            onTap: onGalleryTap,
             child: Assets.images.camera.galleryButton.svg(),
           ),
           IOSStyleCaptureButton(
-            onTap: buttonsEnabled ? onCaptureTap : null,
+            onTap: onCaptureTap,
             isEnabled: hasPermission,
           ),
           CameraButton(
-            onTap: buttonsEnabled ? onSwitchCameraTap : null,
+            onTap: onSwitchCameraTap,
             isEnabled: hasPermission,
             child: Assets.images.camera.cameraReverseButton.svg(),
           ),

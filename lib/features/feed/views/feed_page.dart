@@ -38,7 +38,9 @@ class _FeedPageState extends ConsumerState<FeedPage> {
               onPressed: () async {
                 await ref.read(authRepoProvider).signOut();
                 if (context.mounted) {
-                  SafeRouter.pushNamed(context, Routes.welcome.name);
+                  ref
+                      .read(safeRouterProvider)
+                      .pushNamed(context, Routes.welcome.name);
                 }
               },
               child: const Text('로그 아웃'),
