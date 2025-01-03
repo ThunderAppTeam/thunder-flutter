@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/constants/image_consts.dart';
 import 'package:thunder/core/constants/time_consts.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
@@ -91,10 +92,10 @@ class _CameraPageState extends ConsumerState<CameraPage>
       });
     }
 
-    if (next.selectedImagePath != null &&
-        prev?.selectedImagePath != next.selectedImagePath) {
-      //  _controller.cleanUp(); 메모리 관리 필요시에 주석 해제
+    // 새로운 이미지가 선택되었을 때 미리보기 페이지로 이동
+    if (prev?.selectedImagePath == null && next.selectedImagePath != null) {
       // 새로운 이미지가 선택되었을 때 미리보기 페이지로 이동
+      _controller.clearSelectingImageStates();
       if (mounted) {
         await Navigator.push(
           context,
@@ -104,7 +105,6 @@ class _CameraPageState extends ConsumerState<CameraPage>
             ),
           ),
         );
-        _controller.clearSelectedImage();
       }
     }
   }
@@ -117,9 +117,8 @@ class _CameraPageState extends ConsumerState<CameraPage>
       child: Scaffold(
         appBar: CameraAppBar(
           onClose: () async {
-            if (cameraState.isInitialized) {
-              Navigator.pop(context);
-            }
+            if (!cameraState.isInitialized) return;
+            ref.read(safeRouterProvider).pop(context);
           },
           onFlash: () => _controller.cycleFlashMode(),
           flashIcon: cameraState.flashMode.icon,
@@ -158,7 +157,6 @@ class _CameraPageState extends ConsumerState<CameraPage>
                 ),
                 CameraBottomControls(
                   hasPermission: cameraState.hasPermission,
-                  buttonsEnabled: cameraState.isEnabled,
                   onGalleryTap: () => _controller.pickImage(),
                   onCaptureTap: () => _controller.takePicture(),
                   onSwitchCameraTap: () => _controller.switchCamera(),

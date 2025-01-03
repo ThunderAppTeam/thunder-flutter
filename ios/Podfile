@@ -57,6 +57,8 @@ post_install do |installer|
         # 'PERMISSION_LOCATION=1',
         ## 카메라 권한
         'PERMISSION_CAMERA=1',
+        ## 사진 권한
+        'PERMISSION_PHOTOS=1',
       ]
     end
   end

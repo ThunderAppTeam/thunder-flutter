@@ -18,8 +18,10 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   }
 
   late final PermissionService _permissionService;
-  final ImagePicker _imagePicker = ImagePicker();
   CameraController? _controller;
+  CameraController? _frontController;
+  CameraController? _backController;
+  final ImagePicker _imagePicker = ImagePicker();
   List<CameraDescription> _cameras = [];
 
   double _minZoom = 1.0;
@@ -27,10 +29,21 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   double _currentZoom = 1.0;
   double _baseScale = 1.0;
 
+  bool _isProcessing = false;
+  bool _isSwitching = false;
+
   CameraController get previewController => _controller!;
   double get currentZoom => _currentZoom;
+  bool get isProcessing => _isProcessing;
+
+  void _endProcessing() {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _isProcessing = false;
+    });
+  }
 
   Future<void> checkPermissionAndInitialize() async {
+    _isProcessing = true;
     final isGranted = await _permissionService.checkCameraPermission();
     if (isGranted) {
       state = state.copyWith(hasPermission: true);
@@ -38,22 +51,27 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
         await _initializeCamera();
       }
     }
+    _endProcessing();
   }
 
   Future<void> _initializeCamera() async {
     _cameras = await availableCameras();
     if (_cameras.isEmpty) return;
-    _controller = CameraController(
+    _backController = CameraController(
       _cameras[0],
       ResolutionPreset.veryHigh,
       enableAudio: false,
     );
+    _frontController = CameraController(
+      _cameras[1],
+      ResolutionPreset.veryHigh,
+      enableAudio: false,
+    );
+    _controller = _backController;
     try {
-      _initController(_controller!);
+      await _initController(_controller!);
     } catch (e) {
       state = state.copyWith(error: CameraError.initializationFailed);
-    } finally {
-      state = state.copyWith(isEnabled: true);
     }
   }
 
@@ -70,9 +88,9 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   // ##### --------- Camera Function --------- #####
 
   Future<void> switchCamera() async {
-    if (!state.isEnabled || !state.isInitialized) return;
-    if (_cameras.length < 2) return; // 카메라가 2개 이상이 아니면 반환
-    state = state.copyWith(isEnabled: false);
+    if (_isProcessing || !state.isInitialized || _cameras.length < 2) return;
+    _isProcessing = true;
+    _isSwitching = true;
     final CameraLensDirection nextDirection =
         state.lensDirection == CameraLensDirection.back
             ? CameraLensDirection.front
@@ -82,19 +100,20 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
       isInitialized: false,
     );
     try {
-      await _controller!.dispose();
-      _controller = CameraController(
-        _cameras.firstWhere((camera) => camera.lensDirection == nextDirection),
-        ResolutionPreset.high,
-        enableAudio: false,
-      );
+      if (nextDirection == CameraLensDirection.back) {
+        _controller = _backController;
+      } else {
+        _controller = _frontController;
+      }
       await _initController(_controller!);
     } catch (e) {
+      log('switchCamera error: $e');
       state = state.copyWith(
         error: CameraError.switchCameraFailed,
       );
     } finally {
-      state = state.copyWith(isEnabled: true);
+      _isSwitching = false;
+      _endProcessing();
     }
   }
 
@@ -145,7 +164,8 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   }
 
   Future<void> cycleFlashMode() async {
-    if (_controller == null) return;
+    if (_isProcessing || _controller == null) return;
+    _isProcessing = true;
     final modes = CameraFlashMode.values;
     final currentIndex = modes.indexOf(state.flashMode);
     final nextIndex = (currentIndex + 1) % modes.length;
@@ -154,6 +174,8 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
       state = state.copyWith(flashMode: modes[nextIndex]);
     } catch (e) {
       state = state.copyWith(error: CameraError.flashModeChangeFailed);
+    } finally {
+      _endProcessing();
     }
   }
 
@@ -168,9 +190,10 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   }
 
   Future<void> takePicture() async {
-    if (!state.isEnabled || !state.isInitialized) return;
+    if (_isProcessing || !state.isInitialized) return;
+    _isProcessing = true;
+    state = state.copyWith(isCapturing: true);
     try {
-      state = state.copyWith(isCapturing: true, isEnabled: false);
       final photo = await _controller!.takePicture();
       String imagePath = photo.path;
       if (state.lensDirection == CameraLensDirection.front) {
@@ -179,9 +202,12 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
       }
       state = state.copyWith(selectedImagePath: imagePath);
     } catch (e) {
-      state = state.copyWith(error: CameraError.captureError);
+      state = state.copyWith(
+        error: CameraError.captureError,
+        isCapturing: false,
+      );
     } finally {
-      state = state.copyWith(isCapturing: false, isEnabled: true);
+      _endProcessing();
     }
   }
 
@@ -199,25 +225,32 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   }
 
   Future<void> pickImage() async {
-    if (!state.isEnabled || !state.isInitialized) return;
+    if (_isProcessing ||
+        !state.isInitialized ||
+        _isSwitching ||
+        state.isCapturing) return;
     try {
-      state = state.copyWith(isEnabled: false);
+      // 이미지 피커가 무한 await, 빨리 닫았을 때 await가 끝나지 않는 이슈가 있음.
       final XFile? image = await _imagePicker.pickImage(
         source: ImageSource.gallery,
         requestFullMetadata: false, // 제한된 메타데이터만 요청 권한 요청 안함
       );
       if (image == null) return;
+      _isProcessing = true; // 이미지 피커의 await 에러로 인해, _isProcessing을 이미지 압축시에 사용
       final compressedFile = await _resizeAndCompressImage(image.path);
-      state = state.copyWith(
-        selectedImagePath: compressedFile!.path,
-      );
+      state = state.copyWith(selectedImagePath: compressedFile!.path);
     } catch (e) {
-      state = state.copyWith(
-        error: CameraError.imagePickFailed,
-      );
+      log('pickImage error: $e');
     } finally {
-      state = state.copyWith(isEnabled: true);
+      _endProcessing();
     }
+  }
+
+  void clearSelectingImageStates() {
+    state = state.copyWith(
+      selectedImagePath: null,
+      isCapturing: false,
+    );
   }
 
   Future<File?> _resizeAndCompressImage(String imagePath) async {
@@ -233,6 +266,7 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
       await file.writeAsBytes(compressed);
       return file;
     } catch (e) {
+      log('resizeAndCompressImage error: $e');
       return null;
     }
   }
