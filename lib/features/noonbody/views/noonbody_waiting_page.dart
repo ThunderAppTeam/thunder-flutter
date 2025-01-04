@@ -9,6 +9,7 @@ import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/constants/styles.dart';
 import 'package:thunder/core/theme/gen/assets.gen.dart';
+import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
 import 'package:thunder/core/widgets/buttons/custom_wide_button.dart';
@@ -66,7 +67,20 @@ class _NoonbodyWaitingPageState extends ConsumerState<NoonbodyWaitingPage> {
                       ),
                       Positioned(
                         bottom: 0,
-                        child: Padding(
+                        right: 0,
+                        left: 0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                ColorName.black.withOpacity(0.0),
+                                ColorName.black.withOpacity(0.25),
+                                ColorName.black.withOpacity(0.5),
+                              ],
+                            ),
+                          ),
                           padding: const EdgeInsets.only(
                             top: Sizes.spacing8,
                             left: Sizes.spacing16,
