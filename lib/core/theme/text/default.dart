@@ -81,4 +81,11 @@ const AppTextTheme defaultTextTheme = AppTextTheme(
     fontWeight: FontWeight.w400,
     color: Colors.white,
   ),
+  textBody12: TextStyle(
+    fontFamily: FontFamily.pretendard,
+    fontSize: Sizes.fontSize12,
+    height: Sizes.lineHeight12 / Sizes.fontSize12,
+    fontWeight: FontWeight.w500,
+    color: Colors.white,
+  ),
 );

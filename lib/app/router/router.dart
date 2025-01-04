@@ -4,11 +4,13 @@ import 'package:go_router/go_router.dart';
 import 'package:thunder/app/screens/main_navigation_screen.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/core/widgets/web_view_page.dart';
+import 'package:thunder/features/Interest/views/Interest_page.dart';
 import 'package:thunder/features/auth/repositories/auth_repository.dart';
 import 'package:thunder/features/camera/views/camera_page.dart';
 import 'package:thunder/features/feed/views/feed_page.dart';
 import 'package:thunder/features/noonbody/views/noonbody_waiting_page.dart';
 import 'package:thunder/features/onboarding/views/phone_number_page.dart';
+import 'package:thunder/features/search/views/search_page.dart';
 import 'package:thunder/features/users/views/user_profile_page.dart';
 import 'package:thunder/features/welcome/views/welcome_page.dart';
 
@@ -62,6 +64,24 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: Routes.home.path,
                 name: Routes.home.name,
                 builder: (context, state) => const FeedPage(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: Routes.search.path,
+                name: Routes.search.name,
+                builder: (context, state) => const SearchPage(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: Routes.interest.path,
+                name: Routes.interest.name,
+                builder: (context, state) => const InterestPage(),
               ),
             ],
           ),
