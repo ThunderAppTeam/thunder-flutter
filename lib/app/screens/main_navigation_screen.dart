@@ -179,7 +179,7 @@ class _NavigationBarItem extends StatelessWidget {
               isSelected ? activeIcon : icon,
               color: ColorName.white,
             ),
-            Gaps.h6,
+            Gaps.v6,
             Text(
               label,
               style: textTheme.textBody12,
