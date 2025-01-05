@@ -58,7 +58,6 @@ class _CameraPageState extends ConsumerState<CameraPage>
       builder: (context) => CustomBottomSheet(
         title: errorMessage,
         onPressed: () {
-          _controller.clearError();
           Navigator.pop(context);
         },
       ),
@@ -82,6 +81,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
 
   void _onCameraStateChanged(CameraState? prev, CameraState next) async {
     if (prev?.error == null && next.error != null) {
+      // 에러가 발생했을 때
       _showErrorBottomSheet(next.error!);
     }
 
@@ -117,54 +117,59 @@ class _CameraPageState extends ConsumerState<CameraPage>
       child: Scaffold(
         appBar: CameraAppBar(
           onClose: () async {
-            if (!cameraState.isInitialized) return;
+            if (!cameraState.isInitialized &&
+                cameraState.error != CameraError.initializationFailed) {
+              return;
+            }
             ref.read(safeRouterProvider).pop(context);
           },
           onFlash: () => _controller.cycleFlashMode(),
           flashIcon: cameraState.flashMode.icon,
           hasPermission: cameraState.hasPermission,
         ),
-        body: Stack(
-          children: [
-            if (cameraState.isInitialized)
-              Center(
-                child: GestureDetector(
-                  onTapUp: (details) => _onFocusTap(details, context, ref),
-                  onScaleStart: (_) => _controller.onScaleStart(),
-                  onScaleUpdate: (details) =>
-                      _controller.setZoomLevel(details.scale),
-                  child: AspectRatio(
-                    aspectRatio: ImageConsts.aspectRatio,
-                    child: Stack(
-                      children: [
-                        CameraPreview(_controller.previewController),
-                        // 촬영 시에 깜빡이는 애니메이션
-                        FadeTransition(
-                          opacity: _shutterController,
-                          child: Container(color: Colors.black),
-                        ),
-                        Column(
-                          children: [
-                            Expanded(
-                              child: !cameraState.hasPermission
-                                  ? _buildPermissionDeniedView()
-                                  : const SizedBox(),
-                            ),
-                            CameraBottomControls(
-                              hasPermission: cameraState.hasPermission,
-                              onGalleryTap: () => _controller.pickImage(),
-                              onCaptureTap: () => _controller.takePicture(),
-                              onSwitchCameraTap: () =>
-                                  _controller.switchCamera(),
-                            ),
-                          ],
-                        ),
-                      ],
+        body: Center(
+          child: AspectRatio(
+            aspectRatio: ImageConsts.aspectRatio,
+            child: Stack(
+              children: [
+                if (cameraState.isInitialized && cameraState.hasPermission)
+                  GestureDetector(
+                    onTapUp: (details) => _onFocusTap(details, context, ref),
+                    onScaleStart: (_) => _controller.onScaleStart(),
+                    onScaleUpdate: (details) =>
+                        _controller.setZoomLevel(details.scale),
+                    child: AspectRatio(
+                      aspectRatio: ImageConsts.aspectRatio,
+                      child: Stack(
+                        children: [
+                          CameraPreview(_controller.previewController),
+                          // 촬영 시에 깜빡이는 애니메이션
+                          FadeTransition(
+                            opacity: _shutterController,
+                            child: Container(color: Colors.black),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
+                Column(
+                  children: [
+                    Expanded(
+                      child: !cameraState.hasPermission
+                          ? _buildPermissionDeniedView()
+                          : const SizedBox(),
+                    ),
+                    CameraBottomControls(
+                      hasPermission: cameraState.hasPermission,
+                      onGalleryTap: () => _controller.pickImage(),
+                      onCaptureTap: () => _controller.takePicture(),
+                      onSwitchCameraTap: () => _controller.switchCamera(),
+                    ),
+                  ],
                 ),
-              ),
-          ],
+              ],
+            ),
+          ),
         ),
       ),
     );

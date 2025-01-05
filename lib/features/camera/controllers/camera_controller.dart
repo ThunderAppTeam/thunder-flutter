@@ -57,6 +57,7 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   Future<void> _initializeCamera() async {
     _cameras = await availableCameras();
     if (_cameras.isEmpty) return;
+
     _backController = CameraController(
       _cameras[0],
       ResolutionPreset.veryHigh,
@@ -227,10 +228,7 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   }
 
   Future<void> pickImage() async {
-    if (_isProcessing ||
-        !state.isInitialized ||
-        _isSwitching ||
-        state.isCapturing) return;
+    if (_isProcessing || _isSwitching || state.isCapturing) return;
     try {
       // 이미지 피커가 무한 await, 빨리 닫았을 때 await가 끝나지 않는 이슈가 있음.
       final XFile? image = await _imagePicker.pickImage(
@@ -284,7 +282,9 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   @override
   void dispose() async {
     log('camera dispose');
-    await _controller!.dispose();
+    if (_controller != null) {
+      await _controller!.dispose();
+    }
     super.dispose();
   }
 }
