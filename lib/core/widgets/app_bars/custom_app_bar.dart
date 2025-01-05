@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
+import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -52,6 +53,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         if (actionIcon != null)
           IconButton(
             onPressed: onAction,
+            color: ColorName.white,
             iconSize: Sizes.icon28,
             icon: Icon(actionIcon!),
           ),

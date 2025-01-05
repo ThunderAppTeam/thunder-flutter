@@ -62,11 +62,13 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
       ResolutionPreset.veryHigh,
       enableAudio: false,
     );
-    _frontController = CameraController(
-      _cameras[1],
-      ResolutionPreset.veryHigh,
-      enableAudio: false,
-    );
+    if (_cameras.length > 1) {
+      _frontController = CameraController(
+        _cameras[1],
+        ResolutionPreset.veryHigh,
+        enableAudio: false,
+      );
+    }
     _controller = _backController;
     try {
       await _initController(_controller!);

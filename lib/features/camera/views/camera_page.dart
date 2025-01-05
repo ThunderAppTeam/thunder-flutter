@@ -143,26 +143,27 @@ class _CameraPageState extends ConsumerState<CameraPage>
                           opacity: _shutterController,
                           child: Container(color: Colors.black),
                         ),
+                        Column(
+                          children: [
+                            Expanded(
+                              child: !cameraState.hasPermission
+                                  ? _buildPermissionDeniedView()
+                                  : const SizedBox(),
+                            ),
+                            CameraBottomControls(
+                              hasPermission: cameraState.hasPermission,
+                              onGalleryTap: () => _controller.pickImage(),
+                              onCaptureTap: () => _controller.takePicture(),
+                              onSwitchCameraTap: () =>
+                                  _controller.switchCamera(),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
                 ),
               ),
-            Column(
-              children: [
-                Expanded(
-                  child: !cameraState.hasPermission
-                      ? _buildPermissionDeniedView()
-                      : const SizedBox(),
-                ),
-                CameraBottomControls(
-                  hasPermission: cameraState.hasPermission,
-                  onGalleryTap: () => _controller.pickImage(),
-                  onCaptureTap: () => _controller.takePicture(),
-                  onSwitchCameraTap: () => _controller.switchCamera(),
-                ),
-              ],
-            ),
           ],
         ),
       ),

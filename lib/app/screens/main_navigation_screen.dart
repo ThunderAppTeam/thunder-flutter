@@ -10,7 +10,6 @@ import 'package:thunder/core/services/permission_service.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/assets.gen.dart';
-import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 
 class MainNavigationScreen extends ConsumerStatefulWidget {
@@ -103,36 +102,36 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween, // 가운데 정렬
             children: [
               _NavigationBarItem(
-                icon: Icons.home_outlined,
-                activeIcon: Icons.home,
+                icon: Assets.images.icons.home,
+                activeIcon: Assets.images.icons.home,
                 isSelected: _getSelectedIndex() == Tabs.home.index,
                 label: '홈',
                 onTap: () => _onTap(context, Tabs.home),
               ),
               _NavigationBarItem(
-                icon: Icons.search_outlined,
-                activeIcon: Icons.search,
+                icon: Assets.images.icons.search,
+                activeIcon: Assets.images.icons.searchFilled,
                 isSelected: _getSelectedIndex() == Tabs.search.index,
                 label: '탐색',
                 onTap: () => _onTap(context, Tabs.search),
               ),
               _NavigationBarItem(
-                icon: Icons.add_box_outlined,
-                activeIcon: Icons.add_box,
+                icon: Assets.images.icons.create,
+                activeIcon: Assets.images.icons.create,
                 isSelected: _getSelectedIndex() == Tabs.camera.index,
                 label: '측정',
                 onTap: () => _onTap(context, Tabs.camera),
               ),
               _NavigationBarItem(
-                icon: Icons.favorite_border,
-                activeIcon: Icons.favorite,
+                icon: Assets.images.icons.heart,
+                activeIcon: Assets.images.icons.heart,
                 isSelected: _getSelectedIndex() == Tabs.interest.index,
                 label: '관심',
                 onTap: () => _onTap(context, Tabs.interest),
               ),
               _NavigationBarItem(
-                icon: Icons.person_outline,
-                activeIcon: Icons.person,
+                icon: Assets.images.icons.biPerson,
+                activeIcon: Assets.images.icons.biPerson,
                 isSelected: _getSelectedIndex() == Tabs.profile.index,
                 label: '프로필',
                 onTap: () => _onTap(context, Tabs.profile),
@@ -146,8 +145,8 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
 }
 
 class _NavigationBarItem extends StatelessWidget {
-  final IconData icon;
-  final IconData activeIcon;
+  final SvgGenImage icon;
+  final SvgGenImage activeIcon;
   final bool isSelected;
   final VoidCallback onTap;
   final String label;
@@ -163,6 +162,7 @@ class _NavigationBarItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = getTextTheme(context);
+
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -174,10 +174,13 @@ class _NavigationBarItem extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              size: Sizes.icon24,
-              isSelected ? activeIcon : icon,
-              color: ColorName.white,
+            (isSelected ? activeIcon : icon).svg(
+              width: Sizes.icon24,
+              height: Sizes.icon24,
+              colorFilter: ColorFilter.mode(
+                Colors.white,
+                BlendMode.srcIn,
+              ),
             ),
             Gaps.v6,
             Text(
