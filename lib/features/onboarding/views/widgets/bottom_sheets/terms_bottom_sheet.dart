@@ -76,11 +76,11 @@ class _TermsBottomSheetState extends ConsumerState<TermsBottomSheet> {
   }
 
   void _showTermDetails(Terms term) {
-    SafeRouter.pushNamed(
-      context,
-      Routes.webView.name,
-      extra: term.url,
-    );
+    ref.read(safeRouterProvider).pushNamed(
+          context,
+          Routes.webView.name,
+          extra: term.url,
+        );
   }
 
   Widget _buildAllAgreeCheckbox() {
@@ -183,7 +183,8 @@ class _TermsBottomSheetState extends ConsumerState<TermsBottomSheet> {
       ),
       buttonText: S.of(context).termsConfirm,
       onPressed: _handleAgree,
-      isEnabled: _isValid && !isLoading,
+      isEnabled:
+          _isValid && !isLoading && !ref.read(safeRouterProvider).isNavigating,
     );
   }
 }

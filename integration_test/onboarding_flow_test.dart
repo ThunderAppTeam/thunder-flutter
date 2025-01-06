@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:thunder/features/onboarding/views/widgets/bottom_sheets/terms_bottom_sheet.dart';
 import 'package:thunder/features/onboarding/views/widgets/gender_button.dart';
-import 'package:thunder/features/onboarding/views/widgets/onboarding_button.dart';
+import 'package:thunder/core/widgets/buttons/custom_wide_button.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_text_field.dart';
 import 'package:thunder/firebase_options.dart';
 import 'package:thunder/main.dart';
@@ -30,7 +30,7 @@ void main() {
 
       // 시작하기 화면
       await tester.pumpAndSettle(const Duration(seconds: 1));
-      final startButton = find.byType(OnboardingButton);
+      final startButton = find.byType(CustomWideButton);
       expect(startButton, findsOneWidget);
       await tester.tap(startButton);
       await tester.pumpAndSettle();
@@ -42,7 +42,7 @@ void main() {
       expect(phoneField, findsOneWidget);
       await tester.enterText(phoneField, '01012345678');
       await tester.pumpAndSettle(); // 버튼 애니메이션 끝나기 기다리기
-      final phoneNextButton = find.byType(OnboardingButton);
+      final phoneNextButton = find.byType(CustomWideButton);
       await tester.tap(phoneNextButton);
       await tester.pumpAndSettle();
 
@@ -53,7 +53,7 @@ void main() {
       expect(verificationField, findsOneWidget);
       await tester.enterText(verificationField, '111111');
       await tester.pumpAndSettle();
-      final verificationButton = find.byType(OnboardingButton);
+      final verificationButton = find.byType(CustomWideButton);
       await tester.tap(verificationButton);
       await tester.pumpAndSettle();
 
@@ -66,7 +66,7 @@ void main() {
       await tester.enterText(nicknameField, '테스트계정');
 
       await tester.pumpAndSettle();
-      final nicknameNextButton = find.byType(OnboardingButton);
+      final nicknameNextButton = find.byType(CustomWideButton);
       await tester.tap(nicknameNextButton);
       await tester.pumpAndSettle();
 
@@ -81,7 +81,7 @@ void main() {
       await tester.enterText(birthFields.at(2), '01');
       await tester.pumpAndSettle();
 
-      final birthNextButton = find.byType(OnboardingButton);
+      final birthNextButton = find.byType(CustomWideButton);
       await tester.tap(birthNextButton);
       await tester.pumpAndSettle();
 
@@ -94,7 +94,7 @@ void main() {
       await tester.tap(genderButtons.first); // 첫 번째 버튼(여성) 선택
       await tester.pumpAndSettle();
 
-      final genderNextButton = find.byType(OnboardingButton);
+      final genderNextButton = find.byType(CustomWideButton);
       await tester.tap(genderNextButton);
       await tester.pumpAndSettle();
 
@@ -114,7 +114,7 @@ void main() {
 
       final allAgreeNextButton = find.descendant(
         of: termsBottomSheet,
-        matching: find.byType(OnboardingButton),
+        matching: find.byType(CustomWideButton),
       );
       await tester.tap(allAgreeNextButton);
       await tester.pumpAndSettle();

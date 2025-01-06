@@ -31,6 +31,11 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
+  pod 'FirebaseFirestore',
+  :git => 'https://github.com/invertase/firestore-ios-sdk-frameworks.git',
+  :tag => '11.4.0'
+
+
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
   target 'RunnerTests' do
     inherit! :search_paths
@@ -40,5 +45,21 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+
+    target.build_configurations.each do |config|
+      config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
+        '$(inherited)',
+        ## 알림 권한
+        'PERMISSION_NOTIFICATIONS=1',
+        ## 앱 추적 권한
+        'PERMISSION_APP_TRACKING_TRANSPARENCY=1',
+        # ## 위치 권한
+        # 'PERMISSION_LOCATION=1',
+        ## 카메라 권한
+        'PERMISSION_CAMERA=1',
+        ## 사진 권한
+        'PERMISSION_PHOTOS=1',
+      ]
+    end
   end
 end

@@ -4,7 +4,7 @@ import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/constants/styles.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
-import 'package:thunder/features/onboarding/views/widgets/onboarding_button.dart';
+import 'package:thunder/core/widgets/buttons/custom_wide_button.dart';
 import 'package:thunder/generated/l10n.dart';
 
 class CustomBottomSheet extends StatelessWidget {
@@ -66,7 +66,7 @@ class CustomBottomSheet extends StatelessWidget {
                 content!,
               ],
               Gaps.v32,
-              OnboardingButton(
+              CustomWideButton(
                 backgroundColor: ColorName.black,
                 textColor: ColorName.white,
                 text: buttonText ?? S.of(context).commonConfirm,

@@ -9,7 +9,7 @@ import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/utils/validators.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
-import 'package:thunder/features/onboarding/views/widgets/onboarding_button.dart';
+import 'package:thunder/core/widgets/buttons/custom_wide_button.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_scaffold.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_text_field.dart';
 
@@ -111,7 +111,7 @@ class _PhoneNumberPageState extends ConsumerState<PhoneNumberPage> {
         ],
       ),
       guideText: S.of(context).phoneNumberGuideText,
-      bottomButton: OnboardingButton(
+      bottomButton: CustomWideButton(
         text: S.of(context).phoneNumberButton,
         onPressed: _onButtonPressed,
         isEnabled: _isButtonEnabled,

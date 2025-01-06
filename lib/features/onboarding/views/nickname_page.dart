@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
-import 'package:thunder/features/onboarding/views/widgets/onboarding_button.dart';
+import 'package:thunder/core/widgets/buttons/custom_wide_button.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_scaffold.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_text_field.dart';
 import 'package:thunder/generated/l10n.dart';
@@ -48,7 +48,7 @@ class _NicknamePageState extends ConsumerState<NicknamePage> {
         canClear: true,
       ),
       guideText: S.of(context).nicknameGuideText,
-      bottomButton: OnboardingButton(
+      bottomButton: CustomWideButton(
         text: S.of(context).commonNext,
         onPressed: _onButtonPressed,
         isEnabled: _isValid,

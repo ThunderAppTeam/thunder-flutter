@@ -8,7 +8,7 @@ import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
 import 'package:thunder/features/onboarding/views/widgets/gender_button.dart';
-import 'package:thunder/features/onboarding/views/widgets/onboarding_button.dart';
+import 'package:thunder/core/widgets/buttons/custom_wide_button.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_scaffold.dart';
 import 'package:thunder/generated/l10n.dart';
 import 'package:thunder/features/onboarding/views/widgets/bottom_sheets/terms_bottom_sheet.dart';
@@ -36,7 +36,7 @@ class _GenderPageState extends ConsumerState<GenderPage> {
                 .read(onboardingProvider.notifier)
                 .completeOnboarding(marketingAgreed: marketingAgreed);
             if (context.mounted) {
-              SafeRouter.goNamed(context, Routes.home.name);
+              ref.read(safeRouterProvider).goNamed(context, Routes.home.name);
             }
           } catch (e) {
             if (context.mounted) {
@@ -81,7 +81,7 @@ class _GenderPageState extends ConsumerState<GenderPage> {
           ),
         ],
       ),
-      bottomButton: OnboardingButton(
+      bottomButton: CustomWideButton(
         text: S.of(context).commonConfirm,
         onPressed: handleNextPress,
         isEnabled: _isValid,

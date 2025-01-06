@@ -4,6 +4,7 @@ import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/styles.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
+import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
 
 class OnboardingScaffold extends StatelessWidget {
   final String title;
@@ -25,16 +26,8 @@ class OnboardingScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = getTextTheme(context);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        toolbarHeight: Sizes.appBarHeight48,
-        leading: showBackButton
-            ? IconButton(
-                iconSize: Sizes.icon32,
-                icon: const Icon(Icons.chevron_left),
-                onPressed: () => Navigator.pop(context),
-              )
-            : null,
+      appBar: CustomAppBar(
+        showBackButton: showBackButton,
       ),
       body: SafeArea(
         child: Padding(

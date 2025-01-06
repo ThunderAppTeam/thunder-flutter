@@ -7,7 +7,7 @@ import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
-import 'package:thunder/features/onboarding/views/widgets/onboarding_button.dart';
+import 'package:thunder/core/widgets/buttons/custom_wide_button.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_scaffold.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_text_field.dart';
 import 'package:thunder/generated/l10n.dart';
@@ -188,7 +188,7 @@ class _BirthdatePageState extends ConsumerState<BirthdatePage> {
         ],
       ),
       guideText: S.of(context).birthdateGuideText,
-      bottomButton: OnboardingButton(
+      bottomButton: CustomWideButton(
         text: S.of(context).commonNext,
         onPressed: _handleNextPress,
         isEnabled: _isButtonEnabled,

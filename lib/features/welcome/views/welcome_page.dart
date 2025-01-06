@@ -7,14 +7,14 @@ import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/gen/assets.gen.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
-import 'package:thunder/features/onboarding/views/widgets/onboarding_button.dart';
+import 'package:thunder/core/widgets/buttons/custom_wide_button.dart';
 import 'package:thunder/generated/l10n.dart';
 
 class WelcomePage extends ConsumerWidget {
   const WelcomePage({super.key});
 
   void _onStartPressed(BuildContext context, WidgetRef ref) {
-    SafeRouter.pushNamed(context, Routes.onboarding.name);
+    ref.read(safeRouterProvider).pushNamed(context, Routes.onboarding.name);
   }
 
   @override
@@ -69,7 +69,7 @@ class WelcomePage extends ConsumerWidget {
                           Padding(
                             padding:
                                 const EdgeInsets.only(top: Sizes.spacing32),
-                            child: OnboardingButton(
+                            child: CustomWideButton(
                               text: S.of(context).welcomeStart,
                               onPressed: () => _onStartPressed(context, ref),
                             ),

@@ -24,7 +24,7 @@ const AppTextTheme defaultTextTheme = AppTextTheme(
   textTitle20: TextStyle(
     fontFamily: FontFamily.pretendard,
     fontSize: Sizes.fontSize20,
-    height: Sizes.lineHeight24 / Sizes.fontSize20,
+    height: Sizes.lineHeight22 / Sizes.fontSize20,
     fontWeight: FontWeight.w600,
     color: Colors.white,
   ),
@@ -79,6 +79,13 @@ const AppTextTheme defaultTextTheme = AppTextTheme(
     fontSize: Sizes.fontSize14,
     height: Sizes.lineHeight20 / Sizes.fontSize14,
     fontWeight: FontWeight.w400,
+    color: Colors.white,
+  ),
+  textBody12: TextStyle(
+    fontFamily: FontFamily.pretendard,
+    fontSize: Sizes.fontSize12,
+    height: Sizes.lineHeight12 / Sizes.fontSize12,
+    fontWeight: FontWeight.w500,
     color: Colors.white,
   ),
 );

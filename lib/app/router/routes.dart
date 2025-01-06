@@ -20,6 +20,17 @@ final class Routes {
     name: 'home',
     path: '/',
   );
+
+  static const search = (
+    name: 'search',
+    path: '/search',
+  );
+
+  static const interest = (
+    name: 'interest',
+    path: '/interest',
+  );
+
   static const profile = (
     name: 'profile',
     path: '/profile',
@@ -28,5 +39,10 @@ final class Routes {
   static const camera = (
     name: 'camera',
     path: '/camera',
+  );
+
+  static const noonbody = (
+    name: 'noonbody',
+    path: '/noonbody',
   );
 }
