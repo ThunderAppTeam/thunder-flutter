@@ -4,7 +4,7 @@ description: "A new Flutter project."
 # Prevent accidental publishing to pub.dev
 publish_to: "none"
 
-version: 0.3.1+3
+version: 0.3.2
 
 environment:
   sdk: ^3.5.4
@@ -64,6 +64,9 @@ dev_dependencies:
   freezed: ^2.5.7
   json_serializable: ^6.9.0
   flutter_gen_runner: ^5.8.0
+
+  #=== Splash Screen
+  flutter_native_splash: ^2.4.4
 
   #=== Package
   change_app_package_name: ^1.4.0

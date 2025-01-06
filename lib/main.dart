@@ -36,7 +36,9 @@ class MyApp extends ConsumerWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: S.delegate.supportedLocales,
+      supportedLocales: const [
+        Locale('ko', 'KR'),
+      ],
       locale: const Locale('ko', 'KR'),
       theme: ThemeData.dark(
         useMaterial3: true,
