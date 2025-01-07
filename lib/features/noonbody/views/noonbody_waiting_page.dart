@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
+import 'package:thunder/core/constants/image_consts.dart';
 import 'package:thunder/core/enums/gender.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
@@ -51,14 +52,19 @@ class _NoonbodyWaitingPageState extends ConsumerState<NoonbodyWaitingPage> {
               .goNamed(context, Routes.home.name, extra: true),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(Sizes.spacing16),
+          padding: const EdgeInsets.only(
+            top: Sizes.spacing16,
+            left: Sizes.spacing16,
+            right: Sizes.spacing16,
+            bottom: Sizes.spacing8,
+          ),
           child: Column(
             children: [
               Expanded(
                 child: noonbodyState.isUploading
                     ? const Center(child: CircularProgressIndicator())
                     : AspectRatio(
-                        aspectRatio: 9 / 16, // 또는 원하는 비율
+                        aspectRatio: ImageConsts.aspectRatio,
                         child: Stack(
                           children: [
                             Container(
@@ -102,7 +108,8 @@ class _NoonbodyWaitingPageState extends ConsumerState<NoonbodyWaitingPage> {
                                   children: [
                                     Row(
                                       children: [
-                                        Assets.images.thunderSymbolW.svg(),
+                                        Assets.images.logos.thunderSymbolW
+                                            .svg(),
                                         Gaps.h4,
                                         RichText(
                                           text: TextSpan(
