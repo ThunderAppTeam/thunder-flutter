@@ -88,7 +88,7 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
               horizontal: Sizes.spacing16,
               vertical: Sizes.spacing8,
             ),
-            child: Assets.images.thunderLogotypeSmallW.svg(),
+            child: Assets.images.logos.thunderLogotypeSmallW.svg(),
           ),
           titleSpacing: Sizes.zero,
         ),

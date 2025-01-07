@@ -89,9 +89,11 @@ flutter:
   # example:
 
   assets:
-    - assets/images/
     - assets/images/camera/
     - assets/images/icons/
+    - assets/images/welcome/
+    - assets/images/logos/
+    - assets/images/splash/
 
   fonts:
     - family: Pretendard
