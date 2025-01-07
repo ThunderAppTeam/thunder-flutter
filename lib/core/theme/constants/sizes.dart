@@ -12,6 +12,7 @@ class Sizes {
   static const double spacing24 = 24.0;
   static const double spacing32 = 32.0;
   static const double spacing40 = 40.0;
+  static const double spacing56 = 56.0;
 
   // font sizes
   static const double fontSize12 = 12.0;

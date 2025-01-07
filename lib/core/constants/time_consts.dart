@@ -13,4 +13,9 @@ class TimeConsts {
 
   // camera
   static const Duration cameraFlashDuration = Duration(milliseconds: 100);
+
+  // welcome
+  static const int welcomeImageTransitionInterval = 3;
+  static const Duration welcomeImageTransitionDuration =
+      Duration(milliseconds: 800);
 }
