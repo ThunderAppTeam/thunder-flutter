@@ -106,8 +106,15 @@ class VerificationTimerController
           countryCode: countryCode,
         );
     // 1초 뒤에 canVerify를 true로 변경
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(TimeConsts.onboardingButtonCoolDown);
     state = state.copyWith(canVerify: true);
+  }
+
+  // TODO:온보딩 과정이 끝나면 그때 호출되는 dispose
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 }
 

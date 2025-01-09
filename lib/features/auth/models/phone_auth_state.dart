@@ -16,7 +16,7 @@ class PhoneAuthState with _$PhoneAuthState {
 class PhoneAuthExceptionCode {
   static const tooManyMobileVerification = 'TOO_MANY_MOBILE_VERIFICATION';
   static const notFoundMobileNumber = 'NOT_FOUND_MOBILE_NUMBER';
-  static const invalidVerificationCode = 'INVALID_VERIFICATION_CODE';
+  static const invalidVerificationCode = 'INVALID_MOBILE_VERIFICATION';
 }
 
 enum PhoneAuthError {

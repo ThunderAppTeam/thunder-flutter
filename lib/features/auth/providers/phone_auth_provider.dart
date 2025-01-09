@@ -41,12 +41,20 @@ class PhoneAuthNotifier extends StateNotifier<PhoneAuthState> {
     required String phoneNumber,
     required String countryCode,
   }) async {
-    state = state.copyWith(isCodeVerifying: true, error: null);
+    state =
+        state.copyWith(isCodeVerifying: true, isVerified: false, error: null);
+    final deviceId = await _ref.read(deviceInfoProvider.notifier).deviceId;
+    if (deviceId == null) {
+      log('deviceId is null after initialization');
+      state = state.copyWith(error: PhoneAuthError.unknown);
+      return;
+    }
     try {
       await _ref.read(authRepoProvider).verifyCode(
             countryCode: countryCode,
             phoneNumber: phoneNumber,
             smsCode: smsCode,
+            deviceId: deviceId,
           );
       state = state.copyWith(isCodeVerifying: false, isVerified: true);
     } on PhoneAuthError catch (e) {

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/constants/api_contst.dart';
 import 'package:thunder/core/providers/dio_provider.dart';
@@ -26,11 +27,12 @@ class AuthRepository {
   }) async {
     final path = '/v1/member/sms';
     try {
-      var testMode = false;
+      final testMode = kDebugMode; // 디버그 모드일 때만 테스트 모드로 설정
       await _dio.post(path, data: {
         ApiKeys.deviceId: deviceId,
         ApiKeys.mobileCountry: countryCode,
         ApiKeys.mobileNumber: phoneNumber,
+        ApiKeys.isTestMode: testMode,
       });
     } on DioException catch (e) {
       if (e.response != null) {
