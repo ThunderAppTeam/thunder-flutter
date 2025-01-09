@@ -38,14 +38,6 @@ class _PhoneNumberPageState extends ConsumerState<PhoneNumberPage> {
     super.dispose();
   }
 
-  String _formatToE164(String phoneNumber) {
-    // 01012345678 -> +821012345678
-    if (phoneNumber.startsWith('0')) {
-      return '+82${phoneNumber.substring(1)}';
-    }
-    return '+82$phoneNumber';
-  }
-
   void _onButtonPressed() {
     if (!Validators.isValidPhoneNumber(_phoneNumber)) {
       showModalBottomSheet(
@@ -58,9 +50,8 @@ class _PhoneNumberPageState extends ConsumerState<PhoneNumberPage> {
       );
       return;
     }
-    final formattedPhoneNumber = _formatToE164(_phoneNumber);
     final notifier = ref.read(onboardingProvider.notifier);
-    notifier.setPhoneNumber(formattedPhoneNumber);
+    notifier.setPhoneNumber(_phoneNumber);
     notifier.pushNextStep(
       context: context,
       currentStep: OnboardingStep.phoneNumber,
@@ -102,6 +93,7 @@ class _PhoneNumberPageState extends ConsumerState<PhoneNumberPage> {
                 LengthLimitingTextInputFormatter(_maxLength),
                 KoreanPhoneNumberFormatter(),
               ],
+              autofocus: true,
               canClear: true,
               onChanged: (_) => setState(() {
                 _phoneNumber = _controller.text.replaceAll('-', '');

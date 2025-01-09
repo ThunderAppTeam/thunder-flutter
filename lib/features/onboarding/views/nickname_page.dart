@@ -46,6 +46,7 @@ class _NicknamePageState extends ConsumerState<NicknamePage> {
         ],
         onChanged: (_) => setState(() {}),
         canClear: true,
+        autofocus: true,
       ),
       guideText: S.of(context).nicknameGuideText,
       bottomButton: CustomWideButton(
