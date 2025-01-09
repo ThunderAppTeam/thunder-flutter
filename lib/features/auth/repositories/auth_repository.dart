@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/core/constants/api_contst.dart';
 import 'package:thunder/core/providers/dio_provider.dart';
+import 'package:thunder/features/auth/models/nickname_check_state.dart';
 import 'package:thunder/features/auth/models/phone_auth_state.dart';
 
 class AuthRepository {
@@ -25,14 +28,13 @@ class AuthRepository {
     try {
       var testMode = false;
       await _dio.post(path, data: {
-        'deviceId': deviceId,
-        'mobileCountry': countryCode,
-        'mobileNumber': phoneNumber,
-        'isTestMode': testMode,
+        ApiKeys.deviceId: deviceId,
+        ApiKeys.mobileCountry: countryCode,
+        ApiKeys.mobileNumber: phoneNumber,
       });
     } on DioException catch (e) {
       if (e.response != null) {
-        final errorCode = e.response?.data['errorCode'] ?? '';
+        final errorCode = e.response?.data[ApiKeys.errorCode] ?? '';
         throw PhoneAuthError.fromString(errorCode);
       }
       throw PhoneAuthError.unknown;
@@ -43,20 +45,37 @@ class AuthRepository {
     required String countryCode,
     required String phoneNumber,
     required String smsCode,
+    required String deviceId,
   }) async {
     final path = '/v1/member/sms/verify';
     try {
       await _dio.post(path, data: {
-        'mobileCountry': countryCode,
-        'mobileNumber': phoneNumber,
-        'verificationCode': smsCode,
+        ApiKeys.mobileCountry: countryCode,
+        ApiKeys.mobileNumber: phoneNumber,
+        ApiKeys.verificationCode: smsCode,
+        ApiKeys.deviceId: deviceId,
       });
     } on DioException catch (e) {
       if (e.response != null) {
-        final errorCode = e.response?.data['errorCode'] ?? '';
+        final errorCode = e.response?.data[ApiKeys.errorCode] ?? '';
         throw PhoneAuthError.fromString(errorCode);
       }
       throw PhoneAuthError.unknown;
+    }
+  }
+
+  Future<bool> checkNicknameAvailability(String nickname) async {
+    final path = '/v1/member/nickname/available';
+    try {
+      final response =
+          await _dio.get(path, queryParameters: {ApiKeys.nickname: nickname});
+      return response.statusCode == HttpStatus.ok;
+    } on DioException catch (e) {
+      if (e.response != null) {
+        final errorCode = e.response?.data[ApiKeys.errorCode] ?? '';
+        throw NicknameCheckError.fromString(errorCode);
+      }
+      throw NicknameCheckError.unknown;
     }
   }
 
