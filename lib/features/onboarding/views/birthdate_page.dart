@@ -137,11 +137,12 @@ class _BirthdatePageState extends ConsumerState<BirthdatePage> {
     }
   }
 
-  Widget _buildDateField(DateField field) {
+  Widget _buildDateField(DateField field, {bool autofocus = false}) {
     return IntrinsicWidth(
       child: OnboardingTextField(
         controller: _controllers[field]!,
         focusNode: _focusNodes[field]!,
+        autofocus: autofocus,
         hintText: field.hintText,
         keyboardType: TextInputType.number,
         inputFormatters: [
@@ -180,7 +181,7 @@ class _BirthdatePageState extends ConsumerState<BirthdatePage> {
       content: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          _buildDateField(DateField.year),
+          _buildDateField(DateField.year, autofocus: true),
           ...divider,
           _buildDateField(DateField.month),
           ...divider,

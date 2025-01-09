@@ -27,7 +27,7 @@ class OnboardingTextField extends StatelessWidget {
     this.inputFormatters,
     this.onChanged,
     this.keyboardType = TextInputType.text,
-    this.autofocus = false,
+    this.autofocus = true,
     this.canClear = false,
     super.key,
   });

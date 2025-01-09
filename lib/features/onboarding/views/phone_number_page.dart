@@ -93,7 +93,6 @@ class _PhoneNumberPageState extends ConsumerState<PhoneNumberPage> {
                 LengthLimitingTextInputFormatter(_maxLength),
                 KoreanPhoneNumberFormatter(),
               ],
-              autofocus: true,
               canClear: true,
               onChanged: (_) => setState(() {
                 _phoneNumber = _controller.text.replaceAll('-', '');

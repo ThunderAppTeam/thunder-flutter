@@ -51,6 +51,13 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
     _controller.verifyCode(smsCode);
   }
 
+  void _onVerifySuccess() {
+    ref.read(onboardingProvider.notifier).pushNextStep(
+          context: context,
+          currentStep: OnboardingStep.verification,
+        );
+  }
+
   @override
   void dispose() {
     _textController.dispose();
@@ -59,12 +66,8 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
 
   void _onPhoneAuthStateChanged(PhoneAuthState? prev, PhoneAuthState next) {
     if (next.isVerified) {
-      ref.read(onboardingProvider.notifier).pushNextStep(
-            context: context,
-            currentStep: OnboardingStep.verification,
-          );
+      _onVerifySuccess();
     }
-
     if (prev?.error != next.error && next.error != null) {
       final String title, subtitle;
       switch (next.error!) {
@@ -127,7 +130,6 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
               FilteringTextInputFormatter.digitsOnly,
               LengthLimitingTextInputFormatter(6),
             ],
-            autofocus: true,
             canClear: true,
             onChanged: (_) => setState(() {}),
           ),
