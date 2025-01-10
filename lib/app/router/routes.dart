@@ -10,11 +10,6 @@ final class Routes {
     path: '/onboarding',
   );
 
-  static const webView = (
-    name: 'webView',
-    path: '/webview',
-  );
-
   // 메인 네비게이션
   static const home = (
     name: 'home',

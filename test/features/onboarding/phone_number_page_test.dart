@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:thunder/features/onboarding/views/phone_number_page.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_text_field.dart';
 
-import '../../../helpers/test_helper.dart';
+import '../../helpers/test_helper.dart';
 
 void main() {
   testWidgets('Phone number formatting test (010-1234-5678)',

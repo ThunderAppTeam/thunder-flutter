@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thunder/app/screens/main_navigation_screen.dart';
 import 'package:thunder/app/router/routes.dart';
-import 'package:thunder/core/widgets/web_view_page.dart';
 import 'package:thunder/features/Interest/views/Interest_page.dart';
 import 'package:thunder/features/auth/repositories/auth_repository.dart';
 import 'package:thunder/features/camera/views/camera_page.dart';
@@ -45,13 +44,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: Routes.onboarding.path,
         name: Routes.onboarding.name,
         builder: (_, __) => const PhoneNumberPage(),
-      ),
-      GoRoute(
-        path: Routes.webView.path,
-        name: Routes.webView.name,
-        builder: (_, state) => WebViewPage(
-          url: state.extra as String,
-        ),
       ),
       // Main Navigation
       StatefulShellRoute.indexedStack(

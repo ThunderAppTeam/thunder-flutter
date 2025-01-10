@@ -22,12 +22,12 @@ final dioProvider = Provider<Dio>((ref) {
     },
     onResponse: (response, handler) {
       // Handle response
-      log('Response[${response.statusCode}] => DATA: ${response.data}');
+      log('Response[${response.statusCode}] => RESPONSE: ${response.data}');
       return handler.next(response);
     },
     onError: (DioException e, handler) {
       // Handle errors
-      log('Error[${e.response?.statusCode}] => DATA: ${e.response?.data}');
+      log('Error[${e.response?.statusCode}] => RESPONSE: ${e.response?.data}');
       return handler.next(e);
     },
   ));

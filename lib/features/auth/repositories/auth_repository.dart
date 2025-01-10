@@ -1,23 +1,46 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thunder/core/constants/api_contst.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:thunder/core/constants/key_contsts.dart';
 import 'package:thunder/core/providers/dio_provider.dart';
-import 'package:thunder/features/auth/models/nickname_check_state.dart';
-import 'package:thunder/features/auth/models/phone_auth_state.dart';
+import 'package:thunder/features/auth/models/domain/nickname_check_state.dart';
+import 'package:thunder/features/auth/models/domain/phone_auth_state.dart';
+import 'package:thunder/features/auth/models/data/sign_up_user.dart';
+import 'package:thunder/features/auth/models/domain/sign_up_state.dart';
 
 class AuthRepository {
-  final FirebaseAuth _auth;
+  final FlutterSecureStorage _secureStorage;
   final Dio _dio;
+  String? _accessToken;
+  String? _userId;
 
-  AuthRepository(this._auth, this._dio);
+  AuthRepository(this._secureStorage, this._dio);
 
-  User? get currentUser => _auth.currentUser;
+  bool get isLoggedIn => _accessToken != null;
 
-  bool get isLoggedIn => currentUser != null;
+  String? get userId => _userId;
+  // AuthToken
+  Future<void> loadAuthData() async {
+    _accessToken = await _secureStorage.read(key: KeyConsts.authToken);
+    _userId = await _secureStorage.read(key: KeyConsts.userId);
+  }
+
+  Future<void> saveAuthData(String accessToken, String userId) async {
+    _accessToken = accessToken;
+    _userId = userId;
+    await _secureStorage.write(key: KeyConsts.authToken, value: accessToken);
+    await _secureStorage.write(key: KeyConsts.userId, value: userId);
+  }
+
+  Future<void> clearAuthData() async {
+    _accessToken = null;
+    _userId = null;
+    await _secureStorage.delete(key: KeyConsts.authToken);
+    await _secureStorage.delete(key: KeyConsts.userId);
+  }
 
   /// 인증 코드 발송 (HTTP)
   Future<void> requestVerificationCode({
@@ -29,14 +52,14 @@ class AuthRepository {
     try {
       final testMode = kDebugMode; // 디버그 모드일 때만 테스트 모드로 설정
       await _dio.post(path, data: {
-        ApiKeys.deviceId: deviceId,
-        ApiKeys.mobileCountry: countryCode,
-        ApiKeys.mobileNumber: phoneNumber,
-        ApiKeys.isTestMode: testMode,
+        KeyConsts.deviceId: deviceId,
+        KeyConsts.mobileCountry: countryCode,
+        KeyConsts.mobileNumber: phoneNumber,
+        KeyConsts.isTestMode: testMode,
       });
     } on DioException catch (e) {
       if (e.response != null) {
-        final errorCode = e.response?.data[ApiKeys.errorCode] ?? '';
+        final errorCode = e.response?.data[KeyConsts.errorCode] ?? '';
         throw PhoneAuthError.fromString(errorCode);
       }
       throw PhoneAuthError.unknown;
@@ -52,14 +75,14 @@ class AuthRepository {
     final path = '/v1/member/sms/verify';
     try {
       await _dio.post(path, data: {
-        ApiKeys.mobileCountry: countryCode,
-        ApiKeys.mobileNumber: phoneNumber,
-        ApiKeys.verificationCode: smsCode,
-        ApiKeys.deviceId: deviceId,
+        KeyConsts.mobileCountry: countryCode,
+        KeyConsts.mobileNumber: phoneNumber,
+        KeyConsts.verificationCode: smsCode,
+        KeyConsts.deviceId: deviceId,
       });
     } on DioException catch (e) {
       if (e.response != null) {
-        final errorCode = e.response?.data[ApiKeys.errorCode] ?? '';
+        final errorCode = e.response?.data[KeyConsts.errorCode] ?? '';
         throw PhoneAuthError.fromString(errorCode);
       }
       throw PhoneAuthError.unknown;
@@ -70,23 +93,39 @@ class AuthRepository {
     final path = '/v1/member/nickname/available';
     try {
       final response =
-          await _dio.get(path, queryParameters: {ApiKeys.nickname: nickname});
+          await _dio.get(path, queryParameters: {KeyConsts.nickname: nickname});
       return response.statusCode == HttpStatus.ok;
     } on DioException catch (e) {
       if (e.response != null) {
-        final errorCode = e.response?.data[ApiKeys.errorCode] ?? '';
+        final errorCode = e.response?.data[KeyConsts.errorCode] ?? '';
         throw NicknameCheckError.fromString(errorCode);
       }
       throw NicknameCheckError.unknown;
     }
   }
 
+  Future<void> signUp(SignUpUser signUpUser) async {
+    final path = '/v1/member/signup';
+    try {
+      final response = await _dio.post(path, data: signUpUser.toJson());
+      final memberId =
+          response.data[KeyConsts.data][KeyConsts.memberId] ?? '1234';
+      await saveAuthData(memberId, memberId); // TODO: 토큰 발급 로직 추가
+    } on DioException catch (e) {
+      if (e.response != null) {
+        final errorCode = e.response?.data[KeyConsts.errorCode] ?? '';
+        throw SignUpError.fromString(errorCode);
+      }
+      throw SignUpError.unknown;
+    }
+  }
+
   Future<void> signOut() async {
-    await _auth.signOut();
+    await clearAuthData();
   }
 }
 
 final authRepoProvider = Provider<AuthRepository>((ref) {
   final dio = ref.read(dioProvider);
-  return AuthRepository(FirebaseAuth.instance, dio);
+  return AuthRepository(FlutterSecureStorage(), dio);
 });

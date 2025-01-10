@@ -9,6 +9,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/router.dart';
 import 'package:thunder/core/theme/text/default.dart';
+import 'package:thunder/features/auth/repositories/auth_repository.dart';
 import 'package:thunder/firebase_options.dart';
 import 'package:thunder/generated/l10n.dart';
 
@@ -27,8 +28,14 @@ void main() async {
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
+
+  final container = ProviderContainer();
+  await container.read(authRepoProvider).loadAuthData();
   runApp(
-    const ProviderScope(
+    ProviderScope(
+      overrides: [
+        authRepoProvider.overrideWithValue(container.read(authRepoProvider)),
+      ],
       child: MyApp(),
     ),
   );
@@ -47,9 +54,7 @@ class MyApp extends ConsumerWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('ko', 'KR'),
-      ],
+      supportedLocales: const [Locale('ko', 'KR')],
       locale: const Locale('ko', 'KR'),
       theme: ThemeData.dark(
         useMaterial3: true,

@@ -5,7 +5,7 @@ import 'package:thunder/core/constants/time_consts.dart';
 import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
-import 'package:thunder/features/auth/models/phone_auth_state.dart';
+import 'package:thunder/features/auth/models/domain/phone_auth_state.dart';
 import 'package:thunder/features/auth/providers/phone_auth_provider.dart';
 import 'package:thunder/features/onboarding/controllers/verification_controller.dart';
 

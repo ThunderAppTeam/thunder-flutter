@@ -89,7 +89,7 @@ class _BirthdatePageState extends ConsumerState<BirthdatePage> {
         (today.month == date.month && today.day < date.day)) {
       age--;
     }
-    return age >= AgeConsts.minAge;
+    return age >= AgeConsts.minAge; // 만 18세 이상만 가능
   }
 
   void _handleNextPress() {

@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/constants/time_consts.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
-import 'package:thunder/features/auth/models/nickname_check_state.dart';
+import 'package:thunder/features/auth/models/domain/nickname_check_state.dart';
 import 'package:thunder/features/auth/providers/nickname_check_provider.dart';
 import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
 import 'package:thunder/core/widgets/buttons/custom_wide_button.dart';

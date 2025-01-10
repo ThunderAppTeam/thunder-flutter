@@ -29,6 +29,7 @@ class TestPageWrapper extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
+        supportedLocales: const [Locale('ko', 'KR')],
         home: child,
       ),
     );

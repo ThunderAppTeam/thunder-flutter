@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/constants/time_consts.dart';
+import 'package:thunder/core/utils/info_utils.dart';
 import 'package:thunder/features/auth/providers/phone_auth_provider.dart';
 import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
 
@@ -74,7 +74,7 @@ class VerificationTimerController
     if (state.canSend) {
       state = state.copyWith(canSend: false, canVerify: true);
       final phoneNumber = _ref.read(onboardingProvider).phoneNumber!;
-      final countryCode = Platform.localeName.split('_').last;
+      final countryCode = getCountryCode();
       _ref.read(phoneAuthProvider.notifier).sendVerificationCode(
             phoneNumber: phoneNumber,
             countryCode: countryCode,
@@ -99,7 +99,7 @@ class VerificationTimerController
   void verifyCode(String smsCode) async {
     state = state.copyWith(canVerify: false);
     final phoneNumber = _ref.read(onboardingProvider).phoneNumber!;
-    final countryCode = Platform.localeName.split('_').last;
+    final countryCode = getCountryCode();
     _ref.read(phoneAuthProvider.notifier).veryfyCode(
           smsCode: smsCode,
           phoneNumber: phoneNumber,
@@ -110,7 +110,6 @@ class VerificationTimerController
     state = state.copyWith(canVerify: true);
   }
 
-  // TODO:온보딩 과정이 끝나면 그때 호출되는 dispose
   @override
   void dispose() {
     _timer?.cancel();
