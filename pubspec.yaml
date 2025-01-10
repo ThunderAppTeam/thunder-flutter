@@ -78,6 +78,7 @@ dev_dependencies:
 
   #=== Package
   change_app_package_name: ^1.4.0
+  flutter_launcher_icons: ^0.14.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -103,6 +104,7 @@ flutter:
     - assets/images/welcome/
     - assets/images/logos/
     - assets/images/splash/
+    - assets/images/app_icon/
 
   fonts:
     - family: Pretendard
@@ -148,3 +150,8 @@ flutter_gen:
 flutter_intl:
   enabled: true
   main_locale: ko
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/app_icon/app_icon.png"
