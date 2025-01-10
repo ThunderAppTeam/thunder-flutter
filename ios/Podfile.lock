@@ -3,38 +3,13 @@ PODS:
     - Flutter
   - camera_avfoundation (0.0.1):
     - Flutter
-  - cloud_firestore (5.6.0):
-    - Firebase/Firestore (= 11.4.0)
-    - firebase_core
-    - Flutter
   - device_info_plus (0.0.1):
     - Flutter
-  - Firebase/Auth (11.4.0):
-    - Firebase/CoreOnly
-    - FirebaseAuth (~> 11.4.0)
   - Firebase/CoreOnly (11.4.0):
     - FirebaseCore (= 11.4.0)
-  - Firebase/Firestore (11.4.0):
-    - Firebase/CoreOnly
-    - FirebaseFirestore (~> 11.4.0)
-  - firebase_auth (5.3.4):
-    - Firebase/Auth (= 11.4.0)
-    - firebase_core
-    - Flutter
   - firebase_core (3.9.0):
     - Firebase/CoreOnly (= 11.4.0)
     - Flutter
-  - FirebaseAppCheckInterop (11.6.0)
-  - FirebaseAuth (11.4.0):
-    - FirebaseAppCheckInterop (~> 11.0)
-    - FirebaseAuthInterop (~> 11.0)
-    - FirebaseCore (~> 11.4)
-    - FirebaseCoreExtension (~> 11.4)
-    - GoogleUtilities/AppDelegateSwizzler (~> 8.0)
-    - GoogleUtilities/Environment (~> 8.0)
-    - GTMSessionFetcher/Core (< 5.0, >= 3.4)
-    - RecaptchaInterop (~> 100.0)
-  - FirebaseAuthInterop (11.6.0)
   - FirebaseCore (11.4.0):
     - FirebaseCoreInternal (~> 11.0)
     - GoogleUtilities/Environment (~> 8.0)
@@ -75,28 +50,14 @@ PODS:
     - Flutter
   - flutter_secure_storage (6.0.0):
     - Flutter
-  - GoogleUtilities/AppDelegateSwizzler (8.0.2):
-    - GoogleUtilities/Environment
-    - GoogleUtilities/Logger
-    - GoogleUtilities/Network
-    - GoogleUtilities/Privacy
   - GoogleUtilities/Environment (8.0.2):
     - GoogleUtilities/Privacy
   - GoogleUtilities/Logger (8.0.2):
     - GoogleUtilities/Environment
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Network (8.0.2):
-    - GoogleUtilities/Logger
-    - "GoogleUtilities/NSData+zlib"
-    - GoogleUtilities/Privacy
-    - GoogleUtilities/Reachability
   - "GoogleUtilities/NSData+zlib (8.0.2)":
     - GoogleUtilities/Privacy
   - GoogleUtilities/Privacy (8.0.2)
-  - GoogleUtilities/Reachability (8.0.2):
-    - GoogleUtilities/Logger
-    - GoogleUtilities/Privacy
-  - GTMSessionFetcher/Core (4.1.0)
   - image_picker_ios (0.0.1):
     - Flutter
   - integration_test (0.0.1):
@@ -130,7 +91,6 @@ PODS:
   - photo_manager (2.0.0):
     - Flutter
     - FlutterMacOS
-  - RecaptchaInterop (100.0.0)
   - SDWebImage (5.20.0):
     - SDWebImage/Core (= 5.20.0)
   - SDWebImage/Core (5.20.0)
@@ -147,9 +107,7 @@ PODS:
 DEPENDENCIES:
   - app_tracking_transparency (from `.symlinks/plugins/app_tracking_transparency/ios`)
   - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
-  - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
-  - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - FirebaseFirestore (from `https://github.com/invertase/firestore-ios-sdk-frameworks.git`, tag `11.4.0`)
   - Flutter (from `Flutter`)
@@ -167,9 +125,6 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Firebase
-    - FirebaseAppCheckInterop
-    - FirebaseAuth
-    - FirebaseAuthInterop
     - FirebaseCore
     - FirebaseCoreExtension
     - FirebaseCoreInternal
@@ -181,12 +136,10 @@ SPEC REPOS:
     - FirebaseFirestoreInternalBinary
     - FirebaseSharedSwift
     - GoogleUtilities
-    - GTMSessionFetcher
     - leveldb-library
     - libwebp
     - Mantle
     - nanopb
-    - RecaptchaInterop
     - SDWebImage
     - SDWebImageWebPCoder
 
@@ -195,12 +148,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/app_tracking_transparency/ios"
   camera_avfoundation:
     :path: ".symlinks/plugins/camera_avfoundation/ios"
-  cloud_firestore:
-    :path: ".symlinks/plugins/cloud_firestore/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
-  firebase_auth:
-    :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
   FirebaseFirestore:
@@ -237,14 +186,9 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   app_tracking_transparency: e169b653478da7bb15a6c61209015378ca73e375
   camera_avfoundation: dd002b0330f4981e1bbcb46ae9b62829237459a4
-  cloud_firestore: 56bca083ecf07f16188ace1d5b57123bcb1b3465
   device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
   Firebase: cf1b19f21410b029b6786a54e9764a0cacad3c99
-  firebase_auth: c4bdd9d7b338ac004008cb5024a643584e0ec03f
   firebase_core: b62a5080210edad3f2934314a8b2c6f5124e8e10
-  FirebaseAppCheckInterop: 347aa09a805219a31249b58fc956888e9fcb314b
-  FirebaseAuth: c359af98bd703cbf4293eec107a40de08ede6ce6
-  FirebaseAuthInterop: a919d415797d23b7bfe195a04f322b86c65020ef
   FirebaseCore: e0510f1523bc0eb21653cac00792e1e2bd6f1771
   FirebaseCoreExtension: 4445e4cd877e0790c4af33bedca61eaef27b7513
   FirebaseCoreInternal: d98ab91e2d80a56d7b246856a8885443b302c0c2
@@ -261,7 +205,6 @@ SPEC CHECKSUMS:
   flutter_native_splash: f71420956eb811e6d310720fee915f1d42852e7a
   flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
-  GTMSessionFetcher: 923b710231ad3d6f3f0495ac1ced35421e07d9a6
   image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
   integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
   leveldb-library: cc8b8f8e013647a295ad3f8cd2ddf49a6f19be19
@@ -271,7 +214,6 @@ SPEC CHECKSUMS:
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
   photo_manager: ff695c7a1dd5bc379974953a2b5c0a293f7c4c8a
-  RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
   SDWebImage: 73c6079366fea25fa4bb9640d5fb58f0893facd8
   SDWebImageWebPCoder: e38c0a70396191361d60c092933e22c20d5b1380
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
