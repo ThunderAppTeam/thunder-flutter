@@ -16,24 +16,14 @@ final class Routes {
     path: '/',
   );
 
-  static const search = (
-    name: 'search',
-    path: '/search',
+  static const measure = (
+    name: 'measure',
+    path: '/measure',
   );
 
-  static const interest = (
-    name: 'interest',
-    path: '/interest',
-  );
-
-  static const profile = (
-    name: 'profile',
-    path: '/profile',
-  );
-
-  static const camera = (
-    name: 'camera',
-    path: '/camera',
+  static const archive = (
+    name: 'archive',
+    path: '/archive',
   );
 
   static const noonbody = (

@@ -27,10 +27,8 @@ class MainNavigationScreen extends ConsumerStatefulWidget {
 
 enum Tabs {
   home,
-  search,
-  camera,
-  interest,
-  profile,
+  measure,
+  archive,
 }
 
 class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
@@ -52,28 +50,28 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
     }
   }
 
-  void _onCameraTap() async {
+  void _onMeasureTap() async {
     await ref.read(permissionServiceProvider).requestCameraPermission();
     if (mounted) {
-      ref.read(safeRouterProvider).pushNamed(context, Routes.camera.name);
+      ref.read(safeRouterProvider).pushNamed(context, Routes.measure.name);
     }
   }
 
   void _onTap(BuildContext context, Tabs tab) {
-    if (tab == Tabs.camera) {
-      _onCameraTap();
+    if (tab == Tabs.measure) {
+      _onMeasureTap();
       return;
     }
     // 카메라 탭을 건너뛰고 매핑
     final adjustedIndex =
-        tab.index > Tabs.camera.index ? tab.index - 1 : tab.index;
+        tab.index > Tabs.measure.index ? tab.index - 1 : tab.index;
     widget.navigationShell.goBranch(adjustedIndex);
   }
 
   int _getSelectedIndex() {
     // 브랜치 인덱스를 탭 인덱스로 변환 (카메라 탭을 건너뛰고 매핑)
     final branchIndex = widget.navigationShell.currentIndex;
-    return branchIndex >= Tabs.camera.index ? branchIndex + 1 : branchIndex;
+    return branchIndex >= Tabs.measure.index ? branchIndex + 1 : branchIndex;
   }
 
   @override
@@ -99,42 +97,28 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
             vertical: Sizes.spacing2,
           ), // 전체 좌우 패딩
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween, // 가운데 정렬
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _NavigationBarItem(
                 icon: Assets.images.icons.home,
-                activeIcon: Assets.images.icons.home,
+                activeIcon: Assets.images.icons.homeFilled,
                 isSelected: _getSelectedIndex() == Tabs.home.index,
                 label: '홈',
                 onTap: () => _onTap(context, Tabs.home),
               ),
               _NavigationBarItem(
-                icon: Assets.images.icons.search,
-                activeIcon: Assets.images.icons.searchFilled,
-                isSelected: _getSelectedIndex() == Tabs.search.index,
-                label: '탐색',
-                onTap: () => _onTap(context, Tabs.search),
-              ),
-              _NavigationBarItem(
                 icon: Assets.images.icons.create,
                 activeIcon: Assets.images.icons.create,
-                isSelected: _getSelectedIndex() == Tabs.camera.index,
+                isSelected: _getSelectedIndex() == Tabs.measure.index,
                 label: '측정',
-                onTap: () => _onTap(context, Tabs.camera),
+                onTap: () => _onTap(context, Tabs.measure),
               ),
               _NavigationBarItem(
-                icon: Assets.images.icons.heart,
-                activeIcon: Assets.images.icons.heart,
-                isSelected: _getSelectedIndex() == Tabs.interest.index,
-                label: '관심',
-                onTap: () => _onTap(context, Tabs.interest),
-              ),
-              _NavigationBarItem(
-                icon: Assets.images.icons.biPerson,
-                activeIcon: Assets.images.icons.biPerson,
-                isSelected: _getSelectedIndex() == Tabs.profile.index,
-                label: '프로필',
-                onTap: () => _onTap(context, Tabs.profile),
+                icon: Assets.images.icons.folder,
+                activeIcon: Assets.images.icons.folderFilled,
+                isSelected: _getSelectedIndex() == Tabs.archive.index,
+                label: '보관함',
+                onTap: () => _onTap(context, Tabs.archive),
               ),
             ],
           ),
@@ -174,12 +158,14 @@ class _NavigationBarItem extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            (isSelected ? activeIcon : icon).svg(
+            SizedBox(
               width: Sizes.icon24,
               height: Sizes.icon24,
-              colorFilter: ColorFilter.mode(
-                Colors.white,
-                BlendMode.srcIn,
+              child: (isSelected ? activeIcon : icon).svg(
+                colorFilter: ColorFilter.mode(
+                  Colors.white,
+                  BlendMode.srcIn,
+                ),
               ),
             ),
             Gaps.v6,

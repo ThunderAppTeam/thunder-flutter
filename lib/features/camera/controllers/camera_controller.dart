@@ -55,23 +55,22 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   }
 
   Future<void> _initializeCamera() async {
-    _cameras = await availableCameras();
-    if (_cameras.isEmpty) return;
-
-    _backController = CameraController(
-      _cameras[0],
-      ResolutionPreset.veryHigh,
-      enableAudio: false,
-    );
-    if (_cameras.length > 1) {
-      _frontController = CameraController(
-        _cameras[1],
+    try {
+      _cameras = await availableCameras();
+      if (_cameras.isEmpty) throw Exception('No cameras found');
+      _backController = CameraController(
+        _cameras[0],
         ResolutionPreset.veryHigh,
         enableAudio: false,
       );
-    }
-    _controller = _backController;
-    try {
+      if (_cameras.length > 1) {
+        _frontController = CameraController(
+          _cameras[1],
+          ResolutionPreset.veryHigh,
+          enableAudio: false,
+        );
+      }
+      _controller = _backController;
       await _initController(_controller!);
     } catch (e) {
       state = state.copyWith(error: CameraError.initializationFailed);
