@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/core/errors/server_error.dart';
 import 'package:thunder/features/auth/models/domain/phone_auth_state.dart';
 import 'package:thunder/core/providers/device_info_provider.dart';
 import 'package:thunder/features/auth/repositories/auth_repository.dart';
@@ -30,9 +31,10 @@ class PhoneAuthNotifier extends StateNotifier<PhoneAuthState> {
         countryCode: countryCode,
       );
       state = state.copyWith(isCodeSending: false);
-    } on PhoneAuthError catch (e) {
-      state = state.copyWith(isCodeSending: false, error: e);
-      if (e == PhoneAuthError.tooManyMobileVerification) {
+    } on ServerError catch (e) {
+      final error = PhoneAuthError.fromServerError(e);
+      state = state.copyWith(isCodeSending: false, error: error);
+      if (e == ServerError.tooManyMobileVerification) {
         state = state.copyWith(isTooManyMobileVerification: true);
       }
     }
@@ -59,8 +61,9 @@ class PhoneAuthNotifier extends StateNotifier<PhoneAuthState> {
         deviceId: deviceId,
       );
       state = state.copyWith(isCodeVerifying: false, isVerified: true);
-    } on PhoneAuthError catch (e) {
-      state = state.copyWith(isCodeVerifying: false, error: e);
+    } on ServerError catch (e) {
+      final error = PhoneAuthError.fromServerError(e);
+      state = state.copyWith(isCodeVerifying: false, error: error);
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/core/errors/server_error.dart';
 import 'package:thunder/features/auth/models/domain/nickname_check_state.dart';
 import 'package:thunder/features/auth/repositories/auth_repository.dart';
 
@@ -12,8 +13,9 @@ class NicknameCheckNotifier extends StateNotifier<NicknameCheckState> {
     try {
       await _repository.checkNicknameAvailability(nickname);
       state = state.copyWith(isLoading: false, isAvailable: true);
-    } on NicknameCheckError catch (e) {
-      state = state.copyWith(isLoading: false, error: e);
+    } on ServerError catch (e) {
+      final error = NicknameCheckError.fromServerError(e);
+      state = state.copyWith(isLoading: false, error: error);
     }
   }
 }

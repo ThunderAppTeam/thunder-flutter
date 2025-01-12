@@ -5,11 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:thunder/core/constants/key_contsts.dart';
+import 'package:thunder/core/errors/error_parser.dart';
 import 'package:thunder/core/providers/dio_provider.dart';
-import 'package:thunder/features/auth/models/domain/nickname_check_state.dart';
-import 'package:thunder/features/auth/models/domain/phone_auth_state.dart';
 import 'package:thunder/features/auth/models/data/sign_up_user.dart';
-import 'package:thunder/features/auth/models/domain/sign_up_state.dart';
 
 class AuthRepository {
   final FlutterSecureStorage _secureStorage;
@@ -58,11 +56,7 @@ class AuthRepository {
         KeyConsts.isTestMode: testMode,
       });
     } on DioException catch (e) {
-      if (e.response != null) {
-        final errorCode = e.response?.data[KeyConsts.errorCode] ?? '';
-        throw PhoneAuthError.fromString(errorCode);
-      }
-      throw PhoneAuthError.unknown;
+      ErrorParser.parseAndThrow(e);
     }
   }
 
@@ -81,11 +75,7 @@ class AuthRepository {
         KeyConsts.deviceId: deviceId,
       });
     } on DioException catch (e) {
-      if (e.response != null) {
-        final errorCode = e.response?.data[KeyConsts.errorCode] ?? '';
-        throw PhoneAuthError.fromString(errorCode);
-      }
-      throw PhoneAuthError.unknown;
+      ErrorParser.parseAndThrow(e);
     }
   }
 
@@ -96,11 +86,8 @@ class AuthRepository {
           await _dio.get(path, queryParameters: {KeyConsts.nickname: nickname});
       return response.statusCode == HttpStatus.ok;
     } on DioException catch (e) {
-      if (e.response != null) {
-        final errorCode = e.response?.data[KeyConsts.errorCode] ?? '';
-        throw NicknameCheckError.fromString(errorCode);
-      }
-      throw NicknameCheckError.unknown;
+      ErrorParser.parseAndThrow(e);
+      return false;
     }
   }
 
@@ -112,11 +99,7 @@ class AuthRepository {
           response.data[KeyConsts.data][KeyConsts.memberId] ?? '1234';
       await saveAuthData(memberId, memberId); // TODO: 토큰 발급 로직 추가
     } on DioException catch (e) {
-      if (e.response != null) {
-        final errorCode = e.response?.data[KeyConsts.errorCode] ?? '';
-        throw SignUpError.fromString(errorCode);
-      }
-      throw SignUpError.unknown;
+      ErrorParser.parseAndThrow(e);
     }
   }
 

@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:thunder/core/errors/server_error.dart';
 
 part 'nickname_check_state.freezed.dart';
 
@@ -11,17 +12,13 @@ class NicknameCheckState with _$NicknameCheckState {
   }) = _NicknameCheckState;
 }
 
-class NicknameCheckExceptionCode {
-  static const nicknameDuplicated = 'NICKNAME_DUPLICATED';
-}
-
 enum NicknameCheckError {
   duplicated,
   unknown;
 
-  static NicknameCheckError fromString(String errorCode) {
-    switch (errorCode) {
-      case NicknameCheckExceptionCode.nicknameDuplicated:
+  static NicknameCheckError fromServerError(ServerError error) {
+    switch (error) {
+      case ServerError.nicknameDuplicated:
         return NicknameCheckError.duplicated;
       default:
         return NicknameCheckError.unknown;

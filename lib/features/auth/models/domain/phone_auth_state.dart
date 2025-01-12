@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:thunder/core/errors/server_error.dart';
 
 part 'phone_auth_state.freezed.dart';
 
@@ -13,25 +14,19 @@ class PhoneAuthState with _$PhoneAuthState {
   }) = _PhoneAuthState;
 }
 
-class PhoneAuthExceptionCode {
-  static const tooManyMobileVerification = 'TOO_MANY_MOBILE_VERIFICATION';
-  static const notFoundMobileNumber = 'NOT_FOUND_MOBILE_NUMBER';
-  static const invalidVerificationCode = 'INVALID_MOBILE_VERIFICATION';
-}
-
 enum PhoneAuthError {
   tooManyMobileVerification,
   notFoundMobileNumber,
   invalidVerificationCode,
   unknown;
 
-  static PhoneAuthError fromString(String errorCode) {
+  static PhoneAuthError fromServerError(ServerError errorCode) {
     switch (errorCode) {
-      case PhoneAuthExceptionCode.tooManyMobileVerification:
+      case ServerError.tooManyMobileVerification:
         return PhoneAuthError.tooManyMobileVerification;
-      case PhoneAuthExceptionCode.notFoundMobileNumber:
+      case ServerError.notFoundMobileNumber:
         return PhoneAuthError.notFoundMobileNumber;
-      case PhoneAuthExceptionCode.invalidVerificationCode:
+      case ServerError.invalidMobileVerification:
         return PhoneAuthError.invalidVerificationCode;
       default:
         return PhoneAuthError.unknown;
