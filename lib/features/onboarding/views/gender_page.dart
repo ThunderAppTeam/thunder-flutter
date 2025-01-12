@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/enums/gender.dart';
-import 'package:thunder/core/extensions/gender_extension.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';

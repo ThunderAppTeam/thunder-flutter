@@ -125,3 +125,65 @@ Generate code, corrections, and refactorings that comply with the basic principl
 
 - Use the standard widget testing for flutter
 - Use integration tests for each api module.
+
+### File Structure
+
+lib/
+├── app/
+│ ├── router/
+│ │ ├── router.dart
+│ │ ├── routes.dart
+│ │ └── safe_router.dart
+│ └── screens/
+│ └── main_navigation_screen.dart
+│
+├── core/
+│ ├── constants/
+│ │ ├── key_consts.dart
+│ │ └── time_consts.dart
+│ ├── errors/
+│ │ └── server_error.dart
+│ ├── providers/
+│ │ ├── dio_provider.dart
+│ │ └── device_info_provider.dart
+│ ├── services/
+│ │ └── permission_service.dart
+│ ├── theme/
+│ │ └── text/
+│ └── utils/
+│
+├── features/
+│ ├── auth/
+│ │ ├── models/
+│ │ │ ├── data/
+│ │ │ └── domain/
+│ │ ├── providers/
+│ │ │ ├── phone_auth_provider.dart
+│ │ │ └── sign_up_provider.dart
+│ │ ├── repositories/
+│ │ │ └── auth_repository.dart
+│ │ └── views/
+│ │
+│ ├── camera/
+│ │ ├── controllers/
+│ │ │ ├── camera_controller.dart
+│ │ │ └── photo_preview_controller.dart
+│ │ └── views/
+│ │
+│ ├── feed/
+│ │ └── views/
+│ │
+│ ├── noonbody/
+│ │ ├── view_models/
+│ │ └── views/
+│ │
+│ ├── onboarding/
+│ │ ├── controllers/
+│ │ ├── models/
+│ │ ├── providers/
+│ │ └── views/
+│ │
+│ └── welcome/
+│ └── views/
+│
+└── main.dart

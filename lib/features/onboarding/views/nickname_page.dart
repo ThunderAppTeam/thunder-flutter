@@ -85,25 +85,28 @@ class _NicknamePageState extends ConsumerState<NicknamePage> {
   Widget build(BuildContext context) {
     ref.listen(nicknameCheckProvider, _onNicknameCheckStateChanged);
     final isLoading = ref.watch(nicknameCheckProvider).isLoading;
-    return OnboardingScaffold(
-      showBackButton: false,
-      title: S.of(context).nicknameTitle,
-      content: OnboardingTextField(
-        controller: _controller,
-        hintText: S.of(context).nicknameHint,
-        inputFormatters: [
-          LengthLimitingTextInputFormatter(8),
-        ],
-        onChanged: (_) => setState(() {}),
-        canClear: true,
-      ),
-      guideText: S.of(context).nicknameGuideText,
-      bottomButton: CustomWideButton(
-        text: S.of(context).commonNext,
-        onPressed: _onButtonPressed,
-        isEnabled: _isValidNickname(_controller.text) &&
-            !isLoading &&
-            _isButtonEnabled,
+    return PopScope(
+      canPop: false,
+      child: OnboardingScaffold(
+        showBackButton: false,
+        title: S.of(context).nicknameTitle,
+        content: OnboardingTextField(
+          controller: _controller,
+          hintText: S.of(context).nicknameHint,
+          inputFormatters: [
+            LengthLimitingTextInputFormatter(8),
+          ],
+          onChanged: (_) => setState(() {}),
+          canClear: true,
+        ),
+        guideText: S.of(context).nicknameGuideText,
+        bottomButton: CustomWideButton(
+          text: S.of(context).commonNext,
+          onPressed: _onButtonPressed,
+          isEnabled: _isValidNickname(_controller.text) &&
+              !isLoading &&
+              _isButtonEnabled,
+        ),
       ),
     );
   }
