@@ -25,37 +25,41 @@ class OnboardingScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = getTextTheme(context);
-    return Scaffold(
-      appBar: CustomAppBar(
-        showBackButton: showBackButton,
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: Sizes.spacing20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: Sizes.spacing32),
-                child: Text(
-                  title,
-                  style: textTheme.textHead24,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: CustomAppBar(
+          showBackButton: showBackButton,
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: Sizes.spacing20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: Sizes.spacing32),
+                  child: Text(
+                    title,
+                    style: textTheme.textHead24,
+                  ),
                 ),
-              ),
-              content,
-              if (guideText != null) ...[
-                Gaps.v16,
-                Text(
-                  guideText!,
-                  style: textTheme.textSubtitle14.withOpacity(Styles.opacity80),
+                content,
+                if (guideText != null) ...[
+                  Gaps.v16,
+                  Text(
+                    guideText!,
+                    style:
+                        textTheme.textSubtitle14.withOpacity(Styles.opacity80),
+                  ),
+                ],
+                Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: Sizes.spacing8),
+                  child: bottomButton,
                 ),
               ],
-              Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: Sizes.spacing8),
-                child: bottomButton,
-              ),
-            ],
+            ),
           ),
         ),
       ),

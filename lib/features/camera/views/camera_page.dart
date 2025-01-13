@@ -119,6 +119,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
           onClose: () async {
             if (!cameraState.isInitialized &&
                 cameraState.error != CameraError.initializationFailed) {
+              // 카메라가 초기화 에러가 아닐 때, 초기화가 안되있으면 뒤로가기 방지
               return;
             }
             ref.read(safeRouterProvider).pop(context);

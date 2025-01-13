@@ -10,39 +10,29 @@ final class Routes {
     path: '/onboarding',
   );
 
-  static const webView = (
-    name: 'webView',
-    path: '/webview',
-  );
-
   // 메인 네비게이션
   static const home = (
     name: 'home',
     path: '/',
   );
 
-  static const search = (
-    name: 'search',
-    path: '/search',
+  static const measure = (
+    name: 'measure',
+    path: '/measure',
   );
 
-  static const interest = (
-    name: 'interest',
-    path: '/interest',
-  );
-
-  static const profile = (
-    name: 'profile',
-    path: '/profile',
-  );
-
-  static const camera = (
-    name: 'camera',
-    path: '/camera',
+  static const archive = (
+    name: 'archive',
+    path: '/archive',
   );
 
   static const noonbody = (
     name: 'noonbody',
     path: '/noonbody',
+  );
+
+  static const settings = (
+    name: 'settings',
+    path: '/settings',
   );
 }

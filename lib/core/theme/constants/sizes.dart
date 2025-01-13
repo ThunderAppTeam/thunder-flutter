@@ -10,8 +10,10 @@ class Sizes {
   static const double spacing16 = 16.0;
   static const double spacing20 = 20.0;
   static const double spacing24 = 24.0;
+  static const double spacing28 = 28.0;
   static const double spacing32 = 32.0;
   static const double spacing40 = 40.0;
+  static const double spacing56 = 56.0;
 
   // font sizes
   static const double fontSize12 = 12.0;
@@ -50,4 +52,7 @@ class Sizes {
 
   // app bar height
   static const double appBarHeight48 = 48.0;
+
+  // dialog width
+  static const double dialogWidth280 = 280.0;
 }

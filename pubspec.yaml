@@ -4,7 +4,7 @@ description: "A new Flutter project."
 # Prevent accidental publishing to pub.dev
 publish_to: "none"
 
-version: 0.3.1+3
+version: 0.5.0+1
 
 environment:
   sdk: ^3.5.4
@@ -27,6 +27,12 @@ dependencies:
   flutter_riverpod: ^2.6.1
   go_router: ^14.6.2
   webview_flutter: ^4.10.0
+  device_info_plus: ^11.2.0
+  dio: ^5.7.0
+
+  #=== Storage
+  shared_preferences: ^2.3.5
+  flutter_secure_storage: ^9.2.3
 
   #=== Camera
   camera: ^0.11.0+2
@@ -43,11 +49,11 @@ dependencies:
   #=== Utils
   freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0
+  uuid: ^3.0.7
+  flutter_dotenv: ^5.2.1
 
   #=== Firebase
   firebase_core: ^3.8.1
-  firebase_auth: ^5.3.4
-  cloud_firestore: ^5.6.0
 
 dev_dependencies:
   #=== Testing
@@ -65,8 +71,12 @@ dev_dependencies:
   json_serializable: ^6.9.0
   flutter_gen_runner: ^5.8.0
 
+  #=== Splash Screen
+  flutter_native_splash: ^2.4.4
+
   #=== Package
   change_app_package_name: ^1.4.0
+  flutter_launcher_icons: ^0.14.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -86,9 +96,13 @@ flutter:
   # example:
 
   assets:
-    - assets/images/
+    - .env
     - assets/images/camera/
     - assets/images/icons/
+    - assets/images/welcome/
+    - assets/images/logos/
+    - assets/images/splash/
+    - assets/images/app_icon/
 
   fonts:
     - family: Pretendard
@@ -133,3 +147,9 @@ flutter_gen:
 
 flutter_intl:
   enabled: true
+  main_locale: ko
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/app_icon/app_icon.png"

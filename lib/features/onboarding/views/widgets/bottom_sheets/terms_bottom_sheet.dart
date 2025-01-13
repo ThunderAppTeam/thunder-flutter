@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/constants/url_consts.dart';
-import 'package:thunder/app/router/routes.dart';
-import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
-import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
+import 'package:thunder/core/widgets/web_view_page.dart';
 import 'package:thunder/generated/l10n.dart';
 
 enum Terms {
@@ -21,18 +18,20 @@ enum Terms {
   const Terms(this.isRequired, this.url);
 }
 
-class TermsBottomSheet extends ConsumerStatefulWidget {
+class TermsBottomSheet extends StatefulWidget {
   final Function(bool) onAgree;
+  final bool isButtonEnabled;
   const TermsBottomSheet({
     super.key,
     required this.onAgree,
+    required this.isButtonEnabled,
   });
 
   @override
-  ConsumerState<TermsBottomSheet> createState() => _TermsBottomSheetState();
+  State<TermsBottomSheet> createState() => _TermsBottomSheetState();
 }
 
-class _TermsBottomSheetState extends ConsumerState<TermsBottomSheet> {
+class _TermsBottomSheetState extends State<TermsBottomSheet> {
   String _getTermLabel(Terms term, BuildContext context) {
     switch (term) {
       case Terms.service:
@@ -76,38 +75,46 @@ class _TermsBottomSheetState extends ConsumerState<TermsBottomSheet> {
   }
 
   void _showTermDetails(Terms term) {
-    ref.read(safeRouterProvider).pushNamed(
-          context,
-          Routes.webView.name,
-          extra: term.url,
-        );
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => WebViewPage(
+          url: term.url!,
+        ),
+      ),
+    );
   }
 
   Widget _buildAllAgreeCheckbox() {
     final textTheme = getTextTheme(context);
-    return Row(
-      children: [
-        SizedBox(
-          width: Sizes.icon20,
-          height: Sizes.icon20,
-          child: Checkbox(
-            activeColor: ColorName.black,
-            checkColor: ColorName.white,
-            value: _isAllChecked,
-            onChanged: _toggleAll,
-            shape: const CircleBorder(),
-          ),
-        ),
-        Gaps.h12,
-        Expanded(
-          child: Text(
-            S.of(context).termsAllAgree,
-            style: textTheme.textTitle18.copyWith(
-              color: ColorName.black,
+    return GestureDetector(
+      onTap: () => _toggleAll(!_isAllChecked),
+      child: Container(
+        color: Colors.transparent,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: Sizes.icon20,
+              height: Sizes.icon20,
+              child: Checkbox(
+                activeColor: ColorName.black,
+                checkColor: ColorName.white,
+                value: _isAllChecked,
+                onChanged: _toggleAll,
+                shape: const CircleBorder(),
+              ),
             ),
-          ),
+            Gaps.h12,
+            Text(
+              S.of(context).termsAllAgree,
+              style: textTheme.textTitle18.copyWith(
+                color: ColorName.black,
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
@@ -123,25 +130,27 @@ class _TermsBottomSheetState extends ConsumerState<TermsBottomSheet> {
         // 체크 영역
         GestureDetector(
           onTap: () => onChanged(!value),
-          child: Icon(
-            Icons.check,
-            size: Sizes.icon24,
-            color: value ? ColorName.black : ColorName.gray300,
+          child: Row(
+            children: [
+              Icon(
+                Icons.check,
+                size: Sizes.icon24,
+                color: value ? ColorName.black : ColorName.gray300,
+              ),
+              Gaps.h12,
+              Text(
+                (term.isRequired
+                        ? '(${S.of(context).termsRequired}) '
+                        : '(${S.of(context).termsOptional}) ') +
+                    label,
+                style: textTheme.textBody16.copyWith(
+                  color: ColorName.black,
+                ),
+              ),
+            ],
           ),
         ),
-        Gaps.h12,
-        // 텍스트 영역
-        Expanded(
-          child: Text(
-            (term.isRequired
-                    ? '(${S.of(context).termsRequired}) '
-                    : '(${S.of(context).termsOptional}) ') +
-                label,
-            style: textTheme.textBody16.copyWith(
-              color: ColorName.black,
-            ),
-          ),
-        ),
+        const Spacer(),
         // 상세보기 영역
         if (term.url != null)
           GestureDetector(
@@ -158,10 +167,10 @@ class _TermsBottomSheetState extends ConsumerState<TermsBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(onboardingProvider).isLoading;
     return CustomBottomSheet(
       title: S.of(context).termsTitle,
       content: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildAllAgreeCheckbox(),
           Gaps.v32,
@@ -183,8 +192,7 @@ class _TermsBottomSheetState extends ConsumerState<TermsBottomSheet> {
       ),
       buttonText: S.of(context).termsConfirm,
       onPressed: _handleAgree,
-      isEnabled:
-          _isValid && !isLoading && !ref.read(safeRouterProvider).isNavigating,
+      isEnabled: _isValid && widget.isButtonEnabled,
     );
   }
 }

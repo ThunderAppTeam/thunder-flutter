@@ -1,19 +1,17 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:thunder/core/constants/time_consts.dart';
 import 'package:thunder/core/enums/gender.dart';
-import 'package:thunder/features/auth/repositories/auth_repository.dart';
+import 'package:thunder/core/utils/info_utils.dart';
+import 'package:thunder/features/auth/models/data/sign_up_user.dart';
+import 'package:thunder/features/auth/providers/sign_up_provider.dart';
 import 'package:thunder/features/onboarding/models/onboarding_state.dart';
 import 'package:thunder/features/onboarding/views/birthdate_page.dart';
 import 'package:thunder/features/onboarding/views/gender_page.dart';
 import 'package:thunder/features/onboarding/views/nickname_page.dart';
 import 'package:thunder/features/onboarding/views/phone_number_page.dart';
 import 'package:thunder/features/onboarding/views/verification_page.dart';
-
-import 'package:thunder/features/users/models/user_profile.dart';
-import 'package:thunder/features/users/repositories/user_repository.dart';
 
 enum OnboardingStep {
   phoneNumber,
@@ -36,18 +34,12 @@ extension OnboardingStepX on OnboardingStep {
 }
 
 class OnboardingNotifier extends StateNotifier<OnboardingState> {
-  final AuthRepository _authRepo;
-  final UserRepository _userRepo;
-
   bool _isNavigating = false;
   bool get isNavigating => _isNavigating;
 
-  OnboardingNotifier({
-    required AuthRepository authRepo,
-    required UserRepository userRepo,
-  })  : _authRepo = authRepo,
-        _userRepo = userRepo,
-        super(const OnboardingState());
+  final SignUpNotifier _signUpNotifier;
+
+  OnboardingNotifier(this._signUpNotifier) : super(const OnboardingState());
 
   /// 다음 스탭으로 이동
   ///
@@ -98,36 +90,21 @@ class OnboardingNotifier extends StateNotifier<OnboardingState> {
   }
 
   Future<void> completeOnboarding({required bool marketingAgreed}) async {
-    state = state.copyWith(isLoading: true);
-    final user = _authRepo.currentUser;
-    if (user == null) {
-      state = state.copyWith(isLoading: false);
-      throw Exception('User not found');
-    }
-    try {
-      final profile = UserProfile(
-        uid: user.uid,
-        phoneNumber: user.phoneNumber!, // 국가 코드 포함
-        nickname: state.nickname!,
-        gender: state.gender!,
-        birthdate: state.birthdate!,
-        marketingAgreed: marketingAgreed,
-        createdAt: DateTime.now().microsecondsSinceEpoch,
-      );
-      await _userRepo.createUserProfile(profile);
-    } catch (e) {
-      log('Error creating user profile: $e');
-      throw Exception('Failed to create user profile');
-    } finally {
-      state = state.copyWith(isLoading: false);
-    }
+    final countryCode = getCountryCode();
+    final signUpUser = SignUpUser(
+      mobileNumber: state.phoneNumber!,
+      countryCode: countryCode,
+      mobileCountry: countryCode,
+      gender: state.gender!.toJson(),
+      birthDay: DateFormat('yyyy-MM-dd').format(state.birthdate!),
+      marketingAgreement: marketingAgreed,
+      nickname: state.nickname!,
+    );
+    await _signUpNotifier.signUp(user: signUpUser);
   }
 }
 
 final onboardingProvider =
     StateNotifierProvider<OnboardingNotifier, OnboardingState>((ref) {
-  return OnboardingNotifier(
-    authRepo: ref.read(authRepoProvider),
-    userRepo: ref.read(userRepoProvider),
-  );
+  return OnboardingNotifier(ref.read(signUpProvider.notifier));
 });

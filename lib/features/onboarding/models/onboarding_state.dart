@@ -10,6 +10,5 @@ class OnboardingState with _$OnboardingState {
     String? nickname,
     DateTime? birthdate,
     Gender? gender,
-    @Default(false) bool isLoading,
   }) = _OnboardingState;
 }

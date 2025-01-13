@@ -5,8 +5,10 @@
   "commonNext": "다음",
   "commonFemale": "여성",
   "commonMale": "남성",
+  "commonErrorUnknownTitle": "알 수 없는 오류가 발생했어요",
+  "commonErrorUnknownSubtitle": "네트워크 상태를 확인한 후 다시 시도해주세요. 문제가 지속될 경우 고객센터로 문의해주세요.\n\n고객센터: thunderteam.korea@gmail.com",
+  "commonCancel": "취소",
   "@_WELCOME": {},
-  "welcomeTitle": "⚡Thunder",
   "welcomeDescription": "눈바디를 측정하고\n달라진 나를 확인하세요",
   "welcomeStart": "시작하기",
   "welcomeAlreadyAccount": "이미 계정이 있나요?",
@@ -23,19 +25,39 @@
   "verificationTitle": "문자로 받은\n인증번호 6자리를 입력해주세요",
   "verificationResend": "인증문자 다시 받기",
   "verificationWrongCode": "인증번호가 틀렸습니다.",
+  "verificationErrorTooManyMobileVerificationTitle": "일일 인증 가능 횟수 초과",
+  "verificationErrorTooManyMobileVerificationSubtitle": "일일 인증 가능 횟수 5회를 초과하셨습니다. 내일 다시 시도해주세요.",
+  "verificationErrorNotFoundMobileNumberTitle": "존재하지 않는 휴대폰 번호",
+  "verificationErrorNotFoundMobileNumberSubtitle": "입력하신 휴대폰 번호가 존재하지 않는 번호입니다. 입력하신 정보를 다시 한 번 확인해주세요.",
+  "verificationErrorInvalidVerificationCodeTitle": "올바른 인증번호를 입력해주세요",
+  "verificationErrorInvalidVerificationCodeSubtitle": "입력하신 숫자가 인증번호와 일치하지 않습니다. 인증문자를 다시 한 번 확인해주세요.",
   "@_NICKNAME": {},
   "nicknameTitle": "회원등록을 시작할게요!\n어떤 닉네임을 사용하시겠어요?",
-  "nicknameHint": "닉네임 최소 2글자 최대 8글자",
-  "nicknameGuideText": "닉네임은 프로필에 표시되는 이름입니다. 나중에 다시 변경할 수 있습니다.",
+  "nicknameHint": "최소 2자 최대 8자",
+  "nicknameGuideText": "닉네임은 공백 없이 한글, 영문, 숫자만 사용하여 최소 2자에서 최대 8자 이내로 설정해야 합니다. 닉네임은 나중에 다시 변경할 수 있습니다.",
+  "nicknameErrorDuplicatedTitle": "다른 닉네임을 입력해주세요",
+  "nicknameErrorDuplicatedSubtitle": "입력하신 닉네임은 현재 다른 회원님에 의해 사용중인 상태입니다. 다른 닉네임으로 다시 시도해주세요.",
   "@_BIRTHDATE": {},
   "birthdateTitle": "{nickname}님의\n생년월일은 언제신가요?",
+  "@birthdateTitle": {
+    "nickname": {
+      "description": "user.nickname",
+      "example": "썬더닉네임999"
+    }
+  },
   "birthdateGuideText": "회원님의 나이 정보가 프로필에 표시됩니다. 생년월일은 공개되지 않습니다.",
   "birthdateInvalidDateTitle": "올바른 날짜를 입력해주세요",
   "birthdateInvalidDateSubtitle": "입력하신 생년월일이 올바른 날짜가 아닙니다. 입력하신 정보를 다시 한 번 확인해주세요.",
   "birthdateInvalidAgeTitle": "서비스 이용가능 연령이 아니에요",
   "birthdateInvalidAgeSubtitle": "만 18세 미만은 썬더를 이용하실 수 없어요. 나중에 다시 만나요.",
   "@_GENDER": {},
-  "genderTitle": "{nickname}님의\n성별을 알려주세요",
+  "genderTitle": "{nickname}님의\n성별을선택해주세요",
+  "@genderTitle": {
+    "nickname": {
+      "description": "user.nickname",
+      "example": "썬더닉네임999"
+    }
+  },
   "@_TERMS": {},
   "termsConfirm": "동의하고 시작하기",
   "termsTitle": "썬더를 이용하려면 동의가 필요해요",
@@ -45,5 +67,9 @@
   "termsService": "서비스 이용약관",
   "termsPrivacy": "개인정보 수집 및 이용",
   "termsMarketing": "마케팅 정보 수신 동의",
-  "termsErrorTitle": "계정 생성 중 오류가 발생했습니다."
+  "@_SETTINGS": {},
+  "settingsTitle": "설정",
+  "settingsLogout": "로그아웃",
+  "settingsLogoutTitle": "로그아웃을 하시겠어요?",
+  "settingsLogoutSubtitle": "로그아웃을 하면 시작 화면으로 이동합니다."
 }

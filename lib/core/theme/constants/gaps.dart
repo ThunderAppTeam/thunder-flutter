@@ -3,6 +3,7 @@ import 'package:thunder/core/theme/constants/sizes.dart';
 
 abstract class Gaps {
   // Vertical
+  static const v2 = SizedBox(height: Sizes.spacing2);
   static const v6 = SizedBox(height: Sizes.spacing4);
   static const v8 = SizedBox(height: Sizes.spacing8);
   static const v12 = SizedBox(height: Sizes.spacing12);
