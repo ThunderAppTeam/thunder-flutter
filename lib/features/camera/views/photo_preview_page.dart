@@ -30,10 +30,14 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
       child: Scaffold(
         appBar: CustomAppBar(
           title: '사진 미리보기',
-          actionText: isProcessing ? '처리중' : '완료',
-          onAction: isProcessing || isNavigating
-              ? null
-              : () => _onComplete(widget.imagePath),
+          actions: [
+            CustomAppBarAction(
+              text: isProcessing ? '처리중' : '완료',
+              onTap: isProcessing || isNavigating
+                  ? null
+                  : () => _onComplete(widget.imagePath),
+            ),
+          ],
         ),
         body: Stack(
           children: [

@@ -40,16 +40,24 @@ class _NoonbodyWaitingPageState extends ConsumerState<NoonbodyWaitingPage> {
   Widget build(BuildContext context) {
     final noonbodyState = ref.watch(noonbodyProvider);
     final textTheme = getTextTheme(context);
-
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
           title: '내 눈바디',
-          actionIcon: Icons.more_horiz,
-          onAction: () {},
-          onBack: () => ref
-              .read(safeRouterProvider)
-              .goNamed(context, Routes.home.name, extra: true),
+          actions: [
+            CustomAppBarAction(
+              icon: Icons.more_horiz,
+              onTap: () {},
+            ),
+            CustomAppBarAction(
+              icon: Icons.close,
+              onTap: () {
+                // 홈으로 이동
+                ref.read(safeRouterProvider).goNamed(context, Routes.home.name);
+              },
+            ),
+          ],
+          showBackButton: false,
         ),
         body: Padding(
           padding: const EdgeInsets.only(
