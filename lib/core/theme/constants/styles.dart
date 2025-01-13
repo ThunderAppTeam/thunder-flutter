@@ -18,6 +18,7 @@ abstract class Styles {
 
   // Radius
   static const double radius4 = 4.0;
+  static const double radius14 = 14.0;
   static const double radius16 = 16.0;
   static const double radius24 = 24.0;
 

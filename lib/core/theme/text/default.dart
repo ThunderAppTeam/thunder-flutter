@@ -31,7 +31,7 @@ const AppTextTheme defaultTextTheme = AppTextTheme(
   textTitle18: TextStyle(
     fontFamily: FontFamily.pretendard,
     fontSize: Sizes.fontSize18,
-    height: Sizes.lineHeight24 / Sizes.fontSize18,
+    height: Sizes.lineHeight22 / Sizes.fontSize18,
     fontWeight: FontWeight.w600,
     color: Colors.white,
   ),

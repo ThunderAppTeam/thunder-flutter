@@ -30,4 +30,9 @@ final class Routes {
     name: 'noonbody',
     path: '/noonbody',
   );
+
+  static const settings = (
+    name: 'settings',
+    path: '/settings',
+  );
 }

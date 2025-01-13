@@ -86,7 +86,24 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
               horizontal: Sizes.spacing16,
               vertical: Sizes.spacing8,
             ),
-            child: Assets.images.logos.thunderLogotypeSmallW.svg(),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Assets.images.logos.thunderLogotypeSmallW.svg(),
+                InkWell(
+                  onTap: () {
+                    ref
+                        .read(safeRouterProvider)
+                        .pushNamed(context, Routes.settings.name);
+                  },
+                  child: SizedBox(
+                    width: Sizes.icon24,
+                    height: Sizes.icon24,
+                    child: Assets.images.icons.settings.svg(),
+                  ),
+                ),
+              ],
+            ),
           ),
           titleSpacing: Sizes.zero,
         ),

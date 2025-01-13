@@ -9,6 +9,7 @@ import 'package:thunder/features/camera/views/camera_page.dart';
 import 'package:thunder/features/feed/views/feed_page.dart';
 import 'package:thunder/features/noonbody/views/noonbody_waiting_page.dart';
 import 'package:thunder/features/onboarding/views/phone_number_page.dart';
+import 'package:thunder/features/settings/views/settings_page.dart';
 import 'package:thunder/features/welcome/views/welcome_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -17,7 +18,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     // initialLocation: Routes.home.path,
     initialLocation: !kDebugMode ? Routes.home.path : Routes.home.path,
     redirect: (context, state) {
-      final isLoggedIn = ref.watch(authRepoProvider).isLoggedIn;
+      final isLoggedIn = !ref.watch(authRepoProvider).isLoggedIn;
 
       // 웰컴 페이지나 온보딩 페이지면 리다이렉트 하지 않음
       if (state.matchedLocation == Routes.welcome.path ||
@@ -79,6 +80,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => NoonbodyWaitingPage(
           imagePath: state.extra as String,
         ),
+      ),
+      GoRoute(
+        path: Routes.settings.path,
+        name: Routes.settings.name,
+        builder: (context, state) => const SettingsPage(),
       ),
     ],
   );

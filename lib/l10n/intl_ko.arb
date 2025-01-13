@@ -7,6 +7,7 @@
   "commonMale": "남성",
   "commonErrorUnknownTitle": "알 수 없는 오류가 발생했어요",
   "commonErrorUnknownSubtitle": "네트워크 상태를 확인한 후 다시 시도해주세요. 문제가 지속될 경우 고객센터로 문의해주세요.\n\n고객센터: thunderteam.korea@gmail.com",
+  "commonCancel": "취소",
   "@_WELCOME": {},
   "welcomeDescription": "눈바디를 측정하고\n달라진 나를 확인하세요",
   "welcomeStart": "시작하기",
@@ -65,5 +66,10 @@
   "termsOptional": "선택",
   "termsService": "서비스 이용약관",
   "termsPrivacy": "개인정보 수집 및 이용",
-  "termsMarketing": "마케팅 정보 수신 동의"
+  "termsMarketing": "마케팅 정보 수신 동의",
+  "@_SETTINGS": {},
+  "settingsTitle": "설정",
+  "settingsLogout": "로그아웃",
+  "settingsLogoutTitle": "로그아웃을 하시겠어요?",
+  "settingsLogoutSubtitle": "로그아웃을 하면 시작 화면으로 이동합니다."
 }
