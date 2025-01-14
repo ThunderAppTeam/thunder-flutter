@@ -14,6 +14,7 @@ import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
 import 'package:thunder/core/widgets/buttons/custom_wide_button.dart';
+import 'package:thunder/core/widgets/custom_circular_indicator.dart';
 import 'package:thunder/features/noonbody/models/noonbody_state.dart';
 import 'package:thunder/features/noonbody/view_models/noonbody_view_model.dart';
 
@@ -72,7 +73,7 @@ class _NoonbodyWaitingPageState extends ConsumerState<NoonbodyWaitingPage> {
             children: [
               Expanded(
                 child: noonbodyState.isUploading
-                    ? const Center(child: CircularProgressIndicator())
+                    ? const CustomCircularIndicator()
                     : AspectRatio(
                         aspectRatio: ImageConsts.aspectRatio,
                         child: Stack(
@@ -159,11 +160,7 @@ class _NoonbodyWaitingPageState extends ConsumerState<NoonbodyWaitingPage> {
               Gaps.v16,
               CustomWideButton(
                 text: '공유하기',
-                onPressed: () {
-                  ref
-                      .read(noonbodyProvider.notifier)
-                      .uploadImage(widget.imagePath);
-                },
+                onPressed: () {},
               ),
             ],
           ),

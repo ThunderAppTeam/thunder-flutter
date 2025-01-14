@@ -6,9 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/constants/image_consts.dart';
-import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
+import 'package:thunder/core/widgets/custom_circular_indicator.dart';
 import 'package:thunder/features/camera/controllers/photo_preview_controller.dart';
+import 'package:thunder/features/noonbody/view_models/noonbody_view_model.dart';
 
 class PhotoPreviewPage extends ConsumerStatefulWidget {
   final String imagePath;
@@ -64,12 +65,7 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
                 ),
               ),
             ),
-            if (isProcessing || isNavigating)
-              Center(
-                child: CircularProgressIndicator(
-                  color: ColorName.white,
-                ),
-              ),
+            if (isProcessing || isNavigating) const CustomCircularIndicator(),
           ],
         ),
       ),
@@ -86,13 +82,15 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
     final croppedImagePath = await ref
         .read(photoPreviewControllerProvider.notifier)
         .processCroppedImage(imagePath: imagePath, cropRect: cropRect);
-
-    if (croppedImagePath != null && mounted) {
-      ref.read(safeRouterProvider).goNamed(
-            context,
-            Routes.noonbody.name,
-            extra: croppedImagePath,
-          );
+    if (croppedImagePath != null) {
+      ref.read(noonbodyProvider.notifier).uploadImage(croppedImagePath);
+      if (mounted) {
+        ref.read(safeRouterProvider).goNamed(
+              context,
+              Routes.noonbody.name,
+              extra: croppedImagePath,
+            );
+      }
     }
   }
 }

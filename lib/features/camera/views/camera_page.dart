@@ -9,6 +9,7 @@ import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
+import 'package:thunder/core/widgets/custom_circular_indicator.dart';
 import 'package:thunder/features/camera/controllers/camera_controller.dart';
 import 'package:thunder/features/camera/models/camera_state.dart';
 import 'package:thunder/features/camera/views/photo_preview_page.dart';
@@ -134,12 +135,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
             aspectRatio: ImageConsts.aspectRatio,
             child: Stack(
               children: [
-                if (cameraState.isCompressing)
-                  const Center(
-                    child: CircularProgressIndicator(
-                      color: ColorName.white,
-                    ),
-                  ),
+                if (cameraState.isCompressing) const CustomCircularIndicator(),
                 if (cameraState.isInitialized && cameraState.hasPermission)
                   GestureDetector(
                     onTapUp: (details) => _onFocusTap(details, context, ref),

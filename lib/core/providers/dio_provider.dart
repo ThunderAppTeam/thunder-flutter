@@ -9,8 +9,9 @@ final dioProvider = Provider<Dio>((ref) {
 
   final dio = Dio(BaseOptions(
     baseUrl: baseUrl,
-    connectTimeout: const Duration(seconds: 5),
-    receiveTimeout: const Duration(seconds: 3),
+    connectTimeout: const Duration(seconds: 5), // 연결 시도는 좀 더 여유있게
+    receiveTimeout: const Duration(seconds: 10), // 데이터 수신도 여유있게
+    sendTimeout: const Duration(seconds: 10),
   ));
 
   // Add interceptors if needed

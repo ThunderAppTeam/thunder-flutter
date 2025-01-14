@@ -4,19 +4,21 @@ import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/enums/gender.dart';
 import 'package:thunder/features/noonbody/models/noonbody_state.dart';
+import 'package:thunder/features/noonbody/repsitories/noonbody_repository.dart';
 
 class NoonbodyViewModel extends StateNotifier<NoonbodyState> {
   String imagePath = '';
   Timer? _timer;
   final Random _random = Random();
+  final NoonbodyRepository _repository;
 
-  NoonbodyViewModel(super.state);
+  NoonbodyViewModel(super.state, this._repository);
 
   Future<void> uploadImage(String imagePath) async {
-    print('uploadImage');
     state = state.copyWith(isUploading: true, progress: 0, currentScore: 0);
     this.imagePath = imagePath;
-    _startFakeProgress();
+    await _repository.uploadImage(imagePath);
+    // _startFakeProgress();
     state = state.copyWith(isUploading: false);
   }
 
@@ -77,5 +79,6 @@ class NoonbodyViewModel extends StateNotifier<NoonbodyState> {
 
 final noonbodyProvider =
     StateNotifierProvider<NoonbodyViewModel, NoonbodyState>((ref) {
-  return NoonbodyViewModel(NoonbodyState());
+  return NoonbodyViewModel(
+      NoonbodyState(), ref.read(noonbodyRepositoryProvider));
 });

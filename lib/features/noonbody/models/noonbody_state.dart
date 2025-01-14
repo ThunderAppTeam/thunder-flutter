@@ -14,5 +14,10 @@ class NoonbodyState with _$NoonbodyState {
     @Default(0) int age,
     @Default(0) double genderPercent, // 성별 내에서의 상위%
     @Default(0) double percent, // 전체 상위%
+    NoonbodyError? error,
   }) = _NoonbodyState;
+}
+
+enum NoonbodyError {
+  uploadImage,
 }

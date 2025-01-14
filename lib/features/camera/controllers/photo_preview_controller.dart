@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -6,12 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image/image.dart' as img;
 import 'package:thunder/core/constants/image_consts.dart';
 import 'package:thunder/core/utils/image_utils.dart';
-import 'package:thunder/features/noonbody/view_models/noonbody_view_model.dart';
 
 class PhotoPreviewController extends StateNotifier<bool> {
-  final Ref ref;
-
-  PhotoPreviewController(this.ref) : super(false);
+  PhotoPreviewController() : super(false);
 
   Future<String?> processCroppedImage({
     required String imagePath,
@@ -20,7 +16,6 @@ class PhotoPreviewController extends StateNotifier<bool> {
     try {
       state = true; // 처리 시작
       final file = File(imagePath);
-      log('imagePath: $imagePath');
       final bytes = await file.readAsBytes();
       await logImageInfo('Original Image', bytes);
       final image = img.decodeImage(bytes);
@@ -40,7 +35,6 @@ class PhotoPreviewController extends StateNotifier<bool> {
       );
       await logImageInfo('Compressed Image', compressed);
       await file.writeAsBytes(compressed);
-      await ref.read(noonbodyProvider.notifier).uploadImage(imagePath);
       return imagePath;
     } catch (e) {
       return null;
@@ -52,5 +46,5 @@ class PhotoPreviewController extends StateNotifier<bool> {
 
 final photoPreviewControllerProvider =
     StateNotifierProvider<PhotoPreviewController, bool>((ref) {
-  return PhotoPreviewController(ref);
+  return PhotoPreviewController();
 });
