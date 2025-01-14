@@ -94,8 +94,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
 
     // 새로운 이미지가 선택되었을 때 미리보기 페이지로 이동
     if (prev?.selectedImagePath == null && next.selectedImagePath != null) {
-      // 새로운 이미지가 선택되었을 때 미리보기 페이지로 이동
-      _controller.clearSelectingImageStates();
+      // 새로운 이
       if (mounted) {
         await Navigator.push(
           context,
@@ -105,6 +104,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
             ),
           ),
         );
+        _controller.clearSelectingImageStates();
       }
     }
   }
@@ -113,6 +113,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
   Widget build(BuildContext context) {
     final cameraState = ref.watch(cameraStateNotifierProvider);
     ref.listen(cameraStateNotifierProvider, _onCameraStateChanged);
+
     return SafeArea(
       child: Scaffold(
         appBar: CameraAppBar(
@@ -133,6 +134,12 @@ class _CameraPageState extends ConsumerState<CameraPage>
             aspectRatio: ImageConsts.aspectRatio,
             child: Stack(
               children: [
+                if (cameraState.isCompressing)
+                  const Center(
+                    child: CircularProgressIndicator(
+                      color: ColorName.white,
+                    ),
+                  ),
                 if (cameraState.isInitialized && cameraState.hasPermission)
                   GestureDetector(
                     onTapUp: (details) => _onFocusTap(details, context, ref),

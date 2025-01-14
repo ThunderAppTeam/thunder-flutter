@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:thunder/core/constants/image_consts.dart';
 import 'package:thunder/core/services/permission_service.dart';
+import 'package:thunder/core/utils/image_utils.dart';
 import 'package:thunder/features/camera/models/camera_state.dart';
 import 'package:image/image.dart' as img;
 
@@ -234,12 +236,20 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
         source: ImageSource.gallery,
         requestFullMetadata: false, // 제한된 메타데이터만 요청 권한 요청 안함
       );
+      log('image: ${image?.path}');
       if (image == null) return;
+      state = state.copyWith(isCompressing: true);
       _isProcessing = true; // 이미지 피커의 await 에러로 인해, _isProcessing을 이미지 압축시에 사용
       final compressedFile = await _resizeAndCompressImage(image.path);
-      state = state.copyWith(selectedImagePath: compressedFile!.path);
+      state = state.copyWith(
+        selectedImagePath: compressedFile!.path,
+        isCompressing: false,
+      );
     } catch (e) {
-      log('pickImage error: $e');
+      state = state.copyWith(
+        error: CameraError.imagePickFailed,
+        isCompressing: false,
+      );
     } finally {
       _endProcessing();
     }
@@ -253,21 +263,24 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   }
 
   Future<File?> _resizeAndCompressImage(String imagePath) async {
-    try {
-      final file = File(imagePath);
-      final bytes = await file.readAsBytes();
-      final compressed = await FlutterImageCompress.compressWithList(
-        bytes,
-        minWidth: ImageConsts.targetWidth,
-        minHeight: ImageConsts.targetHeight,
-        quality: ImageConsts.targetQuality,
-      );
-      await file.writeAsBytes(compressed);
-      return file;
-    } catch (e) {
-      log('resizeAndCompressImage error: $e');
-      return null;
-    }
+    final file = File(imagePath);
+    final bytes = await file.readAsBytes();
+
+    await logImageInfo('Original Image', bytes);
+    // 해상도 줄이기
+    final compressed = await FlutterImageCompress.compressWithList(
+      bytes,
+      minWidth: ImageConsts.targetWidth,
+      minHeight: ImageConsts.targetHeight,
+      format: CompressFormat.jpeg,
+      quality: 100,
+    );
+    await logImageInfo('Compressed Image', compressed);
+    final compressedFile = File(
+        '${file.parent.path}/${DateTime.now().millisecondsSinceEpoch}.jpg');
+    await compressedFile.writeAsBytes(compressed);
+    await file.delete();
+    return compressedFile;
   }
 
   void clearSelectedImage() {

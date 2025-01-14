@@ -53,6 +53,8 @@ class _NoonbodyWaitingPageState extends ConsumerState<NoonbodyWaitingPage> {
               icon: Icons.close,
               onTap: () {
                 // 홈으로 이동
+                // 이미지 삭제
+                File(widget.imagePath).delete();
                 ref.read(safeRouterProvider).goNamed(context, Routes.home.name);
               },
             ),

@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/constants/image_consts.dart';
+import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
 import 'package:thunder/features/camera/controllers/photo_preview_controller.dart';
 
@@ -64,7 +65,11 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
               ),
             ),
             if (isProcessing || isNavigating)
-              const Center(child: CircularProgressIndicator()),
+              Center(
+                child: CircularProgressIndicator(
+                  color: ColorName.white,
+                ),
+              ),
           ],
         ),
       ),
