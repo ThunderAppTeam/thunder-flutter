@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thunder/app/router/routes.dart';
-import 'package:thunder/app/router/safe_router.dart';
-import 'package:thunder/features/auth/repositories/auth_repository.dart';
 
 class FeedPage extends ConsumerStatefulWidget {
   const FeedPage({super.key});
@@ -33,17 +30,6 @@ class _FeedPageState extends ConsumerState<FeedPage> {
                 });
               },
               child: const Text('증가'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                await ref.read(authRepoProvider).signOut();
-                if (context.mounted) {
-                  ref
-                      .read(safeRouterProvider)
-                      .pushNamed(context, Routes.welcome.name);
-                }
-              },
-              child: const Text('로그 아웃'),
             ),
           ],
         ),

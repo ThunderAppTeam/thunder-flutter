@@ -57,7 +57,8 @@ class _CameraPageState extends ConsumerState<CameraPage>
     showModalBottomSheet(
       context: context,
       builder: (context) => CustomBottomSheet(
-        title: errorMessage,
+        title: "오류가 발생했습니다",
+        subtitle: errorMessage,
         onPressed: () {
           Navigator.pop(context);
         },

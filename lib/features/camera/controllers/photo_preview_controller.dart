@@ -17,7 +17,6 @@ class PhotoPreviewController extends StateNotifier<bool> {
       state = true; // 처리 시작
       final file = File(imagePath);
       final bytes = await file.readAsBytes();
-      await logImageInfo('Original Image', bytes);
       final image = img.decodeImage(bytes);
       if (image == null) return null;
       final croppedImage = img.copyCrop(
@@ -28,12 +27,11 @@ class PhotoPreviewController extends StateNotifier<bool> {
         height: cropRect.height.toInt(),
       );
       final croppedBytes = img.encodeJpg(croppedImage);
-      await logImageInfo('Cropped Image', croppedBytes);
       final compressed = await FlutterImageCompress.compressWithList(
         croppedBytes,
         quality: ImageConsts.targetQuality,
       );
-      await logImageInfo('Compressed Image', compressed);
+      await logImageInfo('Output Image', compressed);
       await file.writeAsBytes(compressed);
       return imagePath;
     } catch (e) {
