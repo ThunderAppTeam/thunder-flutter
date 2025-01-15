@@ -5,7 +5,7 @@ import 'package:thunder/core/constants/time_consts.dart';
 import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
-import 'package:thunder/features/auth/models/domain/phone_auth_state.dart';
+import 'package:thunder/features/auth/models/states/phone_auth_state.dart';
 import 'package:thunder/features/auth/providers/phone_auth_provider.dart';
 import 'package:thunder/features/onboarding/controllers/verification_controller.dart';
 
@@ -51,11 +51,15 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
     _controller.verifyCode(smsCode);
   }
 
-  void _onVerifySuccess() {
-    ref.read(onboardingProvider.notifier).pushNextStep(
-          context: context,
-          currentStep: OnboardingStep.verification,
-        );
+  void _onVerifySuccess(bool isExistUser) {
+    if (isExistUser) {
+      ref.read(safeRouterProvider).goToHome(context);
+    } else {
+      ref.read(onboardingProvider.notifier).pushNextStep(
+            context: context,
+            currentStep: OnboardingStep.verification,
+          );
+    }
   }
 
   @override
@@ -66,7 +70,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
 
   void _onPhoneAuthStateChanged(PhoneAuthState? prev, PhoneAuthState next) {
     if (next.isVerified) {
-      _onVerifySuccess();
+      _onVerifySuccess(next.isExistUser);
     }
     if (prev?.error != next.error && next.error != null) {
       final String title, subtitle;
@@ -89,6 +93,10 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
         case PhoneAuthError.unknown:
           title = S.of(context).commonErrorUnknownTitle;
           subtitle = S.of(context).commonErrorUnknownSubtitle;
+          break;
+        case PhoneAuthError.expiredVerificationCode:
+          title = "인증 코드가 만료되었습니다.";
+          subtitle = "인증 코드를 다시 발송해주세요.";
           break;
       }
       showModalBottomSheet(

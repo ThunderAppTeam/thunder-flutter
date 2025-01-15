@@ -10,6 +10,7 @@ class PhoneAuthState with _$PhoneAuthState {
     @Default(false) bool isTooManyMobileVerification,
     @Default(false) bool isCodeVerifying,
     @Default(false) bool isVerified,
+    @Default(false) bool isExistUser,
     PhoneAuthError? error,
   }) = _PhoneAuthState;
 }
@@ -18,6 +19,7 @@ enum PhoneAuthError {
   tooManyMobileVerification,
   notFoundMobileNumber,
   invalidVerificationCode,
+  expiredVerificationCode,
   unknown;
 
   static PhoneAuthError fromServerError(ServerError errorCode) {
@@ -28,6 +30,8 @@ enum PhoneAuthError {
         return PhoneAuthError.notFoundMobileNumber;
       case ServerError.invalidMobileVerification:
         return PhoneAuthError.invalidVerificationCode;
+      case ServerError.expiredMobileVerification:
+        return PhoneAuthError.expiredVerificationCode;
       default:
         return PhoneAuthError.unknown;
     }
