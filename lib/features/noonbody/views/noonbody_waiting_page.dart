@@ -13,10 +13,12 @@ import 'package:thunder/core/theme/gen/assets.gen.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
+import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/core/widgets/buttons/custom_wide_button.dart';
 import 'package:thunder/core/widgets/custom_circular_indicator.dart';
 import 'package:thunder/features/noonbody/models/noonbody_state.dart';
 import 'package:thunder/features/noonbody/view_models/noonbody_view_model.dart';
+import 'package:thunder/generated/l10n.dart';
 
 class NoonbodyWaitingPage extends ConsumerStatefulWidget {
   final String imagePath;
@@ -37,9 +39,24 @@ class _NoonbodyWaitingPageState extends ConsumerState<NoonbodyWaitingPage> {
     return '$ageGroup대 $gender 상위 $genderPercent% | 전체 상위 $percent%';
   }
 
+  void _onError() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => CustomBottomSheet(
+        title: S.of(context).commonErrorUnknownTitle,
+        subtitle: S.of(context).commonErrorUnknownSubtitle,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final noonbodyState = ref.watch(noonbodyProvider);
+    ref.listen(noonbodyProvider, (prev, next) {
+      if (prev?.error == null && next.error != null) {
+        _onError();
+      }
+    });
     final textTheme = getTextTheme(context);
     return SafeArea(
       child: Scaffold(

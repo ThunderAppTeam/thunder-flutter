@@ -15,9 +15,16 @@ class NoonbodyViewModel extends StateNotifier<NoonbodyState> {
   NoonbodyViewModel(super.state, this._repository);
 
   Future<void> uploadImage(String imagePath) async {
-    state = state.copyWith(isUploading: true, progress: 0, currentScore: 0);
     this.imagePath = imagePath;
-    await _repository.uploadImage(imagePath);
+    state = state.copyWith(
+        isUploading: true, progress: 0, currentScore: 0, error: null);
+    try {
+      await _repository.uploadImage(imagePath);
+    } catch (e) {
+      state =
+          state.copyWith(isUploading: false, error: NoonbodyError.uploadImage);
+      return;
+    }
     // _startFakeProgress();
     state = state.copyWith(isUploading: false);
   }
