@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -13,31 +14,23 @@ class AuthRepository {
   final FlutterSecureStorage _secureStorage;
   final Dio _dio;
   String? _accessToken;
-  String? _userId;
 
   AuthRepository(this._secureStorage, this._dio);
 
   bool get isLoggedIn => _accessToken != null;
-
-  String? get userId => _userId;
   // AuthToken
   Future<void> loadAuthData() async {
-    _accessToken = await _secureStorage.read(key: KeyConsts.authToken);
-    _userId = await _secureStorage.read(key: KeyConsts.userId);
+    _accessToken = await _secureStorage.read(key: KeyConsts.accessToken);
   }
 
-  Future<void> saveAuthData(String accessToken, String userId) async {
+  Future<void> saveAuthData(String accessToken) async {
     _accessToken = accessToken;
-    _userId = userId;
-    await _secureStorage.write(key: KeyConsts.authToken, value: accessToken);
-    await _secureStorage.write(key: KeyConsts.userId, value: userId);
+    await _secureStorage.write(key: KeyConsts.accessToken, value: accessToken);
   }
 
   Future<void> clearAuthData() async {
     _accessToken = null;
-    _userId = null;
-    await _secureStorage.delete(key: KeyConsts.authToken);
-    await _secureStorage.delete(key: KeyConsts.userId);
+    await _secureStorage.delete(key: KeyConsts.accessToken);
   }
 
   /// 인증 코드 발송 (HTTP)
@@ -56,11 +49,11 @@ class AuthRepository {
         KeyConsts.isTestMode: testMode,
       });
     } on DioException catch (e) {
-      ErrorParser.parseAndThrow(e);
+      throw ErrorParser.parse(e);
     }
   }
 
-  Future<void> verifyCode({
+  Future<bool> verifyCodeAndCheckExist({
     required String countryCode,
     required String phoneNumber,
     required String smsCode,
@@ -68,14 +61,24 @@ class AuthRepository {
   }) async {
     final path = '/v1/member/sms/verify';
     try {
-      await _dio.post(path, data: {
+      final response = await _dio.post(path, data: {
         KeyConsts.mobileCountry: countryCode,
         KeyConsts.mobileNumber: phoneNumber,
         KeyConsts.verificationCode: smsCode,
         KeyConsts.deviceId: deviceId,
       });
+      final data = response.data[KeyConsts.data];
+      final accessToken = data[KeyConsts.accessToken];
+      if (accessToken != null) {
+        await saveAuthData(accessToken);
+        return true;
+      }
+      return false;
     } on DioException catch (e) {
-      ErrorParser.parseAndThrow(e);
+      throw ErrorParser.parse(e);
+    } catch (e) {
+      log('verifyCodeAndCheckExist error: $e');
+      throw Exception('Verification process failed: $e');
     }
   }
 
@@ -86,8 +89,7 @@ class AuthRepository {
           await _dio.get(path, queryParameters: {KeyConsts.nickname: nickname});
       return response.statusCode == HttpStatus.ok;
     } on DioException catch (e) {
-      ErrorParser.parseAndThrow(e);
-      return false;
+      throw ErrorParser.parse(e);
     }
   }
 
@@ -95,11 +97,13 @@ class AuthRepository {
     final path = '/v1/member/signup';
     try {
       final response = await _dio.post(path, data: signUpUser.toJson());
-      final memberId =
-          response.data[KeyConsts.data][KeyConsts.memberId] ?? '1234';
-      await saveAuthData(memberId, memberId); // TODO: 토큰 발급 로직 추가
+      final data = response.data[KeyConsts.data];
+      final accessToken = data[KeyConsts.accessToken];
+      if (accessToken != null) {
+        await saveAuthData(accessToken);
+      }
     } on DioException catch (e) {
-      ErrorParser.parseAndThrow(e);
+      throw ErrorParser.parse(e);
     }
   }
 

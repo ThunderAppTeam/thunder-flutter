@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/errors/server_error.dart';
-import 'package:thunder/features/auth/models/domain/nickname_check_state.dart';
+import 'package:thunder/features/auth/models/states/nickname_check_state.dart';
 import 'package:thunder/features/auth/repositories/auth_repository.dart';
 
 class NicknameCheckNotifier extends StateNotifier<NicknameCheckState> {

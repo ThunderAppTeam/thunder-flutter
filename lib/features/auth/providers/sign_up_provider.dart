@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/features/auth/models/data/sign_up_user.dart';
-import 'package:thunder/features/auth/models/domain/sign_up_state.dart';
+import 'package:thunder/features/auth/models/states/sign_up_state.dart';
 import 'package:thunder/features/auth/repositories/auth_repository.dart';
 
 class SignUpNotifier extends StateNotifier<SignUpState> {

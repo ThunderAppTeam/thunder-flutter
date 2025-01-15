@@ -5,7 +5,7 @@ import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
-import 'package:thunder/features/auth/models/domain/sign_up_state.dart';
+import 'package:thunder/features/auth/models/states/sign_up_state.dart';
 import 'package:thunder/features/auth/providers/sign_up_provider.dart';
 import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
 import 'package:thunder/features/onboarding/views/widgets/gender_button.dart';

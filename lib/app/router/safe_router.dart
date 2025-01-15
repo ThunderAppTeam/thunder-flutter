@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/core/constants/time_consts.dart';
 
 // SafeRouter Notifier
@@ -39,6 +40,10 @@ class SafeRouter {
         _isNavigating = false;
       });
     }
+  }
+
+  void goToHome(BuildContext context) {
+    goNamed(context, Routes.home.name);
   }
 
   void pop(BuildContext context) {

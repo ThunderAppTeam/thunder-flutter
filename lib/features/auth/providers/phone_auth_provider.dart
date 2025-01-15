@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/errors/server_error.dart';
-import 'package:thunder/features/auth/models/domain/phone_auth_state.dart';
+import 'package:thunder/features/auth/models/states/phone_auth_state.dart';
 import 'package:thunder/core/providers/device_info_provider.dart';
 import 'package:thunder/features/auth/repositories/auth_repository.dart';
 
@@ -37,6 +37,9 @@ class PhoneAuthNotifier extends StateNotifier<PhoneAuthState> {
       if (e == ServerError.tooManyMobileVerification) {
         state = state.copyWith(isTooManyMobileVerification: true);
       }
+    } catch (e) {
+      state =
+          state.copyWith(isCodeSending: false, error: PhoneAuthError.unknown);
     }
   }
 
@@ -54,16 +57,23 @@ class PhoneAuthNotifier extends StateNotifier<PhoneAuthState> {
       return;
     }
     try {
-      await _repository.verifyCode(
+      final isExist = await _repository.verifyCodeAndCheckExist(
         countryCode: countryCode,
         phoneNumber: phoneNumber,
         smsCode: smsCode,
         deviceId: deviceId,
       );
-      state = state.copyWith(isCodeVerifying: false, isVerified: true);
+      state = state.copyWith(
+        isCodeVerifying: false,
+        isVerified: true,
+        isExistUser: isExist,
+      );
     } on ServerError catch (e) {
       final error = PhoneAuthError.fromServerError(e);
       state = state.copyWith(isCodeVerifying: false, error: error);
+    } catch (e) {
+      state =
+          state.copyWith(isCodeVerifying: false, error: PhoneAuthError.unknown);
     }
   }
 }
