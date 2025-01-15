@@ -8,6 +8,7 @@ class KeyConsts {
   static const String nickname = 'nickname';
   static const String memberId = 'memberId';
   static const String data = 'data';
-  static const String authToken = 'authToken';
+  static const String accessToken = 'accessToken';
   static const String userId = 'userId';
+  static const String isExist = 'isExist';
 }
