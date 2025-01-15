@@ -1,37 +1,37 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/core/interceptors/auth_interceptor.dart';
 
 final dioProvider = Provider<Dio>((ref) {
   final baseUrl = dotenv.env['BASE_URL']!;
 
   final dio = Dio(BaseOptions(
     baseUrl: baseUrl,
-    connectTimeout: const Duration(seconds: 5), // 연결 시도는 좀 더 여유있게
-    receiveTimeout: const Duration(seconds: 10), // 데이터 수신도 여유있게
+    connectTimeout: const Duration(seconds: 5),
+    receiveTimeout: const Duration(seconds: 10),
     sendTimeout: const Duration(seconds: 10),
   ));
 
-  // Add interceptors if needed
+  // (1) 로그 Interceptor
   dio.interceptors.add(InterceptorsWrapper(
     onRequest: (options, handler) {
-      // Add headers or modify request
       log('Request[${options.method}] => PATH: ${options.path}');
-      return handler.next(options);
+      handler.next(options); // 요청을 다음 Interceptor로 넘김
     },
     onResponse: (response, handler) {
-      // Handle response
       log('Response[${response.statusCode}] => RESPONSE: ${response.data}');
-      return handler.next(response);
+      handler.next(response); // 응답 처리 완료
     },
     onError: (DioException e, handler) {
-      // Handle errors
-      log('Error[${e.response?.statusCode}] => RESPONSE: ${e.response?.data}');
-      return handler.next(e);
+      log('Error[${e.response?.statusCode}] => RESPONSE: ${e.response?.data} ERROR: ${e.error}');
+      handler.next(e); // 에러 전달
     },
   ));
+
+  dio.interceptors.add(AuthInterceptor(ref));
 
   return dio;
 });

@@ -1,9 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:thunder/core/constants/key_contsts.dart';
+import 'package:thunder/core/errors/network_error.dart';
 import 'package:thunder/core/errors/server_error.dart';
 
 class ErrorParser {
-  static ServerError parse(DioException e) {
+  static Object parseDio(DioException e) {
+    if (e.error is NetworkError) {
+      return e.error as NetworkError;
+    }
     // (1) response가 null이거나 형식이 맞지 않는 경우 -> invalidResponse
     if (e.response == null || e.response?.data is! Map<String, dynamic>) {
       return ServerError.invalidResponse;

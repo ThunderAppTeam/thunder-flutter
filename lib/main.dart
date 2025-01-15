@@ -8,8 +8,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/router.dart';
+import 'package:thunder/core/services/token_manager.dart';
 import 'package:thunder/core/theme/text/default.dart';
-import 'package:thunder/features/auth/repositories/auth_repository.dart';
 import 'package:thunder/firebase_options.dart';
 import 'package:thunder/generated/l10n.dart';
 
@@ -30,11 +30,12 @@ void main() async {
   ]);
 
   final container = ProviderContainer();
-  await container.read(authRepoProvider).loadAuthData();
+  await container.read(tokenManagerProvider).initialize();
   runApp(
     ProviderScope(
       overrides: [
-        authRepoProvider.overrideWithValue(container.read(authRepoProvider)),
+        tokenManagerProvider
+            .overrideWithValue(container.read(tokenManagerProvider)),
       ],
       child: MyApp(),
     ),
