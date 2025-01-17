@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/enums/gender.dart';
-import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
@@ -50,7 +49,8 @@ class _GenderPageState extends ConsumerState<GenderPage> {
 
   void _onSignUpStateChange(SignUpState? prev, SignUpState next) {
     if (next.isSuccess) {
-      ref.read(safeRouterProvider).goNamed(context, Routes.home.name);
+      ref.invalidate(onboardingProvider);
+      ref.read(safeRouterProvider).goToHome(context);
     } else if (prev?.isError != next.isError && next.isError) {
       showModalBottomSheet(
         context: context,

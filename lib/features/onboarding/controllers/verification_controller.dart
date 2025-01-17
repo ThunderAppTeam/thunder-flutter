@@ -100,14 +100,18 @@ class VerificationTimerController
     state = state.copyWith(canVerify: false);
     final phoneNumber = _ref.read(onboardingProvider).phoneNumber!;
     final countryCode = getCountryCode();
-    _ref.read(phoneAuthProvider.notifier).veryfyCode(
+    final isVerified = await _ref.read(phoneAuthProvider.notifier).veryfyCode(
           smsCode: smsCode,
           phoneNumber: phoneNumber,
           countryCode: countryCode,
         );
-    // 1초 뒤에 canVerify를 true로 변경
-    await Future.delayed(TimeConsts.onboardingButtonCoolDown);
-    state = state.copyWith(canVerify: true);
+    if (!isVerified) {
+      // 1초 뒤에 canVerify를 true로 변경
+      await Future.delayed(TimeConsts.onboardingButtonCoolDown);
+      if (mounted) {
+        state = state.copyWith(canVerify: true);
+      }
+    }
   }
 
   @override
