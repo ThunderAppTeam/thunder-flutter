@@ -8,9 +8,9 @@ import 'package:thunder/features/auth/repositories/auth_repository.dart';
 
 class PhoneAuthNotifier extends StateNotifier<PhoneAuthState> {
   final AuthRepository _repository;
-  final DeviceInfoNotifier _deviceInfoNotifier;
+  final DeviceInfoProvider _deviceInfoProvider;
 
-  PhoneAuthNotifier(this._repository, this._deviceInfoNotifier)
+  PhoneAuthNotifier(this._repository, this._deviceInfoProvider)
       : super(PhoneAuthState());
 
   Future<void> sendVerificationCode({
@@ -18,7 +18,7 @@ class PhoneAuthNotifier extends StateNotifier<PhoneAuthState> {
     required String countryCode,
   }) async {
     state = state.copyWith(isCodeSending: true, error: null);
-    final deviceId = await _deviceInfoNotifier.deviceId;
+    final deviceId = await _deviceInfoProvider.deviceId;
     if (deviceId == null) {
       log('deviceId is null after initialization');
       state = state.copyWith(error: PhoneAuthError.unknown);
@@ -43,18 +43,18 @@ class PhoneAuthNotifier extends StateNotifier<PhoneAuthState> {
     }
   }
 
-  Future<void> veryfyCode({
+  Future<bool> veryfyCode({
     required String smsCode,
     required String phoneNumber,
     required String countryCode,
   }) async {
     state =
         state.copyWith(isCodeVerifying: true, isVerified: false, error: null);
-    final deviceId = await _deviceInfoNotifier.deviceId;
+    final deviceId = await _deviceInfoProvider.deviceId;
     if (deviceId == null) {
       log('deviceId is null after initialization');
       state = state.copyWith(error: PhoneAuthError.unknown);
-      return;
+      return false;
     }
     try {
       final isExist = await _repository.verifyCodeAndCheckExist(
@@ -68,6 +68,7 @@ class PhoneAuthNotifier extends StateNotifier<PhoneAuthState> {
         isVerified: true,
         isExistUser: isExist,
       );
+      return true;
     } on ServerError catch (e) {
       final error = PhoneAuthError.fromServerError(e);
       state = state.copyWith(isCodeVerifying: false, error: error);
@@ -75,6 +76,7 @@ class PhoneAuthNotifier extends StateNotifier<PhoneAuthState> {
       state =
           state.copyWith(isCodeVerifying: false, error: PhoneAuthError.unknown);
     }
+    return false;
   }
 }
 
@@ -82,6 +84,6 @@ final phoneAuthProvider =
     StateNotifierProvider<PhoneAuthNotifier, PhoneAuthState>((ref) {
   return PhoneAuthNotifier(
     ref.read(authRepoProvider),
-    ref.read(deviceInfoProvider.notifier),
+    ref.read(deviceInfoProvider),
   );
 });

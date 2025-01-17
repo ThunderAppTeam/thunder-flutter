@@ -15,11 +15,7 @@ import 'package:thunder/features/camera/models/camera_state.dart';
 import 'package:image/image.dart' as img;
 
 class CameraStateNotifier extends StateNotifier<CameraState> {
-  CameraStateNotifier(ref) : super(const CameraState()) {
-    _permissionService = ref.read(permissionServiceProvider);
-  }
-
-  late final PermissionService _permissionService;
+  CameraStateNotifier(ref) : super(const CameraState());
   CameraController? _controller;
   CameraController? _frontController;
   CameraController? _backController;
@@ -46,7 +42,7 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
 
   Future<void> checkPermissionAndInitialize() async {
     _isProcessing = true;
-    final isGranted = await _permissionService.checkCameraPermission();
+    final isGranted = await PermissionService.checkCameraPermission();
     if (isGranted) {
       state = state.copyWith(hasPermission: true);
       if (_controller == null) {
@@ -135,7 +131,6 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
 
     // 좌우 반전
     final flippedImage = img.flipHorizontal(originalImage);
-
     await file.writeAsBytes(img.encodeJpg(flippedImage));
   }
 
