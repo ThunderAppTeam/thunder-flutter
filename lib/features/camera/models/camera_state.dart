@@ -39,6 +39,7 @@ class CameraState with _$CameraState {
     @Default(false) bool hasPermission,
     @Default(false) bool isInitialized,
     @Default(false) bool isCapturing,
+    @Default(false) bool isCompressing,
     @Default(CameraFlashMode.auto) CameraFlashMode flashMode,
     @Default(CameraLensDirection.back) CameraLensDirection lensDirection,
     String? selectedImagePath,

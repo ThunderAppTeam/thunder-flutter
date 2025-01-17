@@ -1,36 +1,30 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:thunder/core/constants/key_contsts.dart';
 import 'package:thunder/core/errors/error_parser.dart';
 import 'package:thunder/core/providers/dio_provider.dart';
+import 'package:thunder/core/services/token_service.dart';
 import 'package:thunder/features/auth/models/data/sign_up_user.dart';
 
 class AuthRepository {
-  final FlutterSecureStorage _secureStorage;
   final Dio _dio;
-  String? _accessToken;
+  final TokenService _tokenService;
 
-  AuthRepository(this._secureStorage, this._dio);
+  AuthRepository(this._dio, this._tokenService);
 
-  bool get isLoggedIn => _accessToken != null;
+  bool get isLoggedIn => _tokenService.token != null;
+
+  String? get accessToken => _tokenService.token;
   // AuthToken
   Future<void> loadAuthData() async {
-    _accessToken = await _secureStorage.read(key: KeyConsts.accessToken);
+    await _tokenService.initialize();
   }
 
-  Future<void> saveAuthData(String accessToken) async {
-    _accessToken = accessToken;
-    await _secureStorage.write(key: KeyConsts.accessToken, value: accessToken);
-  }
-
-  Future<void> clearAuthData() async {
-    _accessToken = null;
-    await _secureStorage.delete(key: KeyConsts.accessToken);
+  Future<void> signOut() async {
+    await _tokenService.clearToken();
   }
 
   /// 인증 코드 발송 (HTTP)
@@ -49,7 +43,7 @@ class AuthRepository {
         KeyConsts.isTestMode: testMode,
       });
     } on DioException catch (e) {
-      throw ErrorParser.parse(e);
+      throw ErrorParser.parseDio(e);
     }
   }
 
@@ -70,14 +64,13 @@ class AuthRepository {
       final data = response.data[KeyConsts.data];
       final accessToken = data[KeyConsts.accessToken];
       if (accessToken != null) {
-        await saveAuthData(accessToken);
+        await _tokenService.setToken(accessToken);
         return true;
       }
       return false;
     } on DioException catch (e) {
-      throw ErrorParser.parse(e);
+      throw ErrorParser.parseDio(e);
     } catch (e) {
-      log('verifyCodeAndCheckExist error: $e');
       throw Exception('Verification process failed: $e');
     }
   }
@@ -89,7 +82,7 @@ class AuthRepository {
           await _dio.get(path, queryParameters: {KeyConsts.nickname: nickname});
       return response.statusCode == HttpStatus.ok;
     } on DioException catch (e) {
-      throw ErrorParser.parse(e);
+      throw ErrorParser.parseDio(e);
     }
   }
 
@@ -100,19 +93,16 @@ class AuthRepository {
       final data = response.data[KeyConsts.data];
       final accessToken = data[KeyConsts.accessToken];
       if (accessToken != null) {
-        await saveAuthData(accessToken);
+        await _tokenService.setToken(accessToken);
       }
     } on DioException catch (e) {
-      throw ErrorParser.parse(e);
+      throw ErrorParser.parseDio(e);
     }
-  }
-
-  Future<void> signOut() async {
-    await clearAuthData();
   }
 }
 
 final authRepoProvider = Provider<AuthRepository>((ref) {
   final dio = ref.read(dioProvider);
-  return AuthRepository(FlutterSecureStorage(), dio);
+  final tokenService = ref.read(tokenServiceProvider);
+  return AuthRepository(dio, tokenService);
 });

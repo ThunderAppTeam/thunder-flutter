@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/routes.dart';
@@ -13,14 +11,15 @@ import 'package:thunder/core/theme/gen/assets.gen.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
+import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/core/widgets/buttons/custom_wide_button.dart';
+import 'package:thunder/core/widgets/custom_circular_indicator.dart';
 import 'package:thunder/features/noonbody/models/noonbody_state.dart';
 import 'package:thunder/features/noonbody/view_models/noonbody_view_model.dart';
+import 'package:thunder/generated/l10n.dart';
 
 class NoonbodyWaitingPage extends ConsumerStatefulWidget {
-  final String imagePath;
-
-  const NoonbodyWaitingPage({super.key, required this.imagePath});
+  const NoonbodyWaitingPage({super.key});
 
   @override
   ConsumerState<NoonbodyWaitingPage> createState() =>
@@ -36,20 +35,44 @@ class _NoonbodyWaitingPageState extends ConsumerState<NoonbodyWaitingPage> {
     return '$ageGroup대 $gender 상위 $genderPercent% | 전체 상위 $percent%';
   }
 
+  void _onError() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => CustomBottomSheet(
+        title: S.of(context).commonErrorUnknownTitle,
+        subtitle: S.of(context).commonErrorUnknownSubtitle,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final noonbodyState = ref.watch(noonbodyProvider);
+    final imageUrl = ref.read(noonbodyProvider.notifier).imageUrl;
+    ref.listen(noonbodyProvider, (prev, next) {
+      if (prev?.error == null && next.error != null) {
+        _onError();
+      }
+    });
     final textTheme = getTextTheme(context);
-
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
           title: '내 눈바디',
-          actionIcon: Icons.more_horiz,
-          onAction: () {},
-          onBack: () => ref
-              .read(safeRouterProvider)
-              .goNamed(context, Routes.home.name, extra: true),
+          actions: [
+            CustomAppBarAction(
+              icon: Icons.more_horiz,
+              onTap: () {},
+            ),
+            CustomAppBarAction(
+              icon: Icons.close,
+              onTap: () {
+                // 홈으로 이동
+                ref.read(safeRouterProvider).goNamed(context, Routes.home.name);
+              },
+            ),
+          ],
+          showBackButton: false,
         ),
         body: Padding(
           padding: const EdgeInsets.only(
@@ -62,7 +85,7 @@ class _NoonbodyWaitingPageState extends ConsumerState<NoonbodyWaitingPage> {
             children: [
               Expanded(
                 child: noonbodyState.isUploading
-                    ? const Center(child: CircularProgressIndicator())
+                    ? const CustomCircularIndicator()
                     : AspectRatio(
                         aspectRatio: ImageConsts.aspectRatio,
                         child: Stack(
@@ -73,8 +96,8 @@ class _NoonbodyWaitingPageState extends ConsumerState<NoonbodyWaitingPage> {
                                 borderRadius:
                                     BorderRadius.circular(Styles.radius16),
                               ),
-                              child: Image.file(
-                                File(widget.imagePath),
+                              child: Image.network(
+                                imageUrl,
                                 fit: BoxFit.cover,
                                 width: double.infinity,
                                 height: double.infinity,
@@ -149,11 +172,7 @@ class _NoonbodyWaitingPageState extends ConsumerState<NoonbodyWaitingPage> {
               Gaps.v16,
               CustomWideButton(
                 text: '공유하기',
-                onPressed: () {
-                  ref
-                      .read(noonbodyProvider.notifier)
-                      .uploadImage(widget.imagePath);
-                },
+                onPressed: () {},
               ),
             ],
           ),

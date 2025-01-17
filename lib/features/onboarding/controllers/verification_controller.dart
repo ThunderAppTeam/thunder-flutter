@@ -70,12 +70,12 @@ class VerificationTimerController
     );
   }
 
-  void _sendVerificationCode() {
+  void _sendVerificationCode() async {
     if (state.canSend) {
       state = state.copyWith(canSend: false, canVerify: true);
       final phoneNumber = _ref.read(onboardingProvider).phoneNumber!;
       final countryCode = getCountryCode();
-      _ref.read(phoneAuthProvider.notifier).sendVerificationCode(
+      await _ref.read(phoneAuthProvider.notifier).sendVerificationCode(
             phoneNumber: phoneNumber,
             countryCode: countryCode,
           );

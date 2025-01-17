@@ -1,23 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
+import 'package:thunder/core/theme/constants/styles.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
+
+class CustomAppBarAction {
+  final String? text;
+  final IconData? icon;
+  final VoidCallback? onTap;
+
+  CustomAppBarAction({
+    this.text,
+    this.icon,
+    required this.onTap,
+  });
+}
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showBackButton;
   final String? title;
-  final String? actionText;
-  final IconData? actionIcon;
-  final VoidCallback? onAction;
+  final List<CustomAppBarAction>? actions;
   final VoidCallback? onBack;
 
   const CustomAppBar({
     super.key,
     this.showBackButton = true,
     this.title,
-    this.actionText,
-    this.actionIcon,
-    this.onAction,
+    this.actions,
     this.onBack,
   });
 
@@ -26,39 +35,82 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = getTextTheme(context);
     return AppBar(
+      toolbarHeight: preferredSize.height,
       automaticallyImplyLeading: false,
       backgroundColor: Colors.transparent,
-      title: title != null
-          ? Text(
-              title!,
-              style: getTextTheme(context).textTitle18,
-            )
-          : null,
-      leading: showBackButton
-          ? IconButton(
-              iconSize: Sizes.icon32,
-              icon: const Icon(Icons.chevron_left),
-              onPressed: onBack ?? () => Navigator.pop(context),
-            )
-          : null,
-      actions: [
-        if (actionText != null)
-          TextButton(
-            onPressed: onAction,
-            child: Text(
-              actionText!,
-              style: getTextTheme(context).textTitle18,
-            ),
-          ),
-        if (actionIcon != null)
-          IconButton(
-            onPressed: onAction,
-            color: ColorName.white,
-            iconSize: Sizes.icon28,
-            icon: Icon(actionIcon!),
-          ),
-      ],
+      titleSpacing: 0,
+      title: Container(
+        padding: const EdgeInsets.symmetric(horizontal: Sizes.spacing16),
+        height: preferredSize.height,
+        child: Stack(
+          children: [
+            // (1) Center Title
+            if (title != null)
+              Center(
+                child: Text(
+                  title!,
+                  style: textTheme.textTitle18,
+                ),
+              ),
+
+            // (2) Leading (예: 뒤로가기 버튼)
+            if (showBackButton)
+              Align(
+                alignment: Alignment.centerLeft,
+                child: InkWell(
+                  customBorder: const CircleBorder(),
+                  onTap: onBack ?? () => Navigator.pop(context),
+                  child: Icon(
+                    Icons.chevron_left,
+                    size: Sizes.icon32,
+                    color: ColorName.white,
+                  ),
+                ),
+              ),
+
+            // (3) Actions (오른쪽)
+            if (actions != null && actions!.isNotEmpty)
+              Align(
+                alignment: Alignment.centerRight,
+                child: Wrap(
+                  direction: Axis.horizontal,
+                  spacing: Sizes.spacing20,
+                  children: actions!.map((action) {
+                    if (action.text != null) {
+                      return InkWell(
+                        onTap: action.onTap,
+                        borderRadius: BorderRadius.circular(Styles.radius16),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: Sizes.spacing8,
+                            vertical: Sizes.spacing4,
+                          ),
+                          child: Text(
+                            action.text!,
+                            style: textTheme.textTitle18,
+                          ),
+                        ),
+                      );
+                    } else if (action.icon != null) {
+                      return InkWell(
+                        customBorder: const CircleBorder(),
+                        onTap: action.onTap,
+                        child: Icon(
+                          action.icon,
+                          size: Sizes.icon28,
+                          color: ColorName.white,
+                        ),
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  }).toList(),
+                ),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

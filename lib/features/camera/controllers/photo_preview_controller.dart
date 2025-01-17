@@ -1,13 +1,13 @@
 import 'dart:io';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image/image.dart' as img;
-import 'package:thunder/features/noonbody/view_models/noonbody_view_model.dart';
+import 'package:thunder/core/constants/image_consts.dart';
+import 'package:thunder/core/utils/image_utils.dart';
 
 class PhotoPreviewController extends StateNotifier<bool> {
-  final Ref ref;
-
-  PhotoPreviewController(this.ref) : super(false);
+  PhotoPreviewController() : super(false);
 
   Future<String?> processCroppedImage({
     required String imagePath,
@@ -16,11 +16,9 @@ class PhotoPreviewController extends StateNotifier<bool> {
     try {
       state = true; // 처리 시작
       final file = File(imagePath);
-      final rawImage = await file.readAsBytes();
-      final image = img.decodeImage(rawImage);
-
+      final bytes = await file.readAsBytes();
+      final image = img.decodeImage(bytes);
       if (image == null) return null;
-
       final croppedImage = img.copyCrop(
         image,
         x: cropRect.left.toInt(),
@@ -28,12 +26,14 @@ class PhotoPreviewController extends StateNotifier<bool> {
         width: cropRect.width.toInt(),
         height: cropRect.height.toInt(),
       );
-      final String croppedImagePath =
-          '${file.parent.path}/${DateTime.now().millisecondsSinceEpoch}_cropped.jpg';
-      final croppedFile = File(croppedImagePath);
-      await croppedFile.writeAsBytes(img.encodeJpg(croppedImage));
-      await ref.read(noonbodyProvider.notifier).uploadImage(croppedImagePath);
-      return croppedImagePath;
+      final croppedBytes = img.encodeJpg(croppedImage);
+      final compressed = await FlutterImageCompress.compressWithList(
+        croppedBytes,
+        quality: ImageConsts.targetQuality,
+      );
+      await logImageInfo('Output Image', compressed);
+      await file.writeAsBytes(compressed);
+      return imagePath;
     } catch (e) {
       return null;
     } finally {
@@ -44,5 +44,5 @@ class PhotoPreviewController extends StateNotifier<bool> {
 
 final photoPreviewControllerProvider =
     StateNotifierProvider<PhotoPreviewController, bool>((ref) {
-  return PhotoPreviewController(ref);
+  return PhotoPreviewController();
 });

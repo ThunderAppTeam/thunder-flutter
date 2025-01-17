@@ -6,8 +6,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/constants/image_consts.dart';
+
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
+import 'package:thunder/core/widgets/custom_circular_indicator.dart';
 import 'package:thunder/features/camera/controllers/photo_preview_controller.dart';
+import 'package:thunder/features/noonbody/view_models/noonbody_view_model.dart';
 
 class PhotoPreviewPage extends ConsumerStatefulWidget {
   final String imagePath;
@@ -22,6 +25,10 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
   final GlobalKey<ExtendedImageEditorState> _editorKey =
       GlobalKey<ExtendedImageEditorState>();
 
+  void _onBack() {
+    ref.read(safeRouterProvider).pop(context, true); // 이미지 삭제
+  }
+
   @override
   Widget build(BuildContext context) {
     final isProcessing = ref.watch(photoPreviewControllerProvider);
@@ -30,10 +37,15 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
       child: Scaffold(
         appBar: CustomAppBar(
           title: '사진 미리보기',
-          actionText: isProcessing ? '처리중' : '완료',
-          onAction: isProcessing || isNavigating
-              ? null
-              : () => _onComplete(widget.imagePath),
+          actions: [
+            CustomAppBarAction(
+              text: '완료',
+              onTap: isProcessing || isNavigating
+                  ? null
+                  : () => _onComplete(widget.imagePath),
+            ),
+          ],
+          onBack: _onBack,
         ),
         body: Stack(
           children: [
@@ -59,8 +71,7 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
                 ),
               ),
             ),
-            if (isProcessing || isNavigating)
-              const Center(child: CircularProgressIndicator()),
+            if (isProcessing || isNavigating) const CustomCircularIndicator(),
           ],
         ),
       ),
@@ -77,13 +88,15 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
     final croppedImagePath = await ref
         .read(photoPreviewControllerProvider.notifier)
         .processCroppedImage(imagePath: imagePath, cropRect: cropRect);
-
-    if (croppedImagePath != null && mounted) {
-      ref.read(safeRouterProvider).goNamed(
-            context,
-            Routes.noonbody.name,
-            extra: croppedImagePath,
-          );
+    if (croppedImagePath != null) {
+      await ref.read(noonbodyProvider.notifier).uploadImage(croppedImagePath);
+      // 이미지가 업로드 완료되면 삭제.
+      if (mounted) {
+        ref.read(safeRouterProvider).goNamed(
+              context,
+              Routes.noonbody.name,
+            );
+      }
     }
   }
 }

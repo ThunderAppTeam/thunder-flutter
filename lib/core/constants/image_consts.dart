@@ -1,7 +1,7 @@
 class ImageConsts {
-  static const int targetWidth = 1080;
-  static const int targetHeight = 1920;
-  static const int targetQuality = 75;
+  static const int targetWidth = 720;
+  static const int targetHeight = 1280;
+  static const int targetQuality = 60;
 
   static const double aspectRatio = 9 / 16;
 

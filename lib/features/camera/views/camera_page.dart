@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +11,7 @@ import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
+import 'package:thunder/core/widgets/custom_circular_indicator.dart';
 import 'package:thunder/features/camera/controllers/camera_controller.dart';
 import 'package:thunder/features/camera/models/camera_state.dart';
 import 'package:thunder/features/camera/views/photo_preview_page.dart';
@@ -56,7 +59,8 @@ class _CameraPageState extends ConsumerState<CameraPage>
     showModalBottomSheet(
       context: context,
       builder: (context) => CustomBottomSheet(
-        title: errorMessage,
+        title: "오류가 발생했습니다",
+        subtitle: errorMessage,
         onPressed: () {
           Navigator.pop(context);
         },
@@ -94,8 +98,8 @@ class _CameraPageState extends ConsumerState<CameraPage>
 
     // 새로운 이미지가 선택되었을 때 미리보기 페이지로 이동
     if (prev?.selectedImagePath == null && next.selectedImagePath != null) {
-      // 새로운 이미지가 선택되었을 때 미리보기 페이지로 이동
-      _controller.clearSelectingImageStates();
+      log('selectedImagePath: ${next.selectedImagePath}');
+      // 새로운 이
       if (mounted) {
         await Navigator.push(
           context,
@@ -105,6 +109,8 @@ class _CameraPageState extends ConsumerState<CameraPage>
             ),
           ),
         );
+        // 미리보기 화면에서 돌아왔을 시, 업로드 완료 후 Context.pop되었을 때, 이미지 삭제
+        await _controller.clearSelectedImageStates();
       }
     }
   }
@@ -113,6 +119,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
   Widget build(BuildContext context) {
     final cameraState = ref.watch(cameraStateNotifierProvider);
     ref.listen(cameraStateNotifierProvider, _onCameraStateChanged);
+
     return SafeArea(
       child: Scaffold(
         appBar: CameraAppBar(
@@ -133,6 +140,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
             aspectRatio: ImageConsts.aspectRatio,
             child: Stack(
               children: [
+                if (cameraState.isCompressing) const CustomCircularIndicator(),
                 if (cameraState.isInitialized && cameraState.hasPermission)
                   GestureDetector(
                     onTapUp: (details) => _onFocusTap(details, context, ref),

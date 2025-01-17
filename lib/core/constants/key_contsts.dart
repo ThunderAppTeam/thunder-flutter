@@ -9,6 +9,7 @@ class KeyConsts {
   static const String memberId = 'memberId';
   static const String data = 'data';
   static const String accessToken = 'accessToken';
-  static const String userId = 'userId';
-  static const String isExist = 'isExist';
+  static const String authorization = 'Authorization';
+  static const String requiresAuth = 'requiresAuth';
+  static const String imageUrl = 'imageUrl';
 }
