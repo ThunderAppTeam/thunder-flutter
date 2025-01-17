@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:thunder/core/constants/key_contsts.dart';
 
-class TokenService {
+class TokenProvider {
   final _storage = const FlutterSecureStorage();
   String? _cachedToken;
 
@@ -26,6 +26,6 @@ class TokenService {
   }
 }
 
-final tokenServiceProvider = Provider<TokenService>((ref) {
-  return TokenService();
+final tokenProvider = Provider<TokenProvider>((ref) {
+  return TokenProvider();
 });

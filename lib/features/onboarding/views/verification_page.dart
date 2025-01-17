@@ -52,7 +52,13 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
   }
 
   void _onVerifySuccess(bool isExistUser) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.invalidate(verificationTimerProvider);
+    });
     if (isExistUser) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.invalidate(onboardingProvider);
+      });
       ref.read(safeRouterProvider).goToHome(context);
     } else {
       ref.read(onboardingProvider.notifier).pushNextStep(

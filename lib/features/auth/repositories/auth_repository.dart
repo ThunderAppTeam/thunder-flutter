@@ -6,25 +6,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/constants/key_contsts.dart';
 import 'package:thunder/core/errors/error_parser.dart';
 import 'package:thunder/core/providers/dio_provider.dart';
-import 'package:thunder/core/services/token_service.dart';
+import 'package:thunder/core/providers/token_provider.dart';
 import 'package:thunder/features/auth/models/data/sign_up_user.dart';
 
 class AuthRepository {
   final Dio _dio;
-  final TokenService _tokenService;
+  final TokenProvider _tokenProvider;
 
-  AuthRepository(this._dio, this._tokenService);
+  AuthRepository(this._dio, this._tokenProvider);
 
-  bool get isLoggedIn => _tokenService.token != null;
+  bool get isLoggedIn => _tokenProvider.token != null;
 
-  String? get accessToken => _tokenService.token;
+  String? get accessToken => _tokenProvider.token;
   // AuthToken
   Future<void> loadAuthData() async {
-    await _tokenService.initialize();
+    await _tokenProvider.initialize();
   }
 
   Future<void> signOut() async {
-    await _tokenService.clearToken();
+    await _tokenProvider.clearToken();
   }
 
   /// 인증 코드 발송 (HTTP)
@@ -64,7 +64,7 @@ class AuthRepository {
       final data = response.data[KeyConsts.data];
       final accessToken = data[KeyConsts.accessToken];
       if (accessToken != null) {
-        await _tokenService.setToken(accessToken);
+        await _tokenProvider.setToken(accessToken);
         return true;
       }
       return false;
@@ -93,7 +93,7 @@ class AuthRepository {
       final data = response.data[KeyConsts.data];
       final accessToken = data[KeyConsts.accessToken];
       if (accessToken != null) {
-        await _tokenService.setToken(accessToken);
+        await _tokenProvider.setToken(accessToken);
       }
     } on DioException catch (e) {
       throw ErrorParser.parseDio(e);
@@ -103,6 +103,6 @@ class AuthRepository {
 
 final authRepoProvider = Provider<AuthRepository>((ref) {
   final dio = ref.read(dioProvider);
-  final tokenService = ref.read(tokenServiceProvider);
+  final tokenService = ref.read(tokenProvider);
   return AuthRepository(dio, tokenService);
 });

@@ -45,6 +45,10 @@ class SafeRouter {
     goNamed(context, Routes.home.name);
   }
 
+  void goToWelcome(BuildContext context) {
+    goNamed(context, Routes.welcome.name);
+  }
+
   void pop<T>(BuildContext context, [T? result]) {
     if (_isNavigating) return;
     _isNavigating = true;

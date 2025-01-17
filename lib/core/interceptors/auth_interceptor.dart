@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/constants/key_contsts.dart';
 import 'package:thunder/core/errors/network_error.dart';
-import 'package:thunder/core/services/token_service.dart';
+import 'package:thunder/core/providers/token_provider.dart';
 
 class AuthInterceptor extends Interceptor {
   final Ref _ref;
@@ -17,7 +17,7 @@ class AuthInterceptor extends Interceptor {
     final requiresAuth =
         options.extra[KeyConsts.requiresAuth] as bool? ?? false;
     if (requiresAuth) {
-      final accessToken = _ref.read(tokenServiceProvider).token;
+      final accessToken = _ref.read(tokenProvider).token;
 
       if (accessToken == null) {
         log('No access token');

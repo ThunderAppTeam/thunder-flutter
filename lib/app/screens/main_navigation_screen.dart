@@ -42,16 +42,16 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
 
   Future<void> _requestPermissions() async {
     // 알림 권한 요청
-    await ref.read(permissionServiceProvider).requestNotificationPermission();
+    await PermissionService.requestNotificationPermission();
     // 앱 추적 권한 요청 (iOS only)
     if (Platform.isIOS) {
       await Future.delayed(TimeConsts.permissionPopupDuration);
-      await ref.read(permissionServiceProvider).requestTrackingPermission();
+      await PermissionService.requestTrackingPermission();
     }
   }
 
   void _onMeasureTap() async {
-    await ref.read(permissionServiceProvider).requestCameraPermission();
+    await PermissionService.requestCameraPermission();
     if (mounted) {
       ref.read(safeRouterProvider).pushNamed(context, Routes.measure.name);
     }

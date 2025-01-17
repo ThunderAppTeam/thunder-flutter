@@ -43,6 +43,6 @@ class PhotoPreviewController extends StateNotifier<bool> {
 }
 
 final photoPreviewControllerProvider =
-    StateNotifierProvider<PhotoPreviewController, bool>((ref) {
+    StateNotifierProvider.autoDispose<PhotoPreviewController, bool>((ref) {
   return PhotoPreviewController();
 });

@@ -20,7 +20,7 @@ class NicknameCheckNotifier extends StateNotifier<NicknameCheckState> {
   }
 }
 
-final nicknameCheckProvider =
-    StateNotifierProvider<NicknameCheckNotifier, NicknameCheckState>((ref) {
+final nicknameCheckProvider = StateNotifierProvider.autoDispose<
+    NicknameCheckNotifier, NicknameCheckState>((ref) {
   return NicknameCheckNotifier(ref.read(authRepoProvider));
 });

@@ -1,29 +1,28 @@
 import 'dart:io';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:thunder/core/constants/key_contsts.dart';
 import 'package:uuid/uuid.dart';
 
-class DeviceInfoNotifier extends StateNotifier<String?> {
-  static const _prefsKeyDeviceId = 'device_id';
-
-  DeviceInfoNotifier() : super(null);
-
-  Future<void> _initDeviceId() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? deviceId = prefs.getString(_prefsKeyDeviceId);
-    if (deviceId == null) {
-      deviceId = await _generateDeviceId();
-      await prefs.setString(_prefsKeyDeviceId, deviceId);
-    }
-    state = deviceId;
-  }
+class DeviceInfoProvider {
+  String? _cachedDeviceId;
 
   Future<String?> get deviceId async {
-    if (state == null) {
-      await _initDeviceId();
+    _cachedDeviceId ??= await _loadOrGenerateDeviceId();
+    return _cachedDeviceId;
+  }
+
+  Future<String> _loadOrGenerateDeviceId() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? deviceId = prefs.getString(KeyConsts.deviceId);
+
+    if (deviceId == null) {
+      deviceId = await _generateDeviceId();
+      await prefs.setString(KeyConsts.deviceId, deviceId);
     }
-    return state;
+
+    return deviceId;
   }
 
   Future<String> _generateDeviceId() async {
@@ -36,11 +35,11 @@ class DeviceInfoNotifier extends StateNotifier<String?> {
       final iosInfo = await deviceInfo.iosInfo;
       return iosInfo.identifierForVendor ?? Uuid().v4(); // IDFV
     }
-    return Uuid().v4();
+
+    return Uuid().v4(); // Default UUID for unsupported platforms
   }
 }
 
-final deviceInfoProvider =
-    StateNotifierProvider<DeviceInfoNotifier, String?>((ref) {
-  return DeviceInfoNotifier();
+final deviceInfoProvider = Provider<DeviceInfoProvider>((ref) {
+  return DeviceInfoProvider();
 });

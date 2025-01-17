@@ -89,7 +89,7 @@ class OnboardingNotifier extends StateNotifier<OnboardingState> {
     state = state.copyWith(gender: gender);
   }
 
-  Future<void> completeOnboarding({required bool marketingAgreed}) async {
+  void completeOnboarding({required bool marketingAgreed}) {
     final countryCode = getCountryCode();
     final signUpUser = SignUpUser(
       mobileNumber: state.phoneNumber!,
@@ -100,7 +100,7 @@ class OnboardingNotifier extends StateNotifier<OnboardingState> {
       marketingAgreement: marketingAgreed,
       nickname: state.nickname!,
     );
-    await _signUpNotifier.signUp(user: signUpUser);
+    _signUpNotifier.signUp(user: signUpUser);
   }
 }
 

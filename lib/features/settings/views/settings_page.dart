@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
@@ -24,9 +23,8 @@ class SettingsPage extends ConsumerWidget {
     );
     if (confirmed == true && context.mounted) {
       await ref.read(authRepoProvider).signOut();
-      ref.invalidate(authRepoProvider);
       if (context.mounted) {
-        ref.read(safeRouterProvider).pushNamed(context, Routes.welcome.name);
+        ref.read(safeRouterProvider).goToWelcome(context);
       }
     }
   }
