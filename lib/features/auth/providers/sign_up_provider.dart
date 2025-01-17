@@ -22,6 +22,6 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
 }
 
 final signUpProvider =
-    StateNotifierProvider<SignUpNotifier, SignUpState>((ref) {
+    StateNotifierProvider.autoDispose<SignUpNotifier, SignUpState>((ref) {
   return SignUpNotifier(ref.read(authRepoProvider));
 });

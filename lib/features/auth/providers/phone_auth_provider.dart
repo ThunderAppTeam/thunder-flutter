@@ -81,7 +81,7 @@ class PhoneAuthNotifier extends StateNotifier<PhoneAuthState> {
 }
 
 final phoneAuthProvider =
-    StateNotifierProvider<PhoneAuthNotifier, PhoneAuthState>((ref) {
+    StateNotifierProvider.autoDispose<PhoneAuthNotifier, PhoneAuthState>((ref) {
   return PhoneAuthNotifier(
     ref.read(authRepoProvider),
     ref.read(deviceInfoProvider),
