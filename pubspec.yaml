@@ -151,6 +151,9 @@ flutter_intl:
   main_locale: ko
 
 flutter_launcher_icons:
-  android: true
-  ios: true
   image_path: "assets/images/app_icon/app_icon.png"
+  android: true
+  adaptive_icon_background: "#FFFFFF" # 배경색
+  adaptive_icon_foreground: "assets/images/app_icon/app_icon.png"
+  ios: true
+  remove_alpha_ios: true
