@@ -29,7 +29,7 @@ class _PhoneNumberPageState extends ConsumerState<PhoneNumberPage> {
   final _controller = TextEditingController();
 
   String _phoneNumber = ''; // - 없는 숫자만 있는 전화번호
-
+  bool _isPressed = false;
   bool get _isButtonEnabled => _phoneNumber.length >= _minLength;
 
   @override
@@ -39,6 +39,9 @@ class _PhoneNumberPageState extends ConsumerState<PhoneNumberPage> {
   }
 
   void _onButtonPressed() {
+    setState(() {
+      _isPressed = true;
+    });
     if (!Validators.isValidPhoneNumber(_phoneNumber)) {
       showModalBottomSheet(
         context: context,
@@ -48,6 +51,9 @@ class _PhoneNumberPageState extends ConsumerState<PhoneNumberPage> {
           buttonText: S.of(context).commonConfirm,
         ),
       );
+      setState(() {
+        _isPressed = false;
+      });
       return;
     }
     final notifier = ref.read(onboardingProvider.notifier);
@@ -56,6 +62,9 @@ class _PhoneNumberPageState extends ConsumerState<PhoneNumberPage> {
       context: context,
       currentStep: OnboardingStep.phoneNumber,
     );
+    setState(() {
+      _isPressed = false;
+    });
   }
 
   @override
@@ -105,7 +114,7 @@ class _PhoneNumberPageState extends ConsumerState<PhoneNumberPage> {
       bottomButton: CustomWideButton(
         text: S.of(context).phoneNumberButton,
         onPressed: _onButtonPressed,
-        isEnabled: _isButtonEnabled,
+        isEnabled: _isButtonEnabled && !_isPressed,
       ),
     );
   }

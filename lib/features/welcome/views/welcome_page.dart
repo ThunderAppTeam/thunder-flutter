@@ -24,11 +24,11 @@ class WelcomePage extends ConsumerWidget {
     final controller = ref.read(welcomeControllerProvider.notifier);
     final currentImageIndex = ref.watch(welcomeControllerProvider);
 
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Stack(
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Stack(
           children: [
             // 배경 이미지 애니메이션
             Positioned.fill(

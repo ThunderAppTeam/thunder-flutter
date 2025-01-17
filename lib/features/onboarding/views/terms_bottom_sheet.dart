@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/constants/url_consts.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
@@ -6,6 +8,9 @@ import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/core/widgets/web_view_page.dart';
+import 'package:thunder/features/auth/models/states/sign_up_state.dart';
+import 'package:thunder/features/auth/providers/sign_up_provider.dart';
+import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
 import 'package:thunder/generated/l10n.dart';
 
 enum Terms {
@@ -18,20 +23,15 @@ enum Terms {
   const Terms(this.isRequired, this.url);
 }
 
-class TermsBottomSheet extends StatefulWidget {
-  final Function(bool) onAgree;
-  final bool isButtonEnabled;
-  const TermsBottomSheet({
-    super.key,
-    required this.onAgree,
-    required this.isButtonEnabled,
-  });
+class TermsBottomSheet extends ConsumerStatefulWidget {
+  const TermsBottomSheet({super.key});
 
   @override
-  State<TermsBottomSheet> createState() => _TermsBottomSheetState();
+  ConsumerState<TermsBottomSheet> createState() => _TermsBottomSheetState();
 }
 
-class _TermsBottomSheetState extends State<TermsBottomSheet> {
+class _TermsBottomSheetState extends ConsumerState<TermsBottomSheet> {
+  bool _isPressed = false;
   String _getTermLabel(Terms term, BuildContext context) {
     switch (term) {
       case Terms.service:
@@ -69,9 +69,14 @@ class _TermsBottomSheetState extends State<TermsBottomSheet> {
     });
   }
 
-  void _handleAgree() {
+  void _onPressed() {
     final marketingAgreed = _agreements[Terms.marketing] ?? false;
-    widget.onAgree(marketingAgreed);
+    setState(() {
+      _isPressed = true;
+    });
+    ref
+        .read(onboardingProvider.notifier)
+        .completeOnboarding(marketingAgreed: marketingAgreed);
   }
 
   void _showTermDetails(Terms term) {
@@ -165,8 +170,30 @@ class _TermsBottomSheetState extends State<TermsBottomSheet> {
     );
   }
 
+  void _onSignUpStateChange(SignUpState? prev, SignUpState next) {
+    if (next.isSuccess) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.invalidate(onboardingProvider);
+        ref.invalidate(signUpProvider);
+      });
+      ref.read(safeRouterProvider).goToHome(context);
+    } else if (prev?.isError != next.isError && next.isError) {
+      setState(() {
+        _isPressed = false;
+      });
+      showModalBottomSheet(
+        context: context,
+        builder: (context) => CustomBottomSheet(
+          title: S.of(context).commonErrorUnknownTitle,
+          subtitle: S.of(context).commonErrorUnknownSubtitle,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    ref.listen(signUpProvider, _onSignUpStateChange);
     return CustomBottomSheet(
       title: S.of(context).termsTitle,
       content: Column(
@@ -191,8 +218,8 @@ class _TermsBottomSheetState extends State<TermsBottomSheet> {
         ],
       ),
       buttonText: S.of(context).termsConfirm,
-      onPressed: _handleAgree,
-      isEnabled: _isValid && widget.isButtonEnabled,
+      onPressed: _onPressed,
+      isEnabled: _isValid && !_isPressed,
     );
   }
 }
