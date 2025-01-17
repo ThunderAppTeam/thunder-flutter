@@ -77,9 +77,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.noonbody.path,
         name: Routes.noonbody.name,
-        builder: (context, state) => NoonbodyWaitingPage(
-          imagePath: state.extra as String,
-        ),
+        builder: (context, state) => NoonbodyWaitingPage(),
       ),
       GoRoute(
         path: Routes.settings.path,

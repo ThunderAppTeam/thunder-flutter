@@ -7,25 +7,28 @@ import 'package:thunder/features/noonbody/models/noonbody_state.dart';
 import 'package:thunder/features/noonbody/repsitories/noonbody_repository.dart';
 
 class NoonbodyViewModel extends StateNotifier<NoonbodyState> {
-  String imagePath = '';
+  String _imageUrl = '';
   Timer? _timer;
   final Random _random = Random();
   final NoonbodyRepository _repository;
 
   NoonbodyViewModel(super.state, this._repository);
 
+  get imageUrl => _imageUrl;
+
   Future<void> uploadImage(String imagePath) async {
-    this.imagePath = imagePath;
+    print('uploadImage: $imagePath');
     state = state.copyWith(
         isUploading: true, progress: 0, currentScore: 0, error: null);
     try {
-      await _repository.uploadImage(imagePath);
+      final imageUrl = await _repository.uploadImage(imagePath);
+      _imageUrl = imageUrl!;
     } catch (e) {
       state =
           state.copyWith(isUploading: false, error: NoonbodyError.uploadImage);
       return;
     }
-    // _startFakeProgress();
+    _startFakeProgress();
     state = state.copyWith(isUploading: false);
   }
 

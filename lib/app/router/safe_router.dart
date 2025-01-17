@@ -7,7 +7,6 @@ import 'package:thunder/core/constants/time_consts.dart';
 // SafeRouter Notifier
 class SafeRouter {
   bool _isNavigating = false;
-
   bool get isNavigating => _isNavigating;
 
   Future<T?> pushNamed<T>(
@@ -46,10 +45,10 @@ class SafeRouter {
     goNamed(context, Routes.home.name);
   }
 
-  void pop(BuildContext context) {
+  void pop<T>(BuildContext context, [T? result]) {
     if (_isNavigating) return;
     _isNavigating = true;
-    context.pop();
+    context.pop(result);
     Future.delayed(TimeConsts.navigationDuration, () {
       _isNavigating = false;
     });

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -96,6 +98,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
 
     // 새로운 이미지가 선택되었을 때 미리보기 페이지로 이동
     if (prev?.selectedImagePath == null && next.selectedImagePath != null) {
+      log('selectedImagePath: ${next.selectedImagePath}');
       // 새로운 이
       if (mounted) {
         await Navigator.push(
@@ -106,7 +109,8 @@ class _CameraPageState extends ConsumerState<CameraPage>
             ),
           ),
         );
-        _controller.clearSelectingImageStates();
+        // 미리보기 화면에서 돌아왔을 시, 업로드 완료 후 Context.pop되었을 때, 이미지 삭제
+        await _controller.clearSelectedImageStates();
       }
     }
   }

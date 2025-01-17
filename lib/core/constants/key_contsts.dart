@@ -11,4 +11,5 @@ class KeyConsts {
   static const String accessToken = 'accessToken';
   static const String authorization = 'Authorization';
   static const String requiresAuth = 'requiresAuth';
+  static const String imageUrl = 'imageUrl';
 }

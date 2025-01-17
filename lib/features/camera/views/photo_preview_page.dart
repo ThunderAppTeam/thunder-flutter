@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/constants/image_consts.dart';
+
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
 import 'package:thunder/core/widgets/custom_circular_indicator.dart';
 import 'package:thunder/features/camera/controllers/photo_preview_controller.dart';
@@ -24,6 +25,10 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
   final GlobalKey<ExtendedImageEditorState> _editorKey =
       GlobalKey<ExtendedImageEditorState>();
 
+  void _onBack() {
+    ref.read(safeRouterProvider).pop(context, true); // 이미지 삭제
+  }
+
   @override
   Widget build(BuildContext context) {
     final isProcessing = ref.watch(photoPreviewControllerProvider);
@@ -34,12 +39,13 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
           title: '사진 미리보기',
           actions: [
             CustomAppBarAction(
-              text: isProcessing ? '처리중' : '완료',
+              text: '완료',
               onTap: isProcessing || isNavigating
                   ? null
                   : () => _onComplete(widget.imagePath),
             ),
           ],
+          onBack: _onBack,
         ),
         body: Stack(
           children: [
@@ -83,12 +89,12 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
         .read(photoPreviewControllerProvider.notifier)
         .processCroppedImage(imagePath: imagePath, cropRect: cropRect);
     if (croppedImagePath != null) {
-      ref.read(noonbodyProvider.notifier).uploadImage(croppedImagePath);
+      await ref.read(noonbodyProvider.notifier).uploadImage(croppedImagePath);
+      // 이미지가 업로드 완료되면 삭제.
       if (mounted) {
         ref.read(safeRouterProvider).goNamed(
               context,
               Routes.noonbody.name,
-              extra: croppedImagePath,
             );
       }
     }

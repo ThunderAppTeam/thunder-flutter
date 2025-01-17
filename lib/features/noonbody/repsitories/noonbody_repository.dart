@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/constants/key_contsts.dart';
@@ -9,7 +11,8 @@ class NoonbodyRepository {
 
   NoonbodyRepository(this._dio);
 
-  Future<void> uploadImage(String imagePath) async {
+  Future<String?> uploadImage(String imagePath) async {
+    log('upload Image: $imagePath');
     final path = '/v1/body/photo';
     final formData = FormData.fromMap({
       'file': await MultipartFile.fromFile(
@@ -18,7 +21,7 @@ class NoonbodyRepository {
       ),
     });
     try {
-      await _dio.post(
+      final response = await _dio.post(
         path,
         data: formData,
         options: Options(
@@ -26,6 +29,9 @@ class NoonbodyRepository {
           contentType: 'multipart/form-data',
         ),
       );
+      final data = response.data[KeyConsts.data];
+      final imageUrl = data[KeyConsts.imageUrl];
+      return imageUrl;
     } on DioException catch (e) {
       throw ErrorParser.parseDio(e);
     }

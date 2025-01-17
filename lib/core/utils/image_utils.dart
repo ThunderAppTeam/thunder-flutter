@@ -1,7 +1,8 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer';
-
-import 'package:flutter/services.dart';
 
 String formatFileSize(int size) {
   if (size < 1024) return "$size bytes";
@@ -19,4 +20,23 @@ Future<void> logImageInfo(String title, Uint8List imageBytes) async {
   - Resolution: ${originalImage.width} x ${originalImage.height}
   - Size: $originalSizeKB KB ($originalMB MB)
   ''');
+}
+
+Future<void> clearImage(String filePath) async {
+  final tempFile = File(filePath);
+
+  if (await tempFile.exists()) {
+    await tempFile.delete();
+  } else {
+    throw Exception('Image file not found: $filePath');
+  }
+}
+
+Future<void> clearFolder(Directory folder) async {
+  if (await folder.exists()) {
+    final files = folder.listSync();
+    if (files.isEmpty) {
+      await folder.delete();
+    }
+  }
 }

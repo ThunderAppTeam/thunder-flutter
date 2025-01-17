@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/routes.dart';
@@ -21,9 +19,7 @@ import 'package:thunder/features/noonbody/view_models/noonbody_view_model.dart';
 import 'package:thunder/generated/l10n.dart';
 
 class NoonbodyWaitingPage extends ConsumerStatefulWidget {
-  final String imagePath;
-
-  const NoonbodyWaitingPage({super.key, required this.imagePath});
+  const NoonbodyWaitingPage({super.key});
 
   @override
   ConsumerState<NoonbodyWaitingPage> createState() =>
@@ -52,6 +48,7 @@ class _NoonbodyWaitingPageState extends ConsumerState<NoonbodyWaitingPage> {
   @override
   Widget build(BuildContext context) {
     final noonbodyState = ref.watch(noonbodyProvider);
+    final imageUrl = ref.read(noonbodyProvider.notifier).imageUrl;
     ref.listen(noonbodyProvider, (prev, next) {
       if (prev?.error == null && next.error != null) {
         _onError();
@@ -71,8 +68,6 @@ class _NoonbodyWaitingPageState extends ConsumerState<NoonbodyWaitingPage> {
               icon: Icons.close,
               onTap: () {
                 // 홈으로 이동
-                // 이미지 삭제
-                File(widget.imagePath).delete();
                 ref.read(safeRouterProvider).goNamed(context, Routes.home.name);
               },
             ),
@@ -101,8 +96,8 @@ class _NoonbodyWaitingPageState extends ConsumerState<NoonbodyWaitingPage> {
                                 borderRadius:
                                     BorderRadius.circular(Styles.radius16),
                               ),
-                              child: Image.file(
-                                File(widget.imagePath),
+                              child: Image.network(
+                                imageUrl,
                                 fit: BoxFit.cover,
                                 width: double.infinity,
                                 height: double.infinity,

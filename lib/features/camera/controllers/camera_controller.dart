@@ -8,7 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:thunder/core/constants/image_consts.dart';
+import 'package:thunder/core/services/cache_service.dart';
 import 'package:thunder/core/services/permission_service.dart';
+import 'package:thunder/core/utils/image_utils.dart';
 import 'package:thunder/features/camera/models/camera_state.dart';
 import 'package:image/image.dart' as img;
 
@@ -119,8 +121,8 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
     }
   }
 
-  /// 촬영된 이미지를 좌우 반전 후 새로운 파일로 저장
-  Future<File> flipImageHorizontally(String imagePath) async {
+  /// 촬영된 이미지를 좌우 반전
+  Future<void> _flipImageHorizontally(String imagePath) async {
     // 이미지 파일 읽기
     final file = File(imagePath);
     final imageBytes = await file.readAsBytes();
@@ -134,13 +136,7 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
     // 좌우 반전
     final flippedImage = img.flipHorizontal(originalImage);
 
-    // 반전된 이미지를 새로운 파일로 저장
-    final flippedImagePath = imagePath.replaceAll('.jpg', '_flipped.jpg');
-    final flippedFile = File(flippedImagePath);
-
-    await flippedFile.writeAsBytes(img.encodeJpg(flippedImage));
-
-    return flippedFile;
+    await file.writeAsBytes(img.encodeJpg(flippedImage));
   }
 
   Future<void> _initZoomLevels(CameraController controller) async {
@@ -197,12 +193,13 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
     state = state.copyWith(isCapturing: true);
     try {
       final photo = await _controller!.takePicture();
-      String imagePath = photo.path;
+      final newPath = await CacheService.getNewImagePath();
+      final newFile = await File(photo.path).rename(newPath);
+
       if (state.lensDirection == CameraLensDirection.front) {
-        final flippedFile = await flipImageHorizontally(photo.path);
-        imagePath = flippedFile.path;
+        await _flipImageHorizontally(newFile.path);
       }
-      state = state.copyWith(selectedImagePath: imagePath);
+      state = state.copyWith(selectedImagePath: newFile.path);
     } catch (e) {
       state = state.copyWith(
         error: CameraError.captureError,
@@ -237,7 +234,14 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
       if (image == null) return;
       state = state.copyWith(isCompressing: true);
       _isProcessing = true; // 이미지 피커의 await 에러로 인해, _isProcessing을 이미지 압축시에 사용
-      final compressedFile = await _resizeAndCompressImage(image.path);
+      // 새로운 경로로 이동
+      final newImagePath = await CacheService.getNewImagePath();
+      final newFile = await File(image.path).rename(newImagePath);
+      // 상위 폴더 정리 (안드로이드만 처리, 폴더가 생기는 문제)
+      if (Platform.isAndroid) {
+        clearFolder(File(image.path).parent);
+      }
+      final compressedFile = await _resizeAndCompressImage(newFile.path);
       state = state.copyWith(
         selectedImagePath: compressedFile!.path,
         isCompressing: false,
@@ -252,7 +256,13 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
     }
   }
 
-  void clearSelectingImageStates() {
+  Future<void> clearSelectedImageStates() async {
+    try {
+      await clearImage(state.selectedImagePath!);
+      log('Image deleted: ${state.selectedImagePath!}');
+    } catch (e) {
+      log('Failed to delete image: $e');
+    }
     state = state.copyWith(
       selectedImagePath: null,
       isCapturing: false,
@@ -277,10 +287,6 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
     await compressedFile.writeAsBytes(compressed);
     await file.delete();
     return compressedFile;
-  }
-
-  void clearSelectedImage() {
-    state = state.copyWith(selectedImagePath: null);
   }
 
   void clearError() {
