@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:thunder/features/onboarding/views/widgets/bottom_sheets/terms_bottom_sheet.dart';
+import 'package:thunder/features/onboarding/views/terms_bottom_sheet.dart';
 import 'package:thunder/features/onboarding/views/widgets/gender_button.dart';
 import 'package:thunder/core/widgets/buttons/custom_wide_button.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_text_field.dart';
