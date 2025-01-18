@@ -177,6 +177,7 @@ class _BodyCheckWaitingPageState extends ConsumerState<BodyCheckWaitingPage> {
               CustomWideButton(
                 text: '공유하기',
                 onPressed: _onShare,
+                isEnabled: bodyCheckState.isFinished,
               ),
             ],
           ),

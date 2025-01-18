@@ -52,7 +52,6 @@ class BodyCheckViewModel extends StateNotifier<BodyCheckState> {
     _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       if (state.progress >= 100) {
         timer.cancel();
-
         state = state.copyWith(
           currentScore: targetScore,
           progress: 100,
