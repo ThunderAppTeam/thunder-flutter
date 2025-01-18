@@ -52,7 +52,7 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   Future<void> _initializeCamera() async {
     try {
       _cameras = await availableCameras();
-      if (_cameras.isEmpty) throw Exception('No cameras found');
+      if (_cameras.isEmpty) return;
       _backController = CameraController(
         _cameras[0],
         ResolutionPreset.veryHigh,
@@ -83,7 +83,7 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   // ##### --------- Camera Function --------- #####
 
   Future<void> switchCamera() async {
-    if (state.isProcessing) return;
+    if (state.isProcessing || !state.isInitialized) return;
     state = state.copyWith(isProcessing: true);
     final CameraLensDirection nextDirection =
         state.lensDirection == CameraLensDirection.back

@@ -167,7 +167,8 @@ class _NavigationBarItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
-      child: Padding(
+      child: Container(
+        width: Sizes.navigationTabWidth,
         padding: const EdgeInsets.symmetric(
           horizontal: Sizes.spacing8,
           vertical: Sizes.spacing4,

@@ -50,6 +50,9 @@ class Sizes {
   // button height
   static const double buttonHeight60 = 60.0;
 
+  // navigation tab width
+  static const double navigationTabWidth = 60.0;
+
   // app bar height
   static const double appBarHeight48 = 48.0;
 
