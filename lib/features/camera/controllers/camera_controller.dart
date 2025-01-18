@@ -27,21 +27,18 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   double _currentZoom = 1.0;
   double _baseScale = 1.0;
 
-  bool _isProcessing = false;
-  bool _isSwitching = false;
-
   CameraController get previewController => _controller!;
   double get currentZoom => _currentZoom;
-  bool get isProcessing => _isProcessing;
 
-  void _endProcessing() {
-    Future.delayed(const Duration(milliseconds: 500), () {
-      _isProcessing = false;
+  void _endProcessing({int delay = 500}) {
+    Future.delayed(Duration(milliseconds: delay), () {
+      state = state.copyWith(isProcessing: false);
     });
   }
 
   Future<void> checkPermissionAndInitialize() async {
-    _isProcessing = true;
+    if (state.isProcessing) return;
+    state = state.copyWith(isProcessing: true);
     final isGranted = await PermissionService.checkCameraPermission();
     if (isGranted) {
       state = state.copyWith(hasPermission: true);
@@ -49,7 +46,7 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
         await _initializeCamera();
       }
     }
-    _endProcessing();
+    _endProcessing(delay: 500);
   }
 
   Future<void> _initializeCamera() async {
@@ -80,17 +77,14 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
     await controller.lockCaptureOrientation(DeviceOrientation.portraitUp);
     await controller.setFlashMode(state.flashMode.flashMode);
     await _initZoomLevels(controller);
-    state = state.copyWith(
-      isInitialized: true,
-    );
+    state = state.copyWith(isInitialized: true);
   }
 
   // ##### --------- Camera Function --------- #####
 
   Future<void> switchCamera() async {
-    if (_isProcessing || !state.isInitialized || _cameras.length < 2) return;
-    _isProcessing = true;
-    _isSwitching = true;
+    if (state.isProcessing) return;
+    state = state.copyWith(isProcessing: true);
     final CameraLensDirection nextDirection =
         state.lensDirection == CameraLensDirection.back
             ? CameraLensDirection.front
@@ -112,8 +106,7 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
         error: CameraError.switchCameraFailed,
       );
     } finally {
-      _isSwitching = false;
-      _endProcessing();
+      _endProcessing(delay: 200);
     }
   }
 
@@ -146,19 +139,21 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   }
 
   Future<void> setZoomLevel(double scale) async {
-    if (_controller?.value.isInitialized != true) return;
-
+    if (state.isProcessing || !state.isInitialized) return;
+    state = state.copyWith(isProcessing: true);
     try {
       _currentZoom = (_baseScale * scale).clamp(_minZoom, _maxZoom);
       await _controller!.setZoomLevel(_currentZoom);
     } catch (e) {
       log('setZoomLevel error: $e');
+    } finally {
+      state = state.copyWith(isProcessing: false);
     }
   }
 
   Future<void> cycleFlashMode() async {
-    if (_isProcessing || _controller == null) return;
-    _isProcessing = true;
+    if (state.isProcessing || !state.isInitialized) return;
+    state = state.copyWith(isProcessing: true);
     final modes = CameraFlashMode.values;
     final currentIndex = modes.indexOf(state.flashMode);
     final nextIndex = (currentIndex + 1) % modes.length;
@@ -168,24 +163,26 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
     } catch (e) {
       state = state.copyWith(error: CameraError.flashModeChangeFailed);
     } finally {
-      _endProcessing();
+      state = state.copyWith(isProcessing: false);
     }
   }
 
   Future<void> setFocusExposurePoint(double x, double y) async {
-    if (_controller?.value.isInitialized != true) return;
+    if (state.isProcessing || !state.isInitialized) return;
+    state = state.copyWith(isProcessing: true);
     try {
       await _controller!.setFocusPoint(Offset(x, y));
       await _controller!.setExposurePoint(Offset(x, y));
     } catch (e) {
       log('setFocusPoint error: $e');
+    } finally {
+      state = state.copyWith(isProcessing: false);
     }
   }
 
   Future<void> takePicture() async {
-    if (_isProcessing || !state.isInitialized) return;
-    _isProcessing = true;
-    state = state.copyWith(isCapturing: true);
+    if (state.isProcessing || !state.isInitialized) return;
+    state = state.copyWith(isProcessing: true, isCapturing: true);
     try {
       final photo = await _controller!.takePicture();
       final newPath = await CacheService.getNewImagePath();
@@ -201,7 +198,7 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
         isCapturing: false,
       );
     } finally {
-      _endProcessing();
+      _endProcessing(delay: 200);
     }
   }
 
@@ -219,7 +216,7 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   }
 
   Future<void> pickImage() async {
-    if (_isProcessing || _isSwitching || state.isCapturing) return;
+    if (state.isProcessing) return;
     try {
       // 이미지 피커가 무한 await, 빨리 닫았을 때 await가 끝나지 않는 이슈가 있음.
       final XFile? image = await _imagePicker.pickImage(
@@ -227,8 +224,7 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
         requestFullMetadata: false, // 제한된 메타데이터만 요청 권한 요청 안함
       );
       if (image == null) return;
-      state = state.copyWith(isCompressing: true);
-      _isProcessing = true; // 이미지 피커의 await 에러로 인해, _isProcessing을 이미지 압축시에 사용
+      state = state.copyWith(isCompressing: true, isProcessing: true);
       // 새로운 경로로 이동
       final newImagePath = await CacheService.getNewImagePath();
       final newFile = await File(image.path).rename(newImagePath);
@@ -282,10 +278,6 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
     await compressedFile.writeAsBytes(compressed);
     await file.delete();
     return compressedFile;
-  }
-
-  void clearError() {
-    state = state.copyWith(error: null);
   }
 
   @override

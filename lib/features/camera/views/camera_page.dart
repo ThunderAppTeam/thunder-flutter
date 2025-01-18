@@ -17,6 +17,7 @@ import 'package:thunder/features/camera/models/camera_state.dart';
 import 'package:thunder/features/camera/views/photo_preview_page.dart';
 import 'package:thunder/features/camera/views/widgets/camera_app_bar.dart';
 import 'package:thunder/features/camera/views/widgets/camera_bottom_controls.dart';
+import 'package:thunder/generated/l10n.dart';
 
 class CameraPage extends ConsumerStatefulWidget {
   const CameraPage({super.key});
@@ -34,7 +35,9 @@ class _CameraPageState extends ConsumerState<CameraPage>
   void initState() {
     super.initState();
     _controller = ref.read(cameraStateNotifierProvider.notifier);
-    _controller.checkPermissionAndInitialize();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _controller.checkPermissionAndInitialize();
+    });
     _shutterController = AnimationController(
       duration: TimeConsts.cameraFlashDuration,
       vsync: this,
@@ -48,19 +51,19 @@ class _CameraPageState extends ConsumerState<CameraPage>
   }
 
   void _showErrorBottomSheet(CameraError error) {
-    final errorMessage = switch (error) {
-      CameraError.initializationFailed => '카메라 초기화 도중 오류가 발생했습니다',
-      CameraError.flashModeChangeFailed => '플래시 모드 변경 도중 오류가 발생했습니다',
-      CameraError.settingsOpenFailed => '카메라 접근 권한 설정 실패',
-      CameraError.imagePickFailed => '이미지 선택 도중 오류가 발생했습니다',
-      CameraError.captureError => '사진 촬영 도중 오류가 발생했습니다',
-      CameraError.switchCameraFailed => '카메라 전환 도중 오류가 발생했습니다',
-    };
+    // final errorMessage = switch (error) {
+    //   CameraError.initializationFailed => '카메라 초기화 도중 오류가 발생했습니다',
+    //   CameraError.flashModeChangeFailed => '플래시 모드 변경 도중 오류가 발생했습니다',
+    //   CameraError.settingsOpenFailed => '카메라 접근 권한 설정 실패',
+    //   CameraError.imagePickFailed => '이미지 선택 도중 오류가 발생했습니다',
+    //   CameraError.captureError => '사진 촬영 도중 오류가 발생했습니다',
+    //   CameraError.switchCameraFailed => '카메라 전환 도중 오류가 발생했습니다',
+    // };
     showModalBottomSheet(
       context: context,
       builder: (context) => CustomBottomSheet(
-        title: "오류가 발생했습니다",
-        subtitle: errorMessage,
+        title: S.of(context).commonErrorUnknownTitle,
+        subtitle: S.of(context).commonErrorUnknownSubtitle,
         onPressed: () {
           Navigator.pop(context);
         },
@@ -124,11 +127,8 @@ class _CameraPageState extends ConsumerState<CameraPage>
       child: Scaffold(
         appBar: CameraAppBar(
           onClose: () async {
-            if (!cameraState.isInitialized &&
-                cameraState.error != CameraError.initializationFailed) {
-              // 카메라가 초기화 에러가 아닐 때, 초기화가 안되있으면 뒤로가기 방지
-              return;
-            }
+            if (cameraState.isProcessing) return;
+            // 카메라가 초기화 에러가 아닐 때, 초기화가 안되있으면 뒤로가기 방지
             ref.read(safeRouterProvider).pop(context);
           },
           onFlash: () => _controller.cycleFlashMode(),

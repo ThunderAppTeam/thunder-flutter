@@ -38,6 +38,7 @@ class CameraState with _$CameraState {
   const factory CameraState({
     @Default(false) bool hasPermission,
     @Default(false) bool isInitialized,
+    @Default(false) bool isProcessing,
     @Default(false) bool isCapturing,
     @Default(false) bool isCompressing,
     @Default(CameraFlashMode.auto) CameraFlashMode flashMode,
