@@ -10,6 +10,8 @@ import 'package:thunder/core/services/permission_service.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/assets.gen.dart';
+import 'package:thunder/core/theme/gen/colors.gen.dart';
+import 'package:thunder/core/theme/icon/thunder_icons.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 
 class MainNavigationScreen extends ConsumerStatefulWidget {
@@ -96,10 +98,10 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
                         .read(safeRouterProvider)
                         .pushNamed(context, Routes.settings.name);
                   },
-                  child: SizedBox(
-                    width: Sizes.icon24,
-                    height: Sizes.icon24,
-                    child: Assets.images.icons.settings.svg(),
+                  child: Icon(
+                    size: Sizes.icon24,
+                    ThunderIcons.settings,
+                    color: ColorName.white,
                   ),
                 ),
               ],
@@ -117,22 +119,22 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _NavigationBarItem(
-                icon: Assets.images.icons.home,
-                activeIcon: Assets.images.icons.homeFilled,
+                icon: ThunderIcons.home,
+                activeIcon: ThunderIcons.homeFilled,
                 isSelected: _getSelectedIndex() == Tabs.home.index,
                 label: '홈',
                 onTap: () => _onTap(context, Tabs.home),
               ),
               _NavigationBarItem(
-                icon: Assets.images.icons.create,
-                activeIcon: Assets.images.icons.create,
+                icon: ThunderIcons.create,
+                activeIcon: ThunderIcons.create,
                 isSelected: _getSelectedIndex() == Tabs.measure.index,
                 label: '측정',
                 onTap: () => _onTap(context, Tabs.measure),
               ),
               _NavigationBarItem(
-                icon: Assets.images.icons.folder,
-                activeIcon: Assets.images.icons.folderFilled,
+                icon: ThunderIcons.folder,
+                activeIcon: ThunderIcons.folderFilled,
                 isSelected: _getSelectedIndex() == Tabs.archive.index,
                 label: '보관함',
                 onTap: () => _onTap(context, Tabs.archive),
@@ -146,8 +148,8 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
 }
 
 class _NavigationBarItem extends StatelessWidget {
-  final SvgGenImage icon;
-  final SvgGenImage activeIcon;
+  final IconData icon;
+  final IconData activeIcon;
   final bool isSelected;
   final VoidCallback onTap;
   final String label;
@@ -176,15 +178,10 @@ class _NavigationBarItem extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
-              width: Sizes.icon24,
-              height: Sizes.icon24,
-              child: (isSelected ? activeIcon : icon).svg(
-                colorFilter: ColorFilter.mode(
-                  Colors.white,
-                  BlendMode.srcIn,
-                ),
-              ),
+            Icon(
+              size: Sizes.icon24,
+              isSelected ? activeIcon : icon,
+              color: ColorName.white,
             ),
             Gaps.v6,
             Text(

@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
-import 'package:thunder/core/constants/image_consts.dart';
 import 'package:thunder/core/enums/gender.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
-import 'package:thunder/core/theme/constants/styles.dart';
 import 'package:thunder/core/theme/gen/assets.gen.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
+import 'package:thunder/core/theme/icon/thunder_icons.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
@@ -64,11 +63,11 @@ class _BodyCheckWaitingPageState extends ConsumerState<BodyCheckWaitingPage> {
           title: '내 눈바디',
           actions: [
             CustomAppBarAction(
-              icon: Icons.more_horiz,
+              icon: ThunderIcons.moreHoriz,
               onTap: () {},
             ),
             CustomAppBarAction(
-              icon: Icons.close,
+              icon: ThunderIcons.closeSquareLight,
               onTap: () {
                 // 홈으로 이동
                 ref.read(safeRouterProvider).goNamed(context, Routes.home.name);
@@ -89,95 +88,89 @@ class _BodyCheckWaitingPageState extends ConsumerState<BodyCheckWaitingPage> {
               Expanded(
                 child: bodyCheckState.isUploading
                     ? const CustomCircularIndicator()
-                    : AspectRatio(
-                        aspectRatio: ImageConsts.aspectRatio,
-                        child: Stack(
-                          children: [
-                            Container(
-                              clipBehavior: Clip.antiAlias,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.circular(Styles.radius16),
-                              ),
-                              child: Image.network(
-                                bodyCheckState.imageUrl!,
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: double.infinity,
-                              ),
+                    : Stack(
+                        children: [
+                          Container(
+                            clipBehavior: Clip.antiAlias,
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.circular(Sizes.radius16),
                             ),
-                            Positioned(
-                              left: 0,
-                              right: 0,
-                              bottom: 0,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [
-                                      ColorName.black.withOpacity(0.0),
-                                      ColorName.black.withOpacity(0.25),
-                                      ColorName.black.withOpacity(0.5),
-                                    ],
-                                  ),
-                                ),
-                                padding: const EdgeInsets.only(
-                                  top: Sizes.spacing8,
-                                  left: Sizes.spacing16,
-                                  right: Sizes.spacing16,
-                                  bottom: Sizes.spacing24,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Assets.images.logos.thunderSymbolW
-                                            .svg(),
-                                        Gaps.h4,
-                                        RichText(
-                                          text: TextSpan(
-                                            children: [
-                                              TextSpan(
-                                                text: bodyCheckState
-                                                    .currentScore
-                                                    .toStringAsFixed(1),
-                                                style: textTheme.textHead32,
-                                              ),
-                                              TextSpan(
-                                                text: '점',
-                                                style: textTheme.textTitle16,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    if (bodyCheckState.isFinished)
-                                      Text(
-                                        _getResultText(bodyCheckState),
-                                        style: textTheme.textBody16,
-                                      )
-                                    else
-                                      Text(
-                                        '눈바디 측정 중... ${bodyCheckState.progress.round()}% 완료',
-                                        style: textTheme.textBody16,
-                                      ),
+                            child: Image.network(
+                              bodyCheckState.imageUrl!,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
+                            ),
+                          ),
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    ColorName.black.withOpacity(0.0),
+                                    ColorName.black.withOpacity(0.25),
+                                    ColorName.black.withOpacity(0.5),
                                   ],
                                 ),
                               ),
+                              padding: const EdgeInsets.only(
+                                top: Sizes.spacing8,
+                                left: Sizes.spacing16,
+                                right: Sizes.spacing16,
+                                bottom: Sizes.spacing24,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Assets.images.logos.thunderSymbolW.svg(),
+                                      Gaps.h4,
+                                      RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: bodyCheckState.currentScore
+                                                  .toStringAsFixed(1),
+                                              style: textTheme.textHead32,
+                                            ),
+                                            TextSpan(
+                                              text: '점',
+                                              style: textTheme.textTitle16,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  if (bodyCheckState.isFinished)
+                                    Text(
+                                      _getResultText(bodyCheckState),
+                                      style: textTheme.textBody16,
+                                    )
+                                  else
+                                    Text(
+                                      '눈바디 측정 중... ${bodyCheckState.progress.round()}% 완료',
+                                      style: textTheme.textBody16,
+                                    ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
               ),
               Gaps.v16,
               CustomWideButton(
                 text: '공유하기',
                 onPressed: _onShare,
-                isEnabled: bodyCheckState.isFinished,
               ),
             ],
           ),

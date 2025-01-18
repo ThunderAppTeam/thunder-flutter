@@ -30,7 +30,7 @@ class OnboardingSmallButton extends StatelessWidget {
         padding: const EdgeInsets.all(Sizes.spacing8),
         decoration: BoxDecoration(
           color: backgroundColor,
-          borderRadius: BorderRadius.circular(Styles.radius4),
+          borderRadius: BorderRadius.circular(Sizes.radius16),
         ),
         child: Text(
           text,

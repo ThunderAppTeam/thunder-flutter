@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
-import 'package:thunder/core/theme/constants/styles.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/buttons/custom_wide_button.dart';
@@ -31,7 +30,7 @@ class CustomBottomSheet extends StatelessWidget {
       decoration: const BoxDecoration(
         color: ColorName.white,
         borderRadius: BorderRadius.vertical(
-          top: Radius.circular(Styles.radius24),
+          top: Radius.circular(Sizes.radius24),
         ),
       ),
       child: SafeArea(

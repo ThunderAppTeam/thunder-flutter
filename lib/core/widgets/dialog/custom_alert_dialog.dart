@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
-import 'package:thunder/core/theme/constants/styles.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 
@@ -60,7 +59,7 @@ class CustomAlertDialog extends StatelessWidget {
     final textTheme = getTextTheme(context);
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(Styles.radius14),
+        borderRadius: BorderRadius.circular(Sizes.radius14),
       ),
       clipBehavior: Clip.hardEdge,
       child: Container(

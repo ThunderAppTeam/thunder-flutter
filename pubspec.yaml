@@ -99,7 +99,6 @@ flutter:
   assets:
     - .env
     - assets/images/camera/
-    - assets/images/icons/
     - assets/images/welcome/
     - assets/images/logos/
     - assets/images/splash/
@@ -126,6 +125,10 @@ flutter:
           weight: 800
         - asset: assets/fonts/Pretendard/Pretendard-Black.ttf
           weight: 900
+
+    - family: ThunderIcons
+      fonts:
+        - asset: assets/fonts/ThunderIcons.ttf
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
 

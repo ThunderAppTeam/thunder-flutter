@@ -11,12 +11,13 @@ class CameraIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
+      borderRadius: BorderRadius.circular(Sizes.radius16),
+      // behavior: HitTestBehavior.opaque,
       child: Icon(
         icon,
-        size: Sizes.icon28,
+        size: Sizes.icon24,
         color: ColorName.white,
       ),
     );

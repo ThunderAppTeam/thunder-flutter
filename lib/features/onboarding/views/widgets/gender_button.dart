@@ -29,7 +29,7 @@ class GenderButton extends StatelessWidget {
             color: ColorName.white,
             width: Styles.borderWidth2,
           ),
-          borderRadius: BorderRadius.circular(Styles.radius16),
+          borderRadius: BorderRadius.circular(Sizes.radius16),
           color: isSelected ? ColorName.white : null,
         ),
         child: Center(

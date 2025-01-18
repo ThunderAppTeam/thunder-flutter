@@ -16,12 +16,6 @@ abstract class Styles {
   static const double scale98 = 0.98;
   static const double scale100 = 1.0;
 
-  // Radius
-  static const double radius4 = 4.0;
-  static const double radius14 = 14.0;
-  static const double radius16 = 16.0;
-  static const double radius24 = 24.0;
-
   // Border width
   static const double borderWidth2 = 2.0;
 

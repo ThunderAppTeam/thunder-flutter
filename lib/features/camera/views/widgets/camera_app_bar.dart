@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/features/camera/views/widgets/camera_icon.dart';
+import 'package:thunder/core/theme/icon/thunder_icons.dart';
 
 class CameraAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onClose;
@@ -41,7 +42,7 @@ class CameraAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: Align(
                 alignment: Alignment.centerRight,
                 child: CameraIcon(
-                  icon: Icons.close,
+                  icon: ThunderIcons.closeSquareLight,
                   onTap: onClose,
                 ),
               ),

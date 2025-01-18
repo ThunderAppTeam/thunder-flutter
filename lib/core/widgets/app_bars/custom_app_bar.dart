@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
-import 'package:thunder/core/theme/constants/styles.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
+import 'package:thunder/core/theme/icon/thunder_icons.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 
 class CustomAppBarAction {
@@ -63,8 +63,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   customBorder: const CircleBorder(),
                   onTap: onBack ?? () => Navigator.pop(context),
                   child: Icon(
-                    Icons.chevron_left,
-                    size: Sizes.icon32,
+                    ThunderIcons.chevronLeft,
+                    size: Sizes.icon24,
                     color: ColorName.white,
                   ),
                 ),
@@ -81,7 +81,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     if (action.text != null) {
                       return InkWell(
                         onTap: action.onTap,
-                        borderRadius: BorderRadius.circular(Styles.radius16),
+                        borderRadius: BorderRadius.circular(Sizes.radius16),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: Sizes.spacing8,
@@ -99,7 +99,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         onTap: action.onTap,
                         child: Icon(
                           action.icon,
-                          size: Sizes.icon28,
+                          size: Sizes.icon24,
                           color: ColorName.white,
                         ),
                       );
