@@ -17,7 +17,6 @@ class NoonbodyViewModel extends StateNotifier<NoonbodyState> {
   get imageUrl => _imageUrl;
 
   Future<void> uploadImage(String imagePath) async {
-    print('uploadImage: $imagePath');
     state = state.copyWith(
         isUploading: true, progress: 0, currentScore: 0, error: null);
     try {

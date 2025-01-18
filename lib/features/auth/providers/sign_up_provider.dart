@@ -13,7 +13,6 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
   Future<void> signUp({
     required SignUpUser user,
   }) async {
-    if (!mounted) return;
     state = state.copyWith(isLoading: true, isSuccess: false, isError: false);
     try {
       await _repository.signUp(user);
