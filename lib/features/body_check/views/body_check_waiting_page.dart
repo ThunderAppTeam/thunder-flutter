@@ -14,25 +14,24 @@ import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/core/widgets/buttons/custom_wide_button.dart';
 import 'package:thunder/core/widgets/custom_circular_indicator.dart';
-import 'package:thunder/features/noonbody/models/noonbody_state.dart';
-import 'package:thunder/features/noonbody/view_models/noonbody_view_model.dart';
+import 'package:thunder/features/body_check/models/body_check_state.dart';
+import 'package:thunder/features/body_check/view_models/body_check_view_model.dart';
 import 'package:thunder/generated/l10n.dart';
 
-class NoonbodyWaitingPage extends ConsumerStatefulWidget {
-  const NoonbodyWaitingPage({super.key});
+class BodyCheckWaitingPage extends ConsumerStatefulWidget {
+  const BodyCheckWaitingPage({super.key});
 
   @override
-  ConsumerState<NoonbodyWaitingPage> createState() =>
-      _NoonbodyWaitingPageState();
+  ConsumerState<BodyCheckWaitingPage> createState() =>
+      _BodyCheckWaitingPageState();
 }
 
-class _NoonbodyWaitingPageState extends ConsumerState<NoonbodyWaitingPage> {
-  String _getResultText(NoonbodyState noonbodyState) {
-    final ageGroup = noonbodyState.age ~/ 10 * 10;
-    final gender = noonbodyState.gender == Gender.male ? '남성' : '여성';
-    final genderPercent = noonbodyState.genderPercent.round();
-    final percent = noonbodyState.percent.round();
-    return '$ageGroup대 $gender 상위 $genderPercent% | 전체 상위 $percent%';
+class _BodyCheckWaitingPageState extends ConsumerState<BodyCheckWaitingPage> {
+  String _getResultText(BodyCheckState bodyCheckState) {
+    final gender = bodyCheckState.gender == Gender.male ? '남성' : '여성';
+    final genderPercent = bodyCheckState.genderPercent.round();
+
+    return '최근 30일 기준 $gender 상위 $genderPercent%';
   }
 
   void _onError() {
@@ -45,11 +44,15 @@ class _NoonbodyWaitingPageState extends ConsumerState<NoonbodyWaitingPage> {
     );
   }
 
+  void _onShare() {
+    // TODO: 공유하기, 임시로 process 초기화 버튼으로 사용
+    ref.read(bodyCheckProvider.notifier).startFakeProgress();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final noonbodyState = ref.watch(noonbodyProvider);
-    final imageUrl = ref.read(noonbodyProvider.notifier).imageUrl;
-    ref.listen(noonbodyProvider, (prev, next) {
+    final bodyCheckState = ref.watch(bodyCheckProvider);
+    ref.listen(bodyCheckProvider, (prev, next) {
       if (prev?.error == null && next.error != null) {
         _onError();
       }
@@ -84,7 +87,7 @@ class _NoonbodyWaitingPageState extends ConsumerState<NoonbodyWaitingPage> {
           child: Column(
             children: [
               Expanded(
-                child: noonbodyState.isUploading
+                child: bodyCheckState.isUploading
                     ? const CustomCircularIndicator()
                     : AspectRatio(
                         aspectRatio: ImageConsts.aspectRatio,
@@ -97,7 +100,7 @@ class _NoonbodyWaitingPageState extends ConsumerState<NoonbodyWaitingPage> {
                                     BorderRadius.circular(Styles.radius16),
                               ),
                               child: Image.network(
-                                imageUrl,
+                                bodyCheckState.imageUrl!,
                                 fit: BoxFit.cover,
                                 width: double.infinity,
                                 height: double.infinity,
@@ -138,7 +141,8 @@ class _NoonbodyWaitingPageState extends ConsumerState<NoonbodyWaitingPage> {
                                           text: TextSpan(
                                             children: [
                                               TextSpan(
-                                                text: noonbodyState.currentScore
+                                                text: bodyCheckState
+                                                    .currentScore
                                                     .toStringAsFixed(1),
                                                 style: textTheme.textHead32,
                                               ),
@@ -151,14 +155,14 @@ class _NoonbodyWaitingPageState extends ConsumerState<NoonbodyWaitingPage> {
                                         ),
                                       ],
                                     ),
-                                    if (noonbodyState.isFinished)
+                                    if (bodyCheckState.isFinished)
                                       Text(
-                                        _getResultText(noonbodyState),
+                                        _getResultText(bodyCheckState),
                                         style: textTheme.textBody16,
                                       )
                                     else
                                       Text(
-                                        '눈바디 측정 중... ${noonbodyState.progress.round()}% 완료',
+                                        '눈바디 측정 중... ${bodyCheckState.progress.round()}% 완료',
                                         style: textTheme.textBody16,
                                       ),
                                   ],
@@ -172,7 +176,7 @@ class _NoonbodyWaitingPageState extends ConsumerState<NoonbodyWaitingPage> {
               Gaps.v16,
               CustomWideButton(
                 text: '공유하기',
-                onPressed: () {},
+                onPressed: _onShare,
               ),
             ],
           ),

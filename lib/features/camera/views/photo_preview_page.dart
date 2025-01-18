@@ -10,7 +10,7 @@ import 'package:thunder/core/constants/image_consts.dart';
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
 import 'package:thunder/core/widgets/custom_circular_indicator.dart';
 import 'package:thunder/features/camera/controllers/photo_preview_controller.dart';
-import 'package:thunder/features/noonbody/view_models/noonbody_view_model.dart';
+import 'package:thunder/features/body_check/view_models/body_check_view_model.dart';
 
 class PhotoPreviewPage extends ConsumerStatefulWidget {
   final String imagePath;
@@ -89,12 +89,12 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
         .read(photoPreviewControllerProvider.notifier)
         .processCroppedImage(imagePath: imagePath, cropRect: cropRect);
     if (croppedImagePath != null) {
-      await ref.read(noonbodyProvider.notifier).uploadImage(croppedImagePath);
+      await ref.read(bodyCheckProvider.notifier).uploadImage(croppedImagePath);
       // 이미지가 업로드 완료되면 삭제.
       if (mounted) {
         ref.read(safeRouterProvider).goNamed(
               context,
-              Routes.noonbody.name,
+              Routes.bodyCheck.name,
             );
       }
     }
