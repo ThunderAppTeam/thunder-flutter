@@ -7,7 +7,7 @@ import 'package:thunder/features/archive/views/archive_page.dart';
 import 'package:thunder/features/auth/repositories/auth_repository.dart';
 import 'package:thunder/features/camera/views/camera_page.dart';
 import 'package:thunder/features/feed/views/feed_page.dart';
-import 'package:thunder/features/noonbody/views/noonbody_waiting_page.dart';
+import 'package:thunder/features/body_check/views/body_check_waiting_page.dart';
 import 'package:thunder/features/onboarding/views/phone_number_page.dart';
 import 'package:thunder/features/settings/views/settings_page.dart';
 import 'package:thunder/features/welcome/views/welcome_page.dart';
@@ -75,9 +75,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const CameraPage(),
       ),
       GoRoute(
-        path: Routes.noonbody.path,
-        name: Routes.noonbody.name,
-        builder: (context, state) => NoonbodyWaitingPage(),
+        path: Routes.bodyCheck.path,
+        name: Routes.bodyCheck.name,
+        builder: (context, state) => const BodyCheckWaitingPage(),
       ),
       GoRoute(
         path: Routes.settings.path,

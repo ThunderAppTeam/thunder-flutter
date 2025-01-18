@@ -26,9 +26,9 @@ final class Routes {
     path: '/archive',
   );
 
-  static const noonbody = (
-    name: 'noonbody',
-    path: '/noonbody',
+  static const bodyCheck = (
+    name: 'bodyCheck',
+    path: '/bodyCheck',
   );
 
   static const settings = (

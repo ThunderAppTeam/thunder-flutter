@@ -6,10 +6,10 @@ import 'package:thunder/core/constants/key_contsts.dart';
 import 'package:thunder/core/errors/error_parser.dart';
 import 'package:thunder/core/providers/dio_provider.dart';
 
-class NoonbodyRepository {
+class BodyCheckRepository {
   final Dio _dio;
 
-  NoonbodyRepository(this._dio);
+  BodyCheckRepository(this._dio);
 
   Future<String?> uploadImage(String imagePath) async {
     log('upload Image: $imagePath');
@@ -38,6 +38,6 @@ class NoonbodyRepository {
   }
 }
 
-final noonbodyRepositoryProvider = Provider<NoonbodyRepository>((ref) {
-  return NoonbodyRepository(ref.read(dioProvider));
+final bodyCheckRepositoryProvider = Provider<BodyCheckRepository>((ref) {
+  return BodyCheckRepository(ref.read(dioProvider));
 });

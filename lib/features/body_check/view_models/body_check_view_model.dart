@@ -3,32 +3,28 @@ import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/enums/gender.dart';
-import 'package:thunder/features/noonbody/models/noonbody_state.dart';
-import 'package:thunder/features/noonbody/repsitories/noonbody_repository.dart';
+import 'package:thunder/features/body_check/models/body_check_state.dart';
+import 'package:thunder/features/body_check/repsitories/body_check_repository.dart';
 
-class NoonbodyViewModel extends StateNotifier<NoonbodyState> {
-  String _imageUrl = '';
+class BodyCheckViewModel extends StateNotifier<BodyCheckState> {
   Timer? _timer;
   final Random _random = Random();
-  final NoonbodyRepository _repository;
+  final BodyCheckRepository _repository;
 
-  NoonbodyViewModel(super.state, this._repository);
-
-  get imageUrl => _imageUrl;
+  BodyCheckViewModel(super.state, this._repository);
 
   Future<void> uploadImage(String imagePath) async {
-    state = state.copyWith(
-        isUploading: true, progress: 0, currentScore: 0, error: null);
+    state = state.copyWith(isUploading: true, error: null);
     try {
       final imageUrl = await _repository.uploadImage(imagePath);
-      _imageUrl = imageUrl!;
+      state = state.copyWith(imageUrl: imageUrl);
     } catch (e) {
       state =
-          state.copyWith(isUploading: false, error: NoonbodyError.uploadImage);
+          state.copyWith(isUploading: false, error: BodyCheckError.uploadImage);
       return;
     }
-    _startFakeProgress();
     state = state.copyWith(isUploading: false);
+    startFakeProgress();
   }
 
   double _getNextScore(
@@ -49,14 +45,13 @@ class NoonbodyViewModel extends StateNotifier<NoonbodyState> {
     return nextScore.clamp(1.0, 10.0);
   }
 
-  void _startFakeProgress() {
+  void startFakeProgress() {
     _timer?.cancel();
-    state = state.copyWith(isFinished: false);
+    state = state.copyWith(isFinished: false, progress: 0, currentScore: 0);
     final targetScore = 1 + _random.nextDouble() * 9;
     _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       if (state.progress >= 100) {
         timer.cancel();
-
         state = state.copyWith(
           currentScore: targetScore,
           progress: 100,
@@ -86,8 +81,8 @@ class NoonbodyViewModel extends StateNotifier<NoonbodyState> {
   }
 }
 
-final noonbodyProvider =
-    StateNotifierProvider<NoonbodyViewModel, NoonbodyState>((ref) {
-  return NoonbodyViewModel(
-      NoonbodyState(), ref.read(noonbodyRepositoryProvider));
+final bodyCheckProvider =
+    StateNotifierProvider<BodyCheckViewModel, BodyCheckState>((ref) {
+  return BodyCheckViewModel(
+      BodyCheckState(), ref.read(bodyCheckRepositoryProvider));
 });
