@@ -187,7 +187,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
   Widget _buildPermissionDeniedView() {
     final textTheme = getTextTheme(context);
     return Container(
-      color: ColorName.iosDarkGray,
+      color: ColorName.darkBackground2,
       child: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -207,7 +207,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
               TextButton(
                 onPressed: () => _controller.openPermissionSettings(),
                 child: Text(
-                  '카메라 접근 권한 허용하기',
+                  S.of(context).cameraPermissionAllow,
                   style: textTheme.textTitle20.copyWith(
                     color: ColorName.iosBlue,
                   ),

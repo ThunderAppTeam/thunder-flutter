@@ -60,7 +60,7 @@ class _BodyCheckWaitingPageState extends ConsumerState<BodyCheckWaitingPage> {
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
-          title: '내 눈바디',
+          title: S.of(context).bodyCheckWaitingTitle,
           actions: [
             CustomAppBarAction(
               icon: ThunderIcons.moreHoriz,
@@ -169,7 +169,7 @@ class _BodyCheckWaitingPageState extends ConsumerState<BodyCheckWaitingPage> {
               ),
               Gaps.v16,
               CustomWideButton(
-                text: '공유하기',
+                text: S.of(context).commonShare,
                 onPressed: _onShare,
                 isEnabled: bodyCheckState.isFinished,
               ),

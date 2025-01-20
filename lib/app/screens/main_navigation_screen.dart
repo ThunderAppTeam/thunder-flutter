@@ -13,6 +13,7 @@ import 'package:thunder/core/theme/gen/assets.gen.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/theme/icon/thunder_icons_icons.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
+import 'package:thunder/generated/l10n.dart';
 
 class MainNavigationScreen extends ConsumerStatefulWidget {
   final StatefulNavigationShell navigationShell;
@@ -93,6 +94,7 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
               children: [
                 Assets.images.logos.thunderLogotypeSmallW.svg(),
                 InkWell(
+                  customBorder: CircleBorder(),
                   onTap: () {
                     ref
                         .read(safeRouterProvider)
@@ -122,21 +124,21 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
                 icon: ThunderIcons.home,
                 activeIcon: ThunderIcons.homeFilled,
                 isSelected: _getSelectedIndex() == Tabs.home.index,
-                label: '홈',
+                label: S.of(context).navigationLabelHome,
                 onTap: () => _onTap(context, Tabs.home),
               ),
               _NavigationBarItem(
                 icon: ThunderIcons.create,
                 activeIcon: ThunderIcons.create,
                 isSelected: _getSelectedIndex() == Tabs.measure.index,
-                label: '측정',
+                label: S.of(context).navigationLabelMeasure,
                 onTap: () => _onTap(context, Tabs.measure),
               ),
               _NavigationBarItem(
                 icon: ThunderIcons.folder,
                 activeIcon: ThunderIcons.folderFilled,
                 isSelected: _getSelectedIndex() == Tabs.archive.index,
-                label: '보관함',
+                label: S.of(context).navigationLabelArchive,
                 onTap: () => _onTap(context, Tabs.archive),
               ),
             ],
