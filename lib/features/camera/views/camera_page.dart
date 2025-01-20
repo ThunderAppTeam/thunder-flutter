@@ -197,8 +197,10 @@ class _CameraPageState extends ConsumerState<CameraPage>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Thunder 앱에서 사진을 촬영하기 위해\n카메라 접근 권한을 허용해주세요',
-                style: textTheme.textTitle20,
+                S.of(context).cameraPermissionGuideText,
+                style: textTheme.textTitle20.copyWith(
+                  height: Sizes.fontHeight14,
+                ),
                 textAlign: TextAlign.center,
               ),
               Gaps.v32,

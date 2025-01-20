@@ -57,6 +57,7 @@ class CustomBottomSheet extends StatelessWidget {
                   subtitle!,
                   style: textTheme.textBody18.copyWith(
                     color: ColorName.black,
+                    height: Sizes.fontHeight14,
                   ),
                 ),
               ],

@@ -7,6 +7,7 @@ class Sizes {
   static const double spacing6 = 6.0;
   static const double spacing8 = 8.0;
   static const double spacing12 = 12.0;
+  static const double spacing14 = 14.0;
   static const double spacing16 = 16.0;
   static const double spacing20 = 20.0;
   static const double spacing24 = 24.0;
@@ -24,6 +25,9 @@ class Sizes {
   static const double fontSize24 = 24.0;
   static const double fontSize32 = 32.0;
 
+  // height ratio
+  static const double defaultFontHeight = 1.0;
+  static const double fontHeight14 = 1.4;
   // line height
   static const double lineHeight12 = 12.0;
   static const double lineHeight18 = 18.0;
@@ -42,10 +46,12 @@ class Sizes {
   static const double icon28 = 28.0;
   static const double icon32 = 32.0;
   static const double icon48 = 48.0;
+  static const double icon52 = 52.0;
   static const double icon80 = 80.0;
 
   // Radius
   static const double radius4 = 4.0;
+  static const double radius8 = 8.0;
   static const double radius14 = 14.0;
   static const double radius16 = 16.0;
   static const double radius24 = 24.0;
@@ -64,4 +70,8 @@ class Sizes {
 
   // dialog width
   static const double dialogWidth280 = 280.0;
+
+  // circular indicator size
+  static const double circularIndicatorSize32 = 32.0;
+  static const double circularIndicatorStrokeWidth4 = 4.0;
 }
