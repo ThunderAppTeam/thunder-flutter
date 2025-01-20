@@ -11,7 +11,7 @@ import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/assets.gen.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
-import 'package:thunder/core/theme/icon/thunder_icons.dart';
+import 'package:thunder/core/theme/icon/thunder_icons_icons.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 
 class MainNavigationScreen extends ConsumerStatefulWidget {

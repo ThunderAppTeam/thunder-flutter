@@ -22,6 +22,7 @@ class ThunderIcons {
   static const String? _kFontPkg = null;
 
   static const IconData chevronLeft = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData moreVert = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData moreHoriz = IconData(0xe808, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData home = IconData(0xe80a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData closeSquareLight = IconData(0xe80b, fontFamily: _kFontFam, fontPackage: _kFontPkg);

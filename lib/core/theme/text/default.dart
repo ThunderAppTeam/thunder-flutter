@@ -21,6 +21,14 @@ const AppTextTheme defaultTextTheme = AppTextTheme(
   ),
 
   // #####--- Title styles (살짝 Bold감이 있는 작은 텍스트)
+  textTitle24: TextStyle(
+    fontFamily: FontFamily.pretendard,
+    fontSize: Sizes.fontSize24,
+    height: Sizes.lineHeight24 / Sizes.fontSize24,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  ),
+
   textTitle20: TextStyle(
     fontFamily: FontFamily.pretendard,
     fontSize: Sizes.fontSize20,
