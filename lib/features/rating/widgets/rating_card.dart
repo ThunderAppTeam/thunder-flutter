@@ -10,13 +10,17 @@ import 'package:thunder/features/rating/view_models/rating_view_model.dart';
 class RadingCard extends StatelessWidget {
   final BodyCheckData bodyCheckData;
   final int rating; // 0~5
-  final Function(int targetRating) onRatingChanged;
+  final Function(int targetRating)? onRatingChanged;
+  final Function()? onRatingComplete;
+  final VoidCallback? onFlagTap;
 
   const RadingCard({
     super.key,
     required this.bodyCheckData,
     required this.rating,
-    required this.onRatingChanged,
+    this.onRatingChanged,
+    this.onRatingComplete,
+    this.onFlagTap,
   });
 
   final _iconWidth = 33;
@@ -87,11 +91,15 @@ class RadingCard extends StatelessWidget {
           style: textTheme.textTitle24.copyWith(fontWeight: FontWeight.w400),
         ),
         Spacer(),
-        InkWell(
-          onTap: () {},
-          child: Icon(
-            ThunderIcons.moreVert,
-            color: ColorName.white,
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onFlagTap,
+            customBorder: CircleBorder(),
+            child: Icon(
+              ThunderIcons.flag,
+              color: ColorName.white,
+            ),
           ),
         ),
       ],
@@ -111,6 +119,8 @@ class RadingCard extends StatelessWidget {
             details.localPosition.dx,
             constraints.maxWidth,
           ),
+          onTapUp: (_) => onRatingComplete?.call(),
+          onHorizontalDragEnd: (_) => onRatingComplete?.call(),
           child: SizedBox(
             width: double.infinity,
             child: Padding(
@@ -153,12 +163,12 @@ class RadingCard extends StatelessWidget {
 
   void _handleHorizontalDragUpdate(double dx, double maxWidth) {
     final newRating = _calculateRating(dx, maxWidth);
-    onRatingChanged(newRating);
+    onRatingChanged?.call(newRating);
   }
 
   void _handleTapDown(double dx, double maxWidth) {
     final newRating = _calculateRating(dx, maxWidth);
     // 현재 별점과 새로운 별점이 같으면 이전 별점으로 변경
-    onRatingChanged(newRating == rating ? newRating - 1 : newRating);
+    onRatingChanged?.call(newRating == rating ? newRating - 1 : newRating);
   }
 }

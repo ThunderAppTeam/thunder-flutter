@@ -23,11 +23,13 @@ class ThunderIcons {
 
   static const IconData chevronLeft = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData moreVert = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData noFile = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData moreHoriz = IconData(0xe808, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData home = IconData(0xe80a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData closeSquareLight = IconData(0xe80b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData homeFilled = IconData(0xe80c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData folderFilled = IconData(0xe80d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData flag = IconData(0xe80e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData settings = IconData(0xe80f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData folder = IconData(0xe810, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData searchFilled = IconData(0xe811, fontFamily: _kFontFam, fontPackage: _kFontPkg);
