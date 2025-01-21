@@ -1,85 +1,62 @@
 enum ServerError {
-  // 에러 코드에 따른 에러
-  unknown,
-  missingRequiredParameter,
-  invalidParameterValue,
+  unknown("UNKNOWN"),
+  invalidResponse("INVALID_RESPONSE"),
+  unknownServerError("UNKNOWN_SERVER_ERROR"),
+  missingRequiredParameter("MISSING_REQUIRED_PARAMETER"),
+  invalidParameterValue("INVALID_PARAMETER_VALUE"),
 
-  // mobile verification
-  notFoundMobileVerification,
-  expiredMobileVerification,
-  invalidMobileVerification,
-  tooManyMobileVerification,
-  notFoundMobileNumber,
+  notFoundMobileVerification("NOT_FOUND_MOBILE_VERIFICATION"),
+  expiredMobileVerification("EXPIRED_MOBILE_VERIFICATION"),
+  invalidMobileVerification("INVALID_MOBILE_VERIFICATION"),
+  tooManyMobileVerification("TOO_MANY_MOBILE_VERIFICATION"),
+  notFoundMobileNumber("NOT_FOUND_MOBILE_NUMBER"),
+  sendSmsApiError("SEND_SMS_API_ERROR"),
 
-  // nickname
-  nicknameDuplicated,
+  expiredToken("EXPIRED_TOKEN"),
+  invalidToken("INVALID_TOKEN"),
+  invalidAuthorizationHeader("INVALID_AUTHORIZATION_HEADER"),
 
-  // token
-  expiredToken,
-  invalidToken,
-  invalidAuthorizationHeader,
-  notFoundMember,
-  unsupportedImageFormat,
+  notFoundMember("NOT_FOUND_MEMBER"),
+  nicknameDuplicated("NICKNAME_DUPLICATED"),
 
-  // 응답 이후 에러
-  invalidResponse,
+  unsupportedImageFormat("UNSUPPORTED_IMAGE_FORMAT"),
+  notFoundBodyPhoto("NOT_FOUND_BODY_PHOTO"),
+  notFoundReviewRotation("NOT_FOUND_REVIEW_ROTATION"),
+  alreadyReviewed("ALREADY_REVIEWED");
+
+  const ServerError(this.code);
+
+  final String code;
+
+  static final Map<String, ServerError> _map = {
+    for (var e in values) e.code: e
+  };
+
+  static ServerError fromString(String code) =>
+      _map[code] ?? ServerError.unknown;
 }
 
-class ServerErrorCode {
-  static const unknownServerError = 'UNKNOWN_SERVER_ERROR';
-  static const missingRequiredParameter = 'MISSING_REQUIRED_PARAMETER';
-  static const invalidParameterValue = 'INVALID_PARAMETER_VALUE';
+// UNKNOWN_SERVER_ERROR(INTERNAL_SERVER_ERROR, "An unknown error occurred on the server."),
+// MISSING_REQUIRED_PARAMETER(BAD_REQUEST, "Invalid request body format."),
+// INVALID_PARAMETER_VALUE(BAD_REQUEST, "Invalid request body format."),
 
-  static const notFoundMobileVerification = 'NOT_FOUND_MOBILE_VERIFICATION';
-  static const expiredMobileVerification = 'EXPIRED_MOBILE_VERIFICATION';
-  static const invalidMobileVerification = 'INVALID_MOBILE_VERIFICATION';
-  static const tooManyMobileVerification = 'TOO_MANY_MOBILE_VERIFICATION';
-  static const nicknameDuplicated = 'NICKNAME_DUPLICATED';
+// NOT_FOUND_MOBILE_VERIFICATION(BAD_REQUEST, "Verification code not sent to this mobile number."),
+// EXPIRED_MOBILE_VERIFICATION(BAD_REQUEST, "Verification code is expired."),
+// INVALID_MOBILE_VERIFICATION(BAD_REQUEST, "Invalid mobile verification code."),
+// TOO_MANY_MOBILE_VERIFICATION(TOO_MANY_REQUESTS, "Mobile verification can only be requested 5 times per day."),
+// NOT_FOUND_MOBILE_NUMBER(BAD_REQUEST, "Not found mobile number."),
+// SEND_SMS_API_ERROR(INTERNAL_SERVER_ERROR, "Failed to send SMS due to an error in the external SMS service."),
 
-  static const expiredToken = 'EXPIRED_TOKEN';
-  static const invalidToken = 'INVALID_TOKEN';
-  static const invalidAuthorizationHeader = 'INVALID_AUTHORIZATION_HEADER';
+// EXPIRED_TOKEN(UNAUTHORIZED, "The token has expired."),
+// INVALID_TOKEN(UNAUTHORIZED, "The token is invalid."),
+// INVALID_AUTHORIZATION_HEADER(BAD_REQUEST, "Authorization header must include Bearer prefix."),
 
-  static const notFoundMember = 'NOT_FOUND_MEMBER';
+// NOT_FOUND_MEMBER(NOT_FOUND, "Member not found"),
+// NICKNAME_DUPLICATED(CONFLICT, "Nickname already exists."),
 
-  static const unsupportedImageFormat = 'UNSUPPORTED_IMAGE_FORMAT';
+// UNSUPPORTED_IMAGE_FORMAT(BAD_REQUEST, "Only JPG and PNG formats are allowed for image."),
+// NOT_FOUND_BODY_PHOTO(NOT_FOUND, "Body Photo not found."),
+// NOT_FOUND_REVIEW_ROTATION(NOT_FOUND, "Review Rotation not found."),
+// ALREADY_REVIEWED(CONFLICT, "Body Photo has already been reviewed by the member."),
 
-  static const notFoundMobileNumber = 'NOT_FOUND_MOBILE_NUMBER';
-}
-
-extension ServerErrorX on ServerError {
-  static ServerError fromString(String code) {
-    switch (code) {
-      case ServerErrorCode.unknownServerError:
-        return ServerError.unknown;
-      case ServerErrorCode.missingRequiredParameter:
-        return ServerError.missingRequiredParameter;
-      case ServerErrorCode.invalidParameterValue:
-        return ServerError.invalidParameterValue;
-      case ServerErrorCode.notFoundMobileVerification:
-        return ServerError.notFoundMobileVerification;
-      case ServerErrorCode.expiredMobileVerification:
-        return ServerError.expiredMobileVerification;
-      case ServerErrorCode.invalidMobileVerification:
-        return ServerError.invalidMobileVerification;
-      case ServerErrorCode.tooManyMobileVerification:
-        return ServerError.tooManyMobileVerification;
-      case ServerErrorCode.nicknameDuplicated:
-        return ServerError.nicknameDuplicated;
-      case ServerErrorCode.expiredToken:
-        return ServerError.expiredToken;
-      case ServerErrorCode.invalidToken:
-        return ServerError.invalidToken;
-      case ServerErrorCode.invalidAuthorizationHeader:
-        return ServerError.invalidAuthorizationHeader;
-      case ServerErrorCode.notFoundMember:
-        return ServerError.notFoundMember;
-      case ServerErrorCode.unsupportedImageFormat:
-        return ServerError.unsupportedImageFormat;
-      case ServerErrorCode.notFoundMobileNumber:
-        return ServerError.notFoundMobileNumber;
-      default:
-        return ServerError.unknown;
-    }
-  }
-}
+// 서버 에러 코드

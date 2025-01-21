@@ -19,7 +19,7 @@ class DioErrorParser {
 
     // (2) errorCode가 제대로 없으면 -> invalidResponse
     if (errorCode != null) {
-      return ServerErrorX.fromString(errorCode);
+      return ServerError.fromString(errorCode);
     }
     // (3) ServerError.fromString 으로 변환
     return ServerError.invalidResponse;
