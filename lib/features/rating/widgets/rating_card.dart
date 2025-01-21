@@ -12,7 +12,7 @@ class RadingCard extends StatelessWidget {
   final int rating; // 0~5
   final Function(int targetRating)? onRatingChanged;
   final Function()? onRatingComplete;
-  final VoidCallback? onFlagTap;
+  final VoidCallback? onMoreTap;
 
   const RadingCard({
     super.key,
@@ -20,7 +20,7 @@ class RadingCard extends StatelessWidget {
     required this.rating,
     this.onRatingChanged,
     this.onRatingComplete,
-    this.onFlagTap,
+    this.onMoreTap,
   });
 
   final _iconWidth = 33;
@@ -94,10 +94,10 @@ class RadingCard extends StatelessWidget {
         Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: onFlagTap,
+            onTap: onMoreTap,
             customBorder: CircleBorder(),
             child: Icon(
-              ThunderIcons.flag,
+              ThunderIcons.moreVert,
               color: ColorName.white,
             ),
           ),

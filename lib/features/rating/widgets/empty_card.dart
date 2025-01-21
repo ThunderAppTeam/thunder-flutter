@@ -38,20 +38,23 @@ class EmptyCard extends StatelessWidget {
             ),
             Gaps.v32,
             CustomPressableWrapper(
-              onPressed: onRefresh,
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: Sizes.spacing24,
-                  vertical: Sizes.spacing14,
-                ),
-                decoration: BoxDecoration(
-                  color: ColorName.white,
-                  borderRadius: BorderRadius.circular(Sizes.radius8),
-                ),
-                child: Text(
-                  S.of(context).commonRefresh,
-                  style: textTheme.textBody18.copyWith(
-                    color: ColorName.black,
+              child: Material(
+                color: ColorName.white,
+                borderRadius: BorderRadius.circular(Sizes.radius8),
+                clipBehavior: Clip.hardEdge,
+                child: InkWell(
+                  onTap: onRefresh,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Sizes.spacing24,
+                      vertical: Sizes.spacing14,
+                    ),
+                    child: Text(
+                      S.of(context).commonRefresh,
+                      style: textTheme.textBody18.copyWith(
+                        color: ColorName.black,
+                      ),
+                    ),
                   ),
                 ),
               ),

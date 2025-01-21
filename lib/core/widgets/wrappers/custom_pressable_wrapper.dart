@@ -3,13 +3,11 @@ import 'package:thunder/core/theme/constants/styles.dart';
 
 class CustomPressableWrapper extends StatefulWidget {
   final Widget child;
-  final VoidCallback? onPressed;
   final bool isEnabled;
 
   const CustomPressableWrapper({
     super.key,
     required this.child,
-    required this.onPressed,
     this.isEnabled = true,
   });
 
@@ -36,7 +34,6 @@ class _CustomPressableWrapperState extends State<CustomPressableWrapper> {
         onTapUp: (_) {
           if (widget.isEnabled) {
             _updatePressedState(false);
-            widget.onPressed?.call();
           }
         },
         onTapCancel: () => _updatePressedState(false),

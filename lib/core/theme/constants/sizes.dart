@@ -74,4 +74,8 @@ class Sizes {
   // circular indicator size
   static const double circularIndicatorSize32 = 32.0;
   static const double circularIndicatorStrokeWidth4 = 4.0;
+
+  // border width
+  static const double borderWidth1 = 1.0;
+  static const double borderWidth2 = 2.0;
 }

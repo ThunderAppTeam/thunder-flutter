@@ -27,7 +27,7 @@ class GenderButton extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(
             color: ColorName.white,
-            width: Styles.borderWidth2,
+            width: Sizes.borderWidth2,
           ),
           borderRadius: BorderRadius.circular(Sizes.radius16),
           color: isSelected ? ColorName.white : null,

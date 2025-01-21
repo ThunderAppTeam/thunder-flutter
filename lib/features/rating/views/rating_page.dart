@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
+import 'package:thunder/core/widgets/bottom_sheets/action_bottom_sheet.dart';
 import 'package:thunder/features/rating/view_models/rating_view_model.dart';
 import 'package:thunder/features/rating/widgets/empty_card.dart';
-
 import 'package:thunder/features/rating/widgets/rating_card.dart';
 import 'package:thunder/features/rating/widgets/loading_card.dart';
+import 'package:thunder/generated/l10n.dart';
 
 class RatingPage extends ConsumerStatefulWidget {
   const RatingPage({super.key});
@@ -80,15 +81,38 @@ class _RatingPageState extends ConsumerState<RatingPage>
     ref.read(bodyCheckListProvider.notifier).refresh();
   }
 
+  void _onMoreTap() {
+    final modalActions = [
+      ModalActionItem(text: S.of(context).commonReport, onTap: _onReportTap),
+      ModalActionItem(text: S.of(context).commonBlock, onTap: _onBlockTap),
+    ];
+    showModalBottomSheet(
+      context: context,
+      useRootNavigator: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return ActionBottomSheet(actions: modalActions);
+      },
+    );
+  }
+
+  void _onReportTap() {
+    print('신고');
+  }
+
+  void _onBlockTap() {
+    print('차단');
+  }
+
   @override
   Widget build(BuildContext context) {
     final providerState = ref.watch(bodyCheckListProvider);
-    return providerState.when(
-      data: (bodyCheckList) {
-        return Scaffold(
-          body: Padding(
-            padding: EdgeInsets.all(Sizes.spacing16),
-            child: Stack(
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.all(Sizes.spacing16),
+        child: providerState.when(
+          data: (bodyCheckList) {
+            return Stack(
               children: [
                 // 모든 카드를 평가했을 때
                 EmptyCard(onRefresh: _onRefresh),
@@ -109,29 +133,20 @@ class _RatingPageState extends ConsumerState<RatingPage>
                       onRatingChanged: _onRate,
                       onRatingComplete: () =>
                           _onRatingComplete(bodyCheckList.length),
-                      onFlagTap: () {
-                        print('flag');
-                      },
+                      onMoreTap: _onMoreTap,
                     ),
                   ),
               ],
-            ),
-          ),
-        );
-      },
-      error: (error, stackTrace) {
-        return Scaffold(
-          body: Center(child: Text('Error: $error')),
-        );
-      },
-      loading: () {
-        return Scaffold(
-          body: Padding(
-            padding: EdgeInsets.all(Sizes.spacing16),
-            child: LoadingCard(),
-          ),
-        );
-      },
+            );
+          },
+          error: (error, stackTrace) {
+            return Center(child: Text('Error: $error'));
+          },
+          loading: () {
+            return LoadingCard();
+          },
+        ),
+      ),
     );
   }
 }
