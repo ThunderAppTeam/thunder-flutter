@@ -150,6 +150,7 @@ class _BodyCheckWaitingPageState extends ConsumerState<BodyCheckWaitingPage> {
                                       ),
                                     ],
                                   ),
+                                  Gaps.v12,
                                   if (bodyCheckState.isFinished)
                                     Text(
                                       _getResultText(bodyCheckState),

@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:thunder/core/constants/body_check_const.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/assets.gen.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/theme/icon/thunder_icons_icons.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
-import 'package:thunder/features/rating/view_models/rating_view_model.dart';
+import 'package:thunder/features/rating/models/data/body_check_data.dart';
 
-class RadingCard extends StatelessWidget {
+class RatingWidget extends StatelessWidget {
   final BodyCheckData bodyCheckData;
-  final int rating; // 0~5
+  final int rating; // 1~5
   final Function(int targetRating)? onRatingChanged;
   final Function()? onRatingComplete;
   final VoidCallback? onMoreTap;
 
-  const RadingCard({
+  const RatingWidget({
     super.key,
     required this.bodyCheckData,
     required this.rating,
@@ -29,51 +30,44 @@ class RadingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 8,
-      clipBehavior: Clip.hardEdge,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(Sizes.radius16),
-      ),
-      child: Stack(
-        children: [
-          Image.network(
-            bodyCheckData.imageUrl,
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              padding: EdgeInsets.only(
-                right: Sizes.spacing16,
-                bottom: Sizes.spacing16,
-                left: Sizes.spacing16,
-              ),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.black.withOpacity(0.0),
-                    Colors.black.withOpacity(0.5),
-                    Colors.black.withOpacity(0.75),
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildUserSection(context),
-                  Gaps.v16,
-                  _buildRatingSection(),
+    return Stack(
+      children: [
+        Image.network(
+          bodyCheckData.imageUrl,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            padding: EdgeInsets.only(
+              right: Sizes.spacing16,
+              bottom: Sizes.spacing16,
+              left: Sizes.spacing16,
+            ),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Colors.black.withOpacity(0.0),
+                  Colors.black.withOpacity(0.5),
+                  Colors.black.withOpacity(0.75),
                 ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
             ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildUserSection(context),
+                Gaps.v16,
+                _buildRatingSection(),
+              ],
+            ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -158,7 +152,7 @@ class RadingCard extends StatelessWidget {
 
     return (adjustedDx / (_iconWidth + _iconSpacing))
         .ceil()
-        .clamp(0, _totalIcons);
+        .clamp(RatingConst.minRating, RatingConst.maxRating);
   }
 
   void _handleHorizontalDragUpdate(double dx, double maxWidth) {

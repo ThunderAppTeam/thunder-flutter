@@ -7,60 +7,63 @@ import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/wrappers/custom_pressable_wrapper.dart';
 import 'package:thunder/generated/l10n.dart';
 
-class EmptyCard extends StatelessWidget {
+class EmptyWidget extends StatelessWidget {
   final VoidCallback onRefresh;
-  const EmptyCard({super.key, required this.onRefresh});
+  final bool isEnabled;
+  const EmptyWidget({
+    super.key,
+    required this.onRefresh,
+    required this.isEnabled,
+  });
 
   @override
   Widget build(BuildContext context) {
     final textTheme = getTextTheme(context);
     final textColor = ColorName.darkLabel2;
 
-    return Card(
-      color: ColorName.darkBackground2,
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              ThunderIcons.noFile,
-              size: Sizes.icon52,
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            ThunderIcons.noFile,
+            size: Sizes.icon52,
+            color: textColor,
+          ),
+          Gaps.v16,
+          Text(
+            S.of(context).ratingEmptyGuideText,
+            style: textTheme.textBody18.copyWith(
               color: textColor,
+              height: Sizes.fontHeight14,
             ),
-            Gaps.v16,
-            Text(
-              S.of(context).ratingEmptyGuideText,
-              style: textTheme.textBody18.copyWith(
-                color: textColor,
-                height: Sizes.fontHeight14,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            Gaps.v32,
-            CustomPressableWrapper(
-              child: Material(
-                color: ColorName.white,
-                borderRadius: BorderRadius.circular(Sizes.radius8),
-                clipBehavior: Clip.hardEdge,
-                child: InkWell(
-                  onTap: onRefresh,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: Sizes.spacing24,
-                      vertical: Sizes.spacing14,
-                    ),
-                    child: Text(
-                      S.of(context).commonRefresh,
-                      style: textTheme.textBody18.copyWith(
-                        color: ColorName.black,
-                      ),
+            textAlign: TextAlign.center,
+          ),
+          Gaps.v32,
+          CustomPressableWrapper(
+            isEnabled: isEnabled,
+            child: Material(
+              color: ColorName.white,
+              borderRadius: BorderRadius.circular(Sizes.radius8),
+              clipBehavior: Clip.hardEdge,
+              child: InkWell(
+                onTap: onRefresh,
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Sizes.spacing24,
+                    vertical: Sizes.spacing14,
+                  ),
+                  child: Text(
+                    S.of(context).commonRefresh,
+                    style: textTheme.textBody18.copyWith(
+                      color: ColorName.black,
                     ),
                   ),
                 ),
               ),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }
