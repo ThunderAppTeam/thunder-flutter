@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:thunder/core/constants/age_consts.dart';
+import 'package:thunder/core/constants/age_const.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
@@ -74,7 +74,7 @@ class _BirthdatePageState extends ConsumerState<BirthdatePage> {
     if (date.isAfter(today)) return false;
     // 너무 먼 과거 체크
     final maxAge =
-        today.subtract(Duration(days: AgeConsts.maxAge * AgeConsts.daysInYear));
+        today.subtract(Duration(days: AgeConst.maxAge * AgeConst.daysInYear));
     if (date.isBefore(maxAge)) return false;
     return true;
   }
@@ -89,7 +89,7 @@ class _BirthdatePageState extends ConsumerState<BirthdatePage> {
         (today.month == date.month && today.day < date.day)) {
       age--;
     }
-    return age >= AgeConsts.minAge; // 만 18세 이상만 가능
+    return age >= AgeConst.minAge; // 만 18세 이상만 가능
   }
 
   void _handleNextPress() {

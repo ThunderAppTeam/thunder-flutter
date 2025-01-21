@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
-import 'package:thunder/core/constants/time_consts.dart';
+import 'package:thunder/core/constants/time_const.dart';
 import 'package:thunder/core/theme/constants/styles.dart';
 import 'package:thunder/core/theme/gen/assets.gen.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
@@ -33,7 +33,7 @@ class WelcomePage extends ConsumerWidget {
             // 배경 이미지 애니메이션
             Positioned.fill(
               child: AnimatedSwitcher(
-                duration: TimeConsts.welcomeImageTransitionDuration,
+                duration: TimeConst.welcomeImageTransitionDuration,
                 transitionBuilder: (Widget child, Animation<double> animation) {
                   return FadeTransition(
                     opacity: animation,

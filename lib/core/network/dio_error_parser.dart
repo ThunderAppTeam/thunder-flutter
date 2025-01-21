@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:thunder/core/constants/key_contsts.dart';
+import 'package:thunder/core/constants/key_contst.dart';
 import 'package:thunder/core/errors/network_error.dart';
 import 'package:thunder/core/errors/server_error.dart';
 
-class ErrorParser {
+class DioErrorParser {
   static Object parseDio(DioException e) {
     if (e.error is NetworkError) {
       return e.error as NetworkError;
@@ -15,7 +15,7 @@ class ErrorParser {
     }
 
     final data = e.response!.data as Map<String, dynamic>;
-    final errorCode = data[KeyConsts.errorCode];
+    final errorCode = data[KeyConst.errorCode];
 
     // (2) errorCode가 제대로 없으면 -> invalidResponse
     if (errorCode != null) {

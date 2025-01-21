@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thunder/core/constants/time_consts.dart';
+import 'package:thunder/core/constants/time_const.dart';
 import 'package:thunder/core/utils/info_utils.dart';
 import 'package:thunder/features/auth/providers/phone_auth_provider.dart';
 import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
@@ -16,7 +16,7 @@ class VerificationTimerState {
     this.isInitial = true,
     this.canSend = false,
     this.canVerify = true,
-    this.remainingSeconds = TimeConsts.verificationTimeLimit,
+    this.remainingSeconds = TimeConst.verificationTimeLimit,
   });
 
   VerificationTimerState copyWith({
@@ -38,9 +38,9 @@ class VerificationTimerController
     extends StateNotifier<VerificationTimerState> {
   final Ref _ref;
   Timer? _timer;
-  final int _timeLimit = TimeConsts.verificationTimeLimit;
-  final int _coolDownSeconds = TimeConsts.verificationCoolDown;
-  int _remainingSeconds = TimeConsts.verificationTimeLimit;
+  final int _timeLimit = TimeConst.verificationTimeLimit;
+  final int _coolDownSeconds = TimeConst.verificationCoolDown;
+  int _remainingSeconds = TimeConst.verificationTimeLimit;
 
   VerificationTimerController(this._ref) : super(VerificationTimerState());
 
@@ -107,7 +107,7 @@ class VerificationTimerController
         );
     if (!isVerified) {
       // 1초 뒤에 canVerify를 true로 변경
-      await Future.delayed(TimeConsts.onboardingButtonCoolDown);
+      await Future.delayed(TimeConst.onboardingButtonCoolDown);
       if (mounted) {
         state = state.copyWith(canVerify: true);
       }

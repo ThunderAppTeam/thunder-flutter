@@ -4,8 +4,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/safe_router.dart';
-import 'package:thunder/core/constants/image_consts.dart';
-import 'package:thunder/core/constants/time_consts.dart';
+import 'package:thunder/core/constants/image_const.dart';
+import 'package:thunder/core/constants/time_const.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
@@ -39,7 +39,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
       _controller.checkPermissionAndInitialize();
     });
     _shutterController = AnimationController(
-      duration: TimeConsts.cameraFlashDuration,
+      duration: TimeConst.cameraFlashDuration,
       vsync: this,
     );
   }
@@ -137,7 +137,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
         ),
         body: Center(
           child: AspectRatio(
-            aspectRatio: ImageConsts.aspectRatio,
+            aspectRatio: ImageConst.aspectRatio,
             child: Stack(
               children: [
                 if (cameraState.isCompressing) const CustomCircularIndicator(),
@@ -148,7 +148,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
                     onScaleUpdate: (details) =>
                         _controller.setZoomLevel(details.scale),
                     child: AspectRatio(
-                      aspectRatio: ImageConsts.aspectRatio,
+                      aspectRatio: ImageConst.aspectRatio,
                       child: Stack(
                         children: [
                           CameraPreview(_controller.previewController),

@@ -5,7 +5,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
-import 'package:thunder/core/constants/image_consts.dart';
+import 'package:thunder/core/constants/image_const.dart';
 
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
 import 'package:thunder/core/widgets/custom_circular_indicator.dart';
@@ -52,7 +52,7 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
           children: [
             Center(
               child: AspectRatio(
-                aspectRatio: ImageConsts.aspectRatio,
+                aspectRatio: ImageConst.aspectRatio,
                 child: ExtendedImage.file(
                   File(widget.imagePath),
                   fit: BoxFit.contain,
@@ -62,7 +62,7 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
                     return EditorConfig(
                       cropRectPadding: EdgeInsets.zero,
                       initCropRectType: InitCropRectType.layoutRect,
-                      cropAspectRatio: ImageConsts.aspectRatio,
+                      cropAspectRatio: ImageConst.aspectRatio,
                       maxScale: 4.0,
                       cornerColor: Colors.transparent,
                       lineColor: Colors.transparent,

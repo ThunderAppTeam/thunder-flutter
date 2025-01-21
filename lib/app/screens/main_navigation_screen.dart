@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
-import 'package:thunder/core/constants/time_consts.dart';
+import 'package:thunder/core/constants/time_const.dart';
 import 'package:thunder/core/services/permission_service.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
@@ -48,7 +48,7 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
     await PermissionService.requestNotificationPermission();
     // 앱 추적 권한 요청 (iOS only)
     if (Platform.isIOS) {
-      await Future.delayed(TimeConsts.permissionPopupDuration);
+      await Future.delayed(TimeConst.permissionPopupDuration);
       await PermissionService.requestTrackingPermission();
     }
   }

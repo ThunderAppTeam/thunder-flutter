@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thunder/core/interceptors/auth_interceptor.dart';
+import 'package:thunder/core/network/dio_auth_interceptor.dart';
 
 final dioProvider = Provider<Dio>((ref) {
   final baseUrl = dotenv.env['BASE_URL']!;
@@ -31,7 +31,7 @@ final dioProvider = Provider<Dio>((ref) {
     },
   ));
 
-  dio.interceptors.add(AuthInterceptor(ref));
+  dio.interceptors.add(DioAuthInterceptor(ref));
 
   return dio;
 });

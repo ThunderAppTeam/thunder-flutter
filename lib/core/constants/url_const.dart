@@ -1,4 +1,4 @@
-class UrlConsts {
+class UrlConst {
   static const String termsOfService =
       'https://verdant-hemisphere-f8b.notion.site/Thunder-162237c2a5b38061a63afd497220ded0?pvs=4';
   static const String privacyPolicy =

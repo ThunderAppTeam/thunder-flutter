@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image/image.dart' as img;
-import 'package:thunder/core/constants/image_consts.dart';
+import 'package:thunder/core/constants/image_const.dart';
 import 'package:thunder/core/utils/image_utils.dart';
 
 class PhotoPreviewController extends StateNotifier<bool> {
@@ -29,7 +29,7 @@ class PhotoPreviewController extends StateNotifier<bool> {
       final croppedBytes = img.encodeJpg(croppedImage);
       final compressed = await FlutterImageCompress.compressWithList(
         croppedBytes,
-        quality: ImageConsts.targetQuality,
+        quality: ImageConst.targetQuality,
       );
       await logImageInfo('Output Image', compressed);
       await file.writeAsBytes(compressed);

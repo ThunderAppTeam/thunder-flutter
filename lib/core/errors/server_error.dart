@@ -29,16 +29,21 @@ class ServerErrorCode {
   static const unknownServerError = 'UNKNOWN_SERVER_ERROR';
   static const missingRequiredParameter = 'MISSING_REQUIRED_PARAMETER';
   static const invalidParameterValue = 'INVALID_PARAMETER_VALUE';
+
   static const notFoundMobileVerification = 'NOT_FOUND_MOBILE_VERIFICATION';
   static const expiredMobileVerification = 'EXPIRED_MOBILE_VERIFICATION';
   static const invalidMobileVerification = 'INVALID_MOBILE_VERIFICATION';
   static const tooManyMobileVerification = 'TOO_MANY_MOBILE_VERIFICATION';
   static const nicknameDuplicated = 'NICKNAME_DUPLICATED';
+
   static const expiredToken = 'EXPIRED_TOKEN';
   static const invalidToken = 'INVALID_TOKEN';
   static const invalidAuthorizationHeader = 'INVALID_AUTHORIZATION_HEADER';
+
   static const notFoundMember = 'NOT_FOUND_MEMBER';
+
   static const unsupportedImageFormat = 'UNSUPPORTED_IMAGE_FORMAT';
+
   static const notFoundMobileNumber = 'NOT_FOUND_MOBILE_NUMBER';
 }
 

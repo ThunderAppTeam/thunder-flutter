@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:thunder/core/constants/time_consts.dart';
+import 'package:thunder/core/constants/time_const.dart';
 import 'package:thunder/core/enums/gender.dart';
 import 'package:thunder/core/utils/info_utils.dart';
 import 'package:thunder/features/auth/models/data/sign_up_user.dart';
@@ -59,7 +59,7 @@ class OnboardingNotifier extends StateNotifier<OnboardingState> {
         builder: (context) => nextStep.page,
       ),
     );
-    await Future.delayed(TimeConsts.navigationDuration);
+    await Future.delayed(TimeConst.navigationDuration);
     _isNavigating = false;
   }
 

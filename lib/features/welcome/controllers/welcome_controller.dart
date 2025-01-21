@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thunder/core/constants/time_consts.dart';
+import 'package:thunder/core/constants/time_const.dart';
 import 'package:thunder/core/theme/gen/assets.gen.dart';
 
 final welcomeControllerProvider =
@@ -22,7 +22,7 @@ class WelcomeController extends StateNotifier<int> {
 
   void _startImageTransition() {
     _timer = Timer.periodic(
-      Duration(seconds: TimeConsts.welcomeImageTransitionInterval),
+      Duration(seconds: TimeConst.welcomeImageTransitionInterval),
       (timer) {
         state = (state + 1) % images.length;
       },
