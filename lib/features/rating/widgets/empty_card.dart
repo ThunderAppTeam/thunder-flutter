@@ -9,11 +9,9 @@ import 'package:thunder/generated/l10n.dart';
 
 class EmptyWidget extends StatelessWidget {
   final VoidCallback onRefresh;
-  final bool isEnabled;
   const EmptyWidget({
     super.key,
     required this.onRefresh,
-    required this.isEnabled,
   });
 
   @override
@@ -41,7 +39,6 @@ class EmptyWidget extends StatelessWidget {
           ),
           Gaps.v32,
           CustomPressableWrapper(
-            isEnabled: isEnabled,
             child: Material(
               color: ColorName.white,
               borderRadius: BorderRadius.circular(Sizes.radius8),
