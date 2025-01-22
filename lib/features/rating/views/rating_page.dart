@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/widgets/bottom_sheets/action_bottom_sheet.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/features/rating/view_models/rating_view_model.dart';
-import 'package:thunder/features/rating/widgets/default_card.dart';
-import 'package:thunder/features/rating/widgets/empty_card.dart';
-import 'package:thunder/features/rating/widgets/rating_card.dart';
-import 'package:thunder/features/rating/widgets/loading_card.dart';
+import 'package:thunder/features/rating/widgets/default_widget.dart';
+import 'package:thunder/features/rating/widgets/empty_widget.dart';
+import 'package:thunder/features/rating/widgets/body_check_widget.dart';
+import 'package:thunder/features/rating/widgets/loading_widget.dart';
 import 'package:thunder/generated/l10n.dart';
 
 class RatingPage extends ConsumerStatefulWidget {
@@ -32,7 +33,7 @@ class _RatingPageState extends ConsumerState<RatingPage>
     super.initState();
     _viewModel = ref.read(ratingViewModelProvider.notifier);
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 200),
       vsync: this,
     );
 
@@ -52,23 +53,29 @@ class _RatingPageState extends ConsumerState<RatingPage>
   }
 
   void _onRatingChanged(int rating) {
-    if (_isAnimating) return; // 애니메이션 중이면 무시
-    if (rating != _selectedRating) {
-      setState(() {
-        _selectedRating = rating;
-      });
-    }
+    // if (_isAnimating) return; // 애니메이션 중이면 무시
+    if (_selectedRating == rating) return;
+    HapticFeedback.selectionClick();
+    setState(() {
+      _selectedRating = rating;
+    });
   }
 
-  void _onRatingComplete(int listLength) async {
-    if (_isAnimating) return; // 애니메이션 중이면 중복 호출 방지
+  void _onRatingComplete() async {
+    final rating = _selectedRating;
+    if (rating == 0) return;
+    Future.delayed(const Duration(milliseconds: 100), () {
+      setState(() {
+        _selectedRating = 0;
+      });
+    });
+    if (_isAnimating || _viewModel.isRatingInProgress) return;
     setState(() {
       _isAnimating = true;
     });
     await _animationController.forward();
-    _viewModel.rate(_selectedRating);
+    _viewModel.rate(rating);
     setState(() {
-      _selectedRating = 0;
       _isAnimating = false; // 애니메이션 완료 후 입력 활성화
     });
     _animationController.reset();
@@ -122,7 +129,7 @@ class _RatingPageState extends ConsumerState<RatingPage>
     final currentIdx = ref.watch(ratingViewModelProvider.notifier).currentIdx;
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.all(Sizes.spacing16),
+        padding: EdgeInsets.symmetric(vertical: Sizes.spacing8),
         child: DefaultCard(
           color: ColorName.darkBackground2,
           child: providerState.when(
@@ -133,7 +140,7 @@ class _RatingPageState extends ConsumerState<RatingPage>
                     EmptyWidget(onRefresh: _onRefresh),
                   // 다음 카드 미리 대기
                   if (currentIdx < bodyCheckList.length - 1)
-                    RatingWidget(
+                    BodyCheckWidget(
                       bodyCheckData: bodyCheckList[currentIdx + 1],
                       rating: 0,
                     ),
@@ -141,12 +148,11 @@ class _RatingPageState extends ConsumerState<RatingPage>
                   if (currentIdx < bodyCheckList.length)
                     FadeTransition(
                       opacity: _fadeAnimation,
-                      child: RatingWidget(
+                      child: BodyCheckWidget(
                         bodyCheckData: bodyCheckList[currentIdx],
                         rating: _selectedRating,
                         onRatingChanged: _onRatingChanged,
-                        onRatingComplete: () =>
-                            _onRatingComplete(bodyCheckList.length),
+                        onRatingComplete: _onRatingComplete,
                         onMoreTap: _onMoreTap,
                       ),
                     ),

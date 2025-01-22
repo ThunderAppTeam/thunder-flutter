@@ -18,6 +18,10 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
 
   int get currentIdx => _currentIdx;
 
+  bool _isRatingInProgress = false;
+
+  bool get isRatingInProgress => _isRatingInProgress;
+
   @override
   FutureOr<List<BodyCheckData>> build() async {
     _repository = ref.read(ratingRepositoryProvider);
@@ -41,6 +45,8 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
 
   /// 사용자가 "카드 하나를 스와이프/평가"했을 때 호출
   void rate(int rating) async {
+    if (_isRatingInProgress) return;
+    _isRatingInProgress = true;
     final bodyCheckData = _list[_currentIdx++];
     try {
       await _repository.rate(bodyCheckData.bodyPhotoId, rating);
@@ -51,7 +57,7 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
     if (_currentIdx >= _list.length - _threshold) {
       await _fetchMore();
     }
-    state = AsyncData(_list);
+    _isRatingInProgress = false;
   }
 
   /// 추가 데이터 가져오기
@@ -62,7 +68,6 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
     if (newList.length < _fetchCount) _noMoreData = true;
     // 기존 리스트 뒤에 덧붙임
     _list.addAll(newList);
-    // 메모리 관리: 만약 _list가 _maxLength개를 초과하면, 초과분만큼 앞에서 제거
     if (_list.length > _maxLength) {
       final overflow = _list.length - _maxLength;
       _list.removeRange(0, overflow);
@@ -71,6 +76,7 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
         _currentIdx = 0;
       }
     }
+    state = AsyncData(_list);
   }
 
   /// 데이터 전체를 새로고침
