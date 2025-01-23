@@ -7,7 +7,7 @@ import 'package:thunder/core/widgets/bottom_sheets/action_bottom_sheet.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/features/rating/view_models/rating_view_model.dart';
 import 'package:thunder/features/rating/widgets/default_widget.dart';
-import 'package:thunder/features/rating/widgets/empty_widget.dart';
+import 'package:thunder/core/widgets/empty_widget.dart';
 import 'package:thunder/features/rating/widgets/body_check_widget.dart';
 import 'package:thunder/features/rating/widgets/loading_widget.dart';
 import 'package:thunder/generated/l10n.dart';
@@ -145,7 +145,11 @@ class _RatingPageState extends ConsumerState<RatingPage>
               return Stack(
                 children: [
                   if (currentIdx == bodyCheckList.length)
-                    EmptyWidget(onRefresh: _onRefresh),
+                    EmptyWidget(
+                      onButtonTap: _onRefresh,
+                      guideText: S.of(context).ratingEmptyGuideText,
+                      buttonText: S.of(context).commonRefresh,
+                    ),
                   // 다음 카드 미리 대기
                   if (currentIdx < bodyCheckList.length - 1)
                     AnimatedOpacity(
@@ -172,7 +176,11 @@ class _RatingPageState extends ConsumerState<RatingPage>
               );
             },
             error: (error, stackTrace) {
-              return EmptyWidget(onRefresh: _onRefresh);
+              return EmptyWidget(
+                onButtonTap: _onRefresh,
+                guideText: S.of(context).ratingEmptyGuideText,
+                buttonText: S.of(context).commonRefresh,
+              );
             },
             loading: () {
               return LoadingWidget();

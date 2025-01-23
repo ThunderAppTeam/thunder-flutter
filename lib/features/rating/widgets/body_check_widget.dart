@@ -4,6 +4,7 @@ import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/theme/icon/thunder_icons_icons.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
+import 'package:thunder/core/widgets/thunder_network_image.dart';
 import 'package:thunder/features/rating/models/data/body_check_data.dart';
 import 'package:thunder/features/rating/widgets/rating_widget.dart';
 
@@ -27,12 +28,7 @@ class BodyCheckWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Image.network(
-          bodyCheckData.imageUrl,
-          fit: BoxFit.cover,
-          width: double.infinity,
-          height: double.infinity,
-        ),
+        ThunderNetworkImage(imageUrl: bodyCheckData.imageUrl),
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
