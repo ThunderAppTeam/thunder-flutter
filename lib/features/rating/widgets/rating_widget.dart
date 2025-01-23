@@ -25,11 +25,11 @@ class RatingWidget extends StatelessWidget {
       builder: (context, constraints) {
         return GestureDetector(
           behavior: HitTestBehavior.translucent,
-          onHorizontalDragUpdate: (details) => _handleHorizontalDragUpdate(
+          onHorizontalDragUpdate: (details) => _handleRatingChanged(
             details.localPosition.dx,
             constraints.maxWidth,
           ),
-          onTapDown: (details) => _handleTapDown(
+          onTapDown: (details) => _handleRatingChanged(
             details.localPosition.dx,
             constraints.maxWidth,
           ),
@@ -73,14 +73,8 @@ class RatingWidget extends StatelessWidget {
         .clamp(RatingConst.minRating, RatingConst.maxRating);
   }
 
-  void _handleHorizontalDragUpdate(double dx, double maxWidth) {
+  void _handleRatingChanged(double dx, double maxWidth) {
     final newRating = _calculateRating(dx, maxWidth);
     onRatingChanged?.call(newRating);
-  }
-
-  void _handleTapDown(double dx, double maxWidth) {
-    final newRating = _calculateRating(dx, maxWidth);
-    // 현재 별점과 새로운 별점이 같으면 이전 별점으로 변경
-    onRatingChanged?.call(newRating == rating ? newRating - 1 : newRating);
   }
 }

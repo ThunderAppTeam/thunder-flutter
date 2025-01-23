@@ -28,12 +28,16 @@ class _RatingPageState extends ConsumerState<RatingPage>
   int _selectedRating = 0;
   bool _isAnimating = false; // 애니메이션 진행 상태
 
+  final Duration _ratingAnimationDelay = const Duration(milliseconds: 300);
+  final Duration _ratingAnimationDuration = const Duration(milliseconds: 200);
+  final Duration _ratingResetDelay = const Duration(milliseconds: 100);
+
   @override
   void initState() {
     super.initState();
     _viewModel = ref.read(ratingViewModelProvider.notifier);
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 200),
+      duration: _ratingAnimationDuration,
       vsync: this,
     );
 
@@ -53,30 +57,34 @@ class _RatingPageState extends ConsumerState<RatingPage>
   }
 
   void _onRatingChanged(int rating) {
-    // if (_isAnimating) return; // 애니메이션 중이면 무시
-    if (_selectedRating == rating) return;
-    HapticFeedback.selectionClick();
+    if (_selectedRating == rating || _isAnimating) return;
     setState(() {
       _selectedRating = rating;
     });
+    HapticFeedback.lightImpact();
   }
 
   void _onRatingComplete() async {
     final rating = _selectedRating;
     if (rating == 0) return;
-    Future.delayed(const Duration(milliseconds: 100), () {
-      setState(() {
-        _selectedRating = 0;
+    if (_viewModel.isRatingInProgress) {
+      Future.delayed(_ratingResetDelay, () {
+        setState(() {
+          _selectedRating = 0;
+        });
       });
-    });
-    if (_isAnimating || _viewModel.isRatingInProgress) return;
+      return;
+    }
+    if (_isAnimating) return;
     setState(() {
       _isAnimating = true;
     });
+    await Future.delayed(_ratingAnimationDelay);
     await _animationController.forward();
     _viewModel.rate(rating);
     setState(() {
       _isAnimating = false; // 애니메이션 완료 후 입력 활성화
+      _selectedRating = 0;
     });
     _animationController.reset();
   }
@@ -126,7 +134,7 @@ class _RatingPageState extends ConsumerState<RatingPage>
       }
     });
     final providerState = ref.watch(ratingViewModelProvider);
-    final currentIdx = ref.watch(ratingViewModelProvider.notifier).currentIdx;
+    final currentIdx = _viewModel.currentIdx;
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(vertical: Sizes.spacing8),
@@ -140,9 +148,13 @@ class _RatingPageState extends ConsumerState<RatingPage>
                     EmptyWidget(onRefresh: _onRefresh),
                   // 다음 카드 미리 대기
                   if (currentIdx < bodyCheckList.length - 1)
-                    BodyCheckWidget(
-                      bodyCheckData: bodyCheckList[currentIdx + 1],
-                      rating: 0,
+                    AnimatedOpacity(
+                      opacity: _isAnimating ? 1.0 : 0.0,
+                      duration: const Duration(milliseconds: 200),
+                      child: BodyCheckWidget(
+                        bodyCheckData: bodyCheckList[currentIdx + 1],
+                        rating: 0,
+                      ),
                     ),
                   // 현재 카드 (애니메이션 적용)
                   if (currentIdx < bodyCheckList.length)

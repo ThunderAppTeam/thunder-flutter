@@ -1,15 +1,17 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/core/errors/server_error.dart';
 import 'package:thunder/features/rating/models/data/body_check_data.dart';
 import 'package:thunder/features/rating/repositories/rating_repository.dart';
 
 class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
   late final RatingRepository _repository;
   List<BodyCheckData> _list = [];
-
-  static const _fetchCount = 5;
-  final int _maxLength = 10;
-  final int _threshold = 2;
+  static const _initialFetchCount = 2;
+  static const _fetchCount = 1;
+  static const _threshold = 1; // 리스트의 마지막 몇 개 더 전에 가져오기 시작할지.
+  final int _maxLength = 2;
 
   final Duration _refreshDuration = const Duration(milliseconds: 800);
 
@@ -26,17 +28,18 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
   FutureOr<List<BodyCheckData>> build() async {
     _repository = ref.read(ratingRepositoryProvider);
     state = const AsyncLoading();
-    _list = await _fetchData();
-    if (_list.length < _fetchCount) {
-      _noMoreData = true;
-    }
+    _list = await _fetchData(_initialFetchCount);
     return _list;
   }
 
-  Future<List<BodyCheckData>> _fetchData() async {
+  Future<List<BodyCheckData>> _fetchData(int count) async {
     try {
-      final response = await _repository.fetchRatingList(_fetchCount);
-      return response.map((e) => BodyCheckData.fromJson(e)).toList();
+      final data = await _repository.fetchRatingList(count);
+      if (data.length < count) {
+        // 요구한 데이터 수보다 적게 가져온 경우
+        _noMoreData = true;
+      }
+      return data.map((e) => BodyCheckData.fromJson(e)).toList();
     } catch (e, st) {
       state = AsyncError(e, st);
       return [];
@@ -50,22 +53,28 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
     final bodyCheckData = _list[_currentIdx++];
     try {
       await _repository.rate(bodyCheckData.bodyPhotoId, rating);
+      if (_currentIdx >= _list.length - _threshold) {
+        if (!_noMoreData) await _fetchMore();
+      }
+      state = AsyncData(_list); // 인덱스 정보도 같이 업데이트 되어야함.
+    } on ServerError catch (e) {
+      if (e == ServerError.alreadyReviewed) {
+        return; // 이미 평가한 경우 무시
+      }
+      rethrow;
     } catch (e, st) {
+      log('rate error: $e, $st');
       state = AsyncError(e, st);
       return;
+    } finally {
+      _isRatingInProgress = false;
     }
-    if (_currentIdx >= _list.length - _threshold) {
-      await _fetchMore();
-    }
-    _isRatingInProgress = false;
   }
 
   /// 추가 데이터 가져오기
   Future<void> _fetchMore() async {
-    if (_noMoreData) return;
-    final newList = await _fetchData();
+    final newList = await _fetchData(_fetchCount);
     // 새로 가져온 리스트가 < fetchCount 면 이번이 마지막
-    if (newList.length < _fetchCount) _noMoreData = true;
     // 기존 리스트 뒤에 덧붙임
     _list.addAll(newList);
     if (_list.length > _maxLength) {
@@ -76,7 +85,6 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
         _currentIdx = 0;
       }
     }
-    state = AsyncData(_list);
   }
 
   /// 데이터 전체를 새로고침
@@ -89,17 +97,13 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
 
     // 최소 로딩 시간 보장
     final start = DateTime.now();
-    final fetched = await _fetchData();
+    final fetched = await _fetchData(_initialFetchCount);
     final elapsed = DateTime.now().difference(start);
     final remaining = _refreshDuration - elapsed;
     if (remaining > Duration.zero) {
       await Future.delayed(remaining);
     }
-
     _list = fetched;
-    if (_list.length < _fetchCount) {
-      _noMoreData = true;
-    }
     state = AsyncData(_list);
   }
 }
