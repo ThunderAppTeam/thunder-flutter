@@ -5,13 +5,16 @@ import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/theme/icon/thunder_icons_icons.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/wrappers/custom_pressable_wrapper.dart';
-import 'package:thunder/generated/l10n.dart';
 
 class EmptyWidget extends StatelessWidget {
-  final VoidCallback onRefresh;
+  final VoidCallback onButtonTap;
+  final String guideText;
+  final String buttonText;
   const EmptyWidget({
     super.key,
-    required this.onRefresh,
+    required this.onButtonTap,
+    required this.guideText,
+    required this.buttonText,
   });
 
   @override
@@ -30,7 +33,7 @@ class EmptyWidget extends StatelessWidget {
           ),
           Gaps.v16,
           Text(
-            S.of(context).ratingEmptyGuideText,
+            guideText,
             style: textTheme.textBody18.copyWith(
               color: textColor,
               height: Sizes.fontHeight14,
@@ -44,14 +47,14 @@ class EmptyWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(Sizes.radius8),
               clipBehavior: Clip.hardEdge,
               child: InkWell(
-                onTap: onRefresh,
+                onTap: onButtonTap,
                 child: Container(
                   padding: EdgeInsets.symmetric(
                     horizontal: Sizes.spacing24,
                     vertical: Sizes.spacing14,
                   ),
                   child: Text(
-                    S.of(context).commonRefresh,
+                    buttonText,
                     style: textTheme.textBody18.copyWith(
                       color: ColorName.black,
                     ),

@@ -16,7 +16,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     debugLogDiagnostics: true,
     // initialLocation: Routes.home.path,
-    initialLocation: !kDebugMode ? Routes.home.path : Routes.home.path,
+    initialLocation: !kDebugMode ? Routes.home.path : Routes.archive.path,
     redirect: (context, state) {
       final isLoggedIn = ref.watch(authRepoProvider).isLoggedIn;
 
