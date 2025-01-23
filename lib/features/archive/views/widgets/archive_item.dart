@@ -1,10 +1,8 @@
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/assets.gen.dart';
-import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
-import 'package:thunder/core/widgets/custom_circular_indicator.dart';
+import 'package:thunder/core/widgets/thunder_network_image.dart';
 import 'package:thunder/features/archive/view_models/archive_view_model.dart';
 
 class ArchiveItem extends StatelessWidget {
@@ -17,25 +15,7 @@ class ArchiveItem extends StatelessWidget {
     final textTheme = getTextTheme(context);
     return Stack(
       children: [
-        ExtendedImage.network(
-          item.imageUrl,
-          fit: BoxFit.cover,
-          width: double.infinity,
-          height: double.infinity,
-          cache: true,
-          loadStateChanged: (state) {
-            switch (state.extendedImageLoadState) {
-              case LoadState.loading:
-                return const CustomCircularIndicator();
-              case LoadState.completed:
-                return state.completedWidget;
-              case LoadState.failed:
-                return const Center(
-                  child: Icon(Icons.error, color: ColorName.darkLabel2),
-                );
-            }
-          },
-        ),
+        ThunderNetworkImage(imageUrl: item.imageUrl),
         Positioned(
           left: Sizes.spacing8,
           right: Sizes.spacing8,
