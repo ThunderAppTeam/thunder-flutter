@@ -7,7 +7,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:thunder/core/constants/image_consts.dart';
+import 'package:thunder/core/constants/image_const.dart';
 import 'package:thunder/core/services/cache_service.dart';
 import 'package:thunder/core/services/permission_service.dart';
 import 'package:thunder/core/utils/image_utils.dart';
@@ -267,8 +267,8 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
     // 해상도 줄이기
     final compressed = await FlutterImageCompress.compressWithList(
       bytes,
-      minWidth: ImageConsts.targetWidth,
-      minHeight: ImageConsts.targetHeight,
+      minWidth: ImageConst.targetWidth,
+      minHeight: ImageConst.targetHeight,
       format: CompressFormat.jpeg,
       quality: 100,
     );

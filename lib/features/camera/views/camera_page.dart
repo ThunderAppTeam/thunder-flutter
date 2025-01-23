@@ -4,8 +4,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/safe_router.dart';
-import 'package:thunder/core/constants/image_consts.dart';
-import 'package:thunder/core/constants/time_consts.dart';
+import 'package:thunder/core/constants/image_const.dart';
+import 'package:thunder/core/constants/time_const.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
@@ -39,7 +39,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
       _controller.checkPermissionAndInitialize();
     });
     _shutterController = AnimationController(
-      duration: TimeConsts.cameraFlashDuration,
+      duration: TimeConst.cameraFlashDuration,
       vsync: this,
     );
   }
@@ -137,7 +137,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
         ),
         body: Center(
           child: AspectRatio(
-            aspectRatio: ImageConsts.aspectRatio,
+            aspectRatio: ImageConst.aspectRatio,
             child: Stack(
               children: [
                 if (cameraState.isCompressing) const CustomCircularIndicator(),
@@ -148,7 +148,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
                     onScaleUpdate: (details) =>
                         _controller.setZoomLevel(details.scale),
                     child: AspectRatio(
-                      aspectRatio: ImageConsts.aspectRatio,
+                      aspectRatio: ImageConst.aspectRatio,
                       child: Stack(
                         children: [
                           CameraPreview(_controller.previewController),
@@ -187,7 +187,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
   Widget _buildPermissionDeniedView() {
     final textTheme = getTextTheme(context);
     return Container(
-      color: ColorName.iosDarkGray,
+      color: ColorName.darkBackground2,
       child: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -197,15 +197,17 @@ class _CameraPageState extends ConsumerState<CameraPage>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Thunder 앱에서 사진을 촬영하기 위해\n카메라 접근 권한을 허용해주세요',
-                style: textTheme.textTitle20,
+                S.of(context).cameraPermissionGuideText,
+                style: textTheme.textTitle20.copyWith(
+                  height: Sizes.fontHeight14,
+                ),
                 textAlign: TextAlign.center,
               ),
               Gaps.v32,
               TextButton(
                 onPressed: () => _controller.openPermissionSettings(),
                 child: Text(
-                  '카메라 접근 권한 허용하기',
+                  S.of(context).cameraPermissionAllow,
                   style: textTheme.textTitle20.copyWith(
                     color: ColorName.iosBlue,
                   ),

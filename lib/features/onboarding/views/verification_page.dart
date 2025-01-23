@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thunder/core/constants/time_consts.dart';
+import 'package:thunder/core/constants/time_const.dart';
 import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
@@ -37,8 +37,8 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
   }
 
   String _formattedTime(int seconds) {
-    final minutes = seconds ~/ TimeConsts.minute;
-    final remainingSeconds = seconds % TimeConsts.minute;
+    final minutes = seconds ~/ TimeConst.minute;
+    final remainingSeconds = seconds % TimeConst.minute;
     return '$minutes:${remainingSeconds.toString().padLeft(2, '0')}';
   }
 

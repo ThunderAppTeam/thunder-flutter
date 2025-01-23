@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thunder/app/router/routes.dart';
-import 'package:thunder/core/constants/time_consts.dart';
+import 'package:thunder/core/constants/time_const.dart';
 
 // SafeRouter Notifier
 class SafeRouter {
@@ -19,7 +19,7 @@ class SafeRouter {
     try {
       return context.pushNamed<T>(name, extra: extra);
     } finally {
-      await Future.delayed(TimeConsts.navigationDuration);
+      await Future.delayed(TimeConst.navigationDuration);
       _isNavigating = false;
     }
   }
@@ -35,7 +35,7 @@ class SafeRouter {
     try {
       context.goNamed(name, pathParameters: pathParameters ?? {}, extra: extra);
     } finally {
-      Future.delayed(TimeConsts.navigationDuration, () {
+      Future.delayed(TimeConst.navigationDuration, () {
         _isNavigating = false;
       });
     }
@@ -53,7 +53,7 @@ class SafeRouter {
     if (_isNavigating) return;
     _isNavigating = true;
     context.pop(result);
-    Future.delayed(TimeConsts.navigationDuration, () {
+    Future.delayed(TimeConst.navigationDuration, () {
       _isNavigating = false;
     });
   }

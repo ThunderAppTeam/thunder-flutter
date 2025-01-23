@@ -23,20 +23,22 @@ class CustomWideButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPressableWrapper(
-      onPressed: onPressed,
       isEnabled: isEnabled,
-      child: Container(
-        height: Sizes.buttonHeight60,
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(Sizes.radius16),
-        ),
-        child: Center(
-          child: Text(
-            text,
-            style: getTextTheme(context).textTitle18.copyWith(
-                  color: textColor,
-                ),
+      child: Material(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(Sizes.radius16),
+        clipBehavior: Clip.hardEdge,
+        child: InkWell(
+          onTap: isEnabled ? onPressed : null,
+          child: SizedBox(
+            height: Sizes.buttonHeight60,
+            child: Center(
+              child: Text(
+                text,
+                style:
+                    getTextTheme(context).textBody18.copyWith(color: textColor),
+              ),
+            ),
           ),
         ),
       ),

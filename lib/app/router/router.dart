@@ -6,7 +6,7 @@ import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/features/archive/views/archive_page.dart';
 import 'package:thunder/features/auth/repositories/auth_repository.dart';
 import 'package:thunder/features/camera/views/camera_page.dart';
-import 'package:thunder/features/feed/views/feed_page.dart';
+import 'package:thunder/features/rating/views/rating_page.dart';
 import 'package:thunder/features/body_check/views/body_check_waiting_page.dart';
 import 'package:thunder/features/onboarding/views/phone_number_page.dart';
 import 'package:thunder/features/settings/views/settings_page.dart';
@@ -54,7 +54,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: Routes.home.path,
                 name: Routes.home.name,
-                builder: (context, state) => const FeedPage(),
+                builder: (context, state) => const RatingPage(),
               ),
             ],
           ),

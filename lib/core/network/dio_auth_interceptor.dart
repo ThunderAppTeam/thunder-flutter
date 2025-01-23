@@ -2,21 +2,21 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thunder/core/constants/key_contsts.dart';
+import 'package:thunder/core/constants/key_contst.dart';
 import 'package:thunder/core/errors/network_error.dart';
 import 'package:thunder/core/providers/token_provider.dart';
 
-class AuthInterceptor extends Interceptor {
+class DioAuthInterceptor extends Interceptor {
   final Ref _ref;
 
-  AuthInterceptor(this._ref);
+  DioAuthInterceptor(this._ref);
 
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-    final requiresAuth =
-        options.extra[KeyConsts.requiresAuth] as bool? ?? false;
-    if (requiresAuth) {
+    final requiresToken =
+        options.extra[KeyConst.requiresToken] as bool? ?? false;
+    if (requiresToken) {
       final accessToken = _ref.read(tokenProvider).token;
 
       if (accessToken == null) {
@@ -30,7 +30,7 @@ class AuthInterceptor extends Interceptor {
         );
       }
 
-      options.headers[KeyConsts.authorization] = 'Bearer $accessToken';
+      options.headers[KeyConst.authorization] = 'Bearer $accessToken';
     }
 
     handler.next(options);

@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:thunder/core/constants/key_contsts.dart';
+import 'package:thunder/core/constants/key_contst.dart';
 import 'package:uuid/uuid.dart';
 
 class DeviceInfoProvider {
@@ -15,11 +15,11 @@ class DeviceInfoProvider {
 
   Future<String> _loadOrGenerateDeviceId() async {
     final prefs = await SharedPreferences.getInstance();
-    String? deviceId = prefs.getString(KeyConsts.deviceId);
+    String? deviceId = prefs.getString(KeyConst.deviceId);
 
     if (deviceId == null) {
       deviceId = await _generateDeviceId();
-      await prefs.setString(KeyConsts.deviceId, deviceId);
+      await prefs.setString(KeyConst.deviceId, deviceId);
     }
 
     return deviceId;

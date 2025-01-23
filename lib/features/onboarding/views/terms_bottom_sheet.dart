@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/safe_router.dart';
-import 'package:thunder/core/constants/url_consts.dart';
+import 'package:thunder/core/constants/url_const.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
@@ -14,8 +14,8 @@ import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
 import 'package:thunder/generated/l10n.dart';
 
 enum Terms {
-  service(true, UrlConsts.termsOfService),
-  privacy(true, UrlConsts.privacyPolicy),
+  service(true, UrlConst.termsOfService),
+  privacy(true, UrlConst.privacyPolicy),
   marketing(false, null);
 
   final bool isRequired;

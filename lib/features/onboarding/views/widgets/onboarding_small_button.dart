@@ -24,19 +24,23 @@ class OnboardingSmallButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPressableWrapper(
-      onPressed: onPressed,
       isEnabled: isEnabled,
-      child: Container(
-        padding: const EdgeInsets.all(Sizes.spacing8),
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(Sizes.radius16),
-        ),
-        child: Text(
-          text,
-          style: getTextTheme(context).textSubtitle12.copyWith(
-                color: textColor.withOpacity(Styles.opacity70),
-              ),
+      child: Material(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(Sizes.radius4),
+        clipBehavior: Clip.hardEdge,
+        child: InkWell(
+          onTap: isEnabled ? onPressed : null,
+          child: Container(
+            padding: const EdgeInsets.all(Sizes.spacing8),
+            child: Text(
+              text,
+              style: getTextTheme(context).textSubtitle12.copyWith(
+                    color: textColor.withOpacity(Styles.opacity70),
+                    height: Sizes.fontHeight14,
+                  ),
+            ),
+          ),
         ),
       ),
     );

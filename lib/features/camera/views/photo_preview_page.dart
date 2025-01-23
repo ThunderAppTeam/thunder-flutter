@@ -5,12 +5,13 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
-import 'package:thunder/core/constants/image_consts.dart';
+import 'package:thunder/core/constants/image_const.dart';
 
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
 import 'package:thunder/core/widgets/custom_circular_indicator.dart';
 import 'package:thunder/features/camera/controllers/photo_preview_controller.dart';
 import 'package:thunder/features/body_check/view_models/body_check_view_model.dart';
+import 'package:thunder/generated/l10n.dart';
 
 class PhotoPreviewPage extends ConsumerStatefulWidget {
   final String imagePath;
@@ -36,10 +37,10 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
-          title: '사진 미리보기',
+          title: S.of(context).photoPreviewTitle,
           actions: [
             CustomAppBarAction(
-              text: '완료',
+              text: S.of(context).commonComplete,
               onTap: isProcessing || isNavigating
                   ? null
                   : () => _onComplete(widget.imagePath),
@@ -51,7 +52,7 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
           children: [
             Center(
               child: AspectRatio(
-                aspectRatio: ImageConsts.aspectRatio,
+                aspectRatio: ImageConst.aspectRatio,
                 child: ExtendedImage.file(
                   File(widget.imagePath),
                   fit: BoxFit.contain,
@@ -61,7 +62,7 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
                     return EditorConfig(
                       cropRectPadding: EdgeInsets.zero,
                       initCropRectType: InitCropRectType.layoutRect,
-                      cropAspectRatio: ImageConsts.aspectRatio,
+                      cropAspectRatio: ImageConst.aspectRatio,
                       maxScale: 4.0,
                       cornerColor: Colors.transparent,
                       lineColor: Colors.transparent,

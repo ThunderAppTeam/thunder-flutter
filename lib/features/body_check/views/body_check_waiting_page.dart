@@ -7,7 +7,7 @@ import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/assets.gen.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
-import 'package:thunder/core/theme/icon/thunder_icons.dart';
+import 'package:thunder/core/theme/icon/thunder_icons_icons.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
@@ -60,7 +60,7 @@ class _BodyCheckWaitingPageState extends ConsumerState<BodyCheckWaitingPage> {
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
-          title: '내 눈바디',
+          title: S.of(context).bodyCheckWaitingTitle,
           actions: [
             CustomAppBarAction(
               icon: ThunderIcons.moreHoriz,
@@ -150,6 +150,7 @@ class _BodyCheckWaitingPageState extends ConsumerState<BodyCheckWaitingPage> {
                                       ),
                                     ],
                                   ),
+                                  Gaps.v12,
                                   if (bodyCheckState.isFinished)
                                     Text(
                                       _getResultText(bodyCheckState),
@@ -169,8 +170,9 @@ class _BodyCheckWaitingPageState extends ConsumerState<BodyCheckWaitingPage> {
               ),
               Gaps.v16,
               CustomWideButton(
-                text: '공유하기',
+                text: S.of(context).commonShare,
                 onPressed: _onShare,
+                isEnabled: bodyCheckState.isFinished,
               ),
             ],
           ),

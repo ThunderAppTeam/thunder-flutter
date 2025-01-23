@@ -1,4 +1,4 @@
-class TimeConsts {
+class TimeConst {
   static const int second = 1;
   static const int minute = 60;
 

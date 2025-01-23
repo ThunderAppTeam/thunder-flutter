@@ -48,7 +48,9 @@ class OnboardingTextField extends StatelessWidget {
       autofocus: autofocus,
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: textTheme.textHead24.withOpacity(Styles.opacity50),
+        hintStyle: textTheme.textHead24
+            .copyWith(height: Sizes.fontHeight14)
+            .withOpacity(Styles.opacity50),
         isDense: true,
         contentPadding: const EdgeInsets.all(Sizes.spacing8),
         focusedBorder: UnderlineInputBorder(

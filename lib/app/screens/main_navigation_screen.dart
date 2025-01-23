@@ -5,14 +5,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
-import 'package:thunder/core/constants/time_consts.dart';
+import 'package:thunder/core/constants/time_const.dart';
 import 'package:thunder/core/services/permission_service.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/assets.gen.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
-import 'package:thunder/core/theme/icon/thunder_icons.dart';
+import 'package:thunder/core/theme/icon/thunder_icons_icons.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
+import 'package:thunder/generated/l10n.dart';
 
 class MainNavigationScreen extends ConsumerStatefulWidget {
   final StatefulNavigationShell navigationShell;
@@ -47,7 +48,7 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
     await PermissionService.requestNotificationPermission();
     // 앱 추적 권한 요청 (iOS only)
     if (Platform.isIOS) {
-      await Future.delayed(TimeConsts.permissionPopupDuration);
+      await Future.delayed(TimeConst.permissionPopupDuration);
       await PermissionService.requestTrackingPermission();
     }
   }
@@ -93,6 +94,7 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
               children: [
                 Assets.images.logos.thunderLogotypeSmallW.svg(),
                 InkWell(
+                  customBorder: CircleBorder(),
                   onTap: () {
                     ref
                         .read(safeRouterProvider)
@@ -122,21 +124,21 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
                 icon: ThunderIcons.home,
                 activeIcon: ThunderIcons.homeFilled,
                 isSelected: _getSelectedIndex() == Tabs.home.index,
-                label: '홈',
+                label: S.of(context).navigationLabelHome,
                 onTap: () => _onTap(context, Tabs.home),
               ),
               _NavigationBarItem(
                 icon: ThunderIcons.create,
                 activeIcon: ThunderIcons.create,
                 isSelected: _getSelectedIndex() == Tabs.measure.index,
-                label: '측정',
+                label: S.of(context).navigationLabelMeasure,
                 onTap: () => _onTap(context, Tabs.measure),
               ),
               _NavigationBarItem(
                 icon: ThunderIcons.folder,
                 activeIcon: ThunderIcons.folderFilled,
                 isSelected: _getSelectedIndex() == Tabs.archive.index,
-                label: '보관함',
+                label: S.of(context).navigationLabelArchive,
                 onTap: () => _onTap(context, Tabs.archive),
               ),
             ],

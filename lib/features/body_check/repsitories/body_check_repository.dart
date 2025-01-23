@@ -2,9 +2,10 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thunder/core/constants/key_contsts.dart';
-import 'package:thunder/core/errors/error_parser.dart';
-import 'package:thunder/core/providers/dio_provider.dart';
+import 'package:thunder/core/constants/key_contst.dart';
+import 'package:thunder/core/network/dio_error_parser.dart';
+import 'package:thunder/core/network/dio_options.dart';
+import 'package:thunder/core/network/dio_provider.dart';
 
 class BodyCheckRepository {
   final Dio _dio;
@@ -24,16 +25,13 @@ class BodyCheckRepository {
       final response = await _dio.post(
         path,
         data: formData,
-        options: Options(
-          extra: {KeyConsts.requiresAuth: true},
-          contentType: 'multipart/form-data',
-        ),
+        options: DioOptions.multipartTokenOptions,
       );
-      final data = response.data[KeyConsts.data];
-      final imageUrl = data[KeyConsts.imageUrl];
+      final data = response.data[KeyConst.data];
+      final imageUrl = data[KeyConst.imageUrl];
       return imageUrl;
     } on DioException catch (e) {
-      throw ErrorParser.parseDio(e);
+      throw DioErrorParser.parseDio(e);
     }
   }
 }

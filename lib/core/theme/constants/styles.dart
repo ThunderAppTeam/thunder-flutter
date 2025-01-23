@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 
 abstract class Styles {
@@ -16,15 +17,11 @@ abstract class Styles {
   static const double scale98 = 0.98;
   static const double scale100 = 1.0;
 
-  // Border width
-  static const double borderWidth2 = 2.0;
-
   // BorderSide
   static const BorderSide whiteBorder2 = BorderSide(
     color: ColorName.white,
-    width: borderWidth2,
+    width: Sizes.borderWidth1,
   );
-
   // Duration
   static const Duration duration100 = Duration(milliseconds: 100);
   static const Duration duration200 = Duration(milliseconds: 200);

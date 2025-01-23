@@ -1,4 +1,4 @@
-class ImageConsts {
+class ImageConst {
   static const int targetWidth = 720;
   static const int targetHeight = 1280;
   static const int targetQuality = 60;
