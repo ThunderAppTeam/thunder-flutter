@@ -109,6 +109,6 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
 }
 
 final ratingViewModelProvider =
-    AutoDisposeAsyncNotifierProvider<RatingViewModel, List<BodyCheckData>>(
+    AsyncNotifierProvider.autoDispose<RatingViewModel, List<BodyCheckData>>(
   () => RatingViewModel(),
 );

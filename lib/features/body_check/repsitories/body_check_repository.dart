@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/constants/key_contst.dart';
@@ -12,24 +10,12 @@ class BodyCheckRepository {
 
   BodyCheckRepository(this._dio);
 
-  Future<String?> uploadImage(String imagePath) async {
-    log('upload Image: $imagePath');
-    final path = '/v1/body/photo';
-    final formData = FormData.fromMap({
-      'file': await MultipartFile.fromFile(
-        imagePath,
-        contentType: DioMediaType('image', 'jpeg'),
-      ),
-    });
+  Future<Map<String, dynamic>> getBodyCheckResult(int bodyPhotoId) async {
+    final path = '/v1/body/photo/$bodyPhotoId';
     try {
-      final response = await _dio.post(
-        path,
-        data: formData,
-        options: DioOptions.multipartTokenOptions,
-      );
+      final response = await _dio.get(path, options: DioOptions.tokenOptions);
       final data = response.data[KeyConst.data];
-      final imageUrl = data[KeyConst.imageUrl];
-      return imageUrl;
+      return data;
     } on DioException catch (e) {
       throw DioErrorParser.parseDio(e);
     }

@@ -6,11 +6,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/constants/image_const.dart';
+import 'package:thunder/core/constants/key_contst.dart';
 
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
 import 'package:thunder/core/widgets/custom_circular_indicator.dart';
-import 'package:thunder/features/camera/controllers/photo_preview_controller.dart';
-import 'package:thunder/features/body_check/view_models/body_check_view_model.dart';
+import 'package:thunder/features/photo_preview/view_models/photo_preview_view_model.dart';
 import 'package:thunder/generated/l10n.dart';
 
 class PhotoPreviewPage extends ConsumerStatefulWidget {
@@ -26,25 +26,65 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
   final GlobalKey<ExtendedImageEditorState> _editorKey =
       GlobalKey<ExtendedImageEditorState>();
 
+  late final PhotoPreviewViewModel _viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    _viewModel = ref.read(photoPreviewProvider.notifier);
+  }
+
   void _onBack() {
-    ref.read(safeRouterProvider).pop(context, true); // 이미지 삭제
+    ref.read(safeRouterProvider).pop(context); // 이미지 삭제
+  }
+
+  Future<void> _onComplete(String imagePath) async {
+    final editorState = _editorKey.currentState;
+    if (editorState == null) return;
+
+    final Rect? cropRect = editorState.getCropRect();
+    if (cropRect == null) return;
+
+    final bodyPhotoId = await _viewModel.cropAndUploadImage(
+      imagePath: imagePath,
+      cropRect: cropRect,
+    );
+    if (mounted) {
+      ref.read(safeRouterProvider).goNamed(
+        context,
+        Routes.bodyCheck.name,
+        pathParameters: {
+          KeyConst.bodyPhotoId: bodyPhotoId.toString(),
+        },
+        extra: {
+          KeyConst.fromUpload: true,
+        },
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final isProcessing = ref.watch(photoPreviewControllerProvider);
+    final uploadState = ref.watch(photoPreviewProvider);
     final isNavigating = ref.watch(safeRouterProvider).isNavigating;
+    final isProcessing = uploadState.isLoading;
+
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
           title: S.of(context).photoPreviewTitle,
           actions: [
-            CustomAppBarAction(
-              text: S.of(context).commonComplete,
-              onTap: isProcessing || isNavigating
-                  ? null
-                  : () => _onComplete(widget.imagePath),
-            ),
+            if (isProcessing || isNavigating)
+              CustomAppBarAction(
+                type: CustomAppBarActionType.child,
+                child: CustomCircularIndicator(),
+              )
+            else
+              CustomAppBarAction(
+                type: CustomAppBarActionType.text,
+                text: S.of(context).commonComplete,
+                onTap: () => _onComplete(widget.imagePath),
+              ),
           ],
           onBack: _onBack,
         ),
@@ -72,32 +112,9 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
                 ),
               ),
             ),
-            if (isProcessing || isNavigating) const CustomCircularIndicator(),
           ],
         ),
       ),
     );
-  }
-
-  Future<void> _onComplete(String imagePath) async {
-    final editorState = _editorKey.currentState;
-    if (editorState == null) return;
-
-    final Rect? cropRect = editorState.getCropRect();
-    if (cropRect == null) return;
-
-    final croppedImagePath = await ref
-        .read(photoPreviewControllerProvider.notifier)
-        .processCroppedImage(imagePath: imagePath, cropRect: cropRect);
-    if (croppedImagePath != null) {
-      await ref.read(bodyCheckProvider.notifier).uploadImage(croppedImagePath);
-      // 이미지가 업로드 완료되면 삭제.
-      if (mounted) {
-        ref.read(safeRouterProvider).goNamed(
-              context,
-              Routes.bodyCheck.name,
-            );
-      }
-    }
   }
 }

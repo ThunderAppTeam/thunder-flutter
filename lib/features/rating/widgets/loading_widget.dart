@@ -20,7 +20,7 @@ class LoadingWidget extends StatelessWidget {
               style: textTheme.textTitle18,
             ),
             Gaps.v8,
-            CustomCircularIndicator(),
+            Center(child: CustomCircularIndicator()),
           ],
         ),
       ),

@@ -14,7 +14,7 @@ import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/core/widgets/custom_circular_indicator.dart';
 import 'package:thunder/features/camera/controllers/camera_controller.dart';
 import 'package:thunder/features/camera/models/camera_state.dart';
-import 'package:thunder/features/camera/views/photo_preview_page.dart';
+import 'package:thunder/features/photo_preview/views/photo_preview_page.dart';
 import 'package:thunder/features/camera/views/widgets/camera_app_bar.dart';
 import 'package:thunder/features/camera/views/widgets/camera_bottom_controls.dart';
 import 'package:thunder/generated/l10n.dart';
@@ -140,7 +140,8 @@ class _CameraPageState extends ConsumerState<CameraPage>
             aspectRatio: ImageConst.aspectRatio,
             child: Stack(
               children: [
-                if (cameraState.isCompressing) const CustomCircularIndicator(),
+                if (cameraState.isCompressing)
+                  Center(child: CustomCircularIndicator()),
                 if (cameraState.isInitialized && cameraState.hasPermission)
                   GestureDetector(
                     onTapUp: (details) => _onFocusTap(details, context, ref),

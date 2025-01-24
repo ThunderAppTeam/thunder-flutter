@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -5,20 +6,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image/image.dart' as img;
 import 'package:thunder/core/constants/image_const.dart';
 import 'package:thunder/core/utils/image_utils.dart';
+import 'package:thunder/features/photo_preview/repositories/photo_preview_repository.dart';
 
-class PhotoPreviewController extends StateNotifier<bool> {
-  PhotoPreviewController() : super(false);
+class PhotoPreviewViewModel extends AsyncNotifier<void> {
+  late final PhotoPreviewRepository _repository;
 
-  Future<String?> processCroppedImage({
+  @override
+  FutureOr<void> build() {
+    _repository = ref.read(photoPreviewRepositoryProvider);
+    return null;
+  }
+
+  Future<int> cropAndUploadImage({
     required String imagePath,
     required Rect cropRect,
   }) async {
-    try {
-      state = true; // 처리 시작
+    state = const AsyncLoading();
+    late final int bodyPhotoId;
+    state = await AsyncValue.guard(() async {
       final file = File(imagePath);
       final bytes = await file.readAsBytes();
       final image = img.decodeImage(bytes);
-      if (image == null) return null;
+      if (image == null) throw Exception('Failed to decode image');
+
       final croppedImage = img.copyCrop(
         image,
         x: cropRect.left.toInt(),
@@ -26,23 +36,21 @@ class PhotoPreviewController extends StateNotifier<bool> {
         width: cropRect.width.toInt(),
         height: cropRect.height.toInt(),
       );
+
       final croppedBytes = img.encodeJpg(croppedImage);
       final compressed = await FlutterImageCompress.compressWithList(
         croppedBytes,
         quality: ImageConst.targetQuality,
       );
+
       await logImageInfo('Output Image', compressed);
       await file.writeAsBytes(compressed);
-      return imagePath;
-    } catch (e) {
-      return null;
-    } finally {
-      state = false; // 처리 완료
-    }
+      bodyPhotoId = await _repository.uploadImage(imagePath);
+    });
+    return bodyPhotoId;
   }
 }
 
-final photoPreviewControllerProvider =
-    StateNotifierProvider.autoDispose<PhotoPreviewController, bool>((ref) {
-  return PhotoPreviewController();
-});
+final photoPreviewProvider = AsyncNotifierProvider<PhotoPreviewViewModel, void>(
+  () => PhotoPreviewViewModel(),
+);
