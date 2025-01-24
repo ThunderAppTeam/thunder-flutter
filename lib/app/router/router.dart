@@ -5,7 +5,7 @@ import 'package:thunder/app/screens/main_navigation_screen.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/core/constants/key_contst.dart';
 import 'package:thunder/features/archive/views/archive_page.dart';
-import 'package:thunder/features/auth/repositories/auth_repository.dart';
+import 'package:thunder/features/auth/providers/auth_state_provider.dart';
 import 'package:thunder/features/camera/views/camera_page.dart';
 import 'package:thunder/features/rating/views/rating_page.dart';
 import 'package:thunder/features/body_check/views/body_check_result_page.dart';
@@ -17,10 +17,9 @@ final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     debugLogDiagnostics: true,
     // initialLocation: Routes.home.path,
-    initialLocation: !kDebugMode ? Routes.home.path : Routes.archive.path,
+    initialLocation: !kDebugMode ? Routes.home.path : Routes.home.path,
     redirect: (context, state) {
-      final isLoggedIn = ref.watch(authRepoProvider).isLoggedIn;
-
+      final isLoggedIn = ref.read(authStateProvider).isLoggedIn;
       // 웰컴 페이지나 온보딩 페이지면 리다이렉트 하지 않음
       if (state.matchedLocation == Routes.welcome.path ||
           state.matchedLocation.startsWith(Routes.onboarding.path)) {
