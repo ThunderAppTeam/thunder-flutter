@@ -12,4 +12,6 @@ class KeyConst {
   static const String authorization = 'Authorization';
   static const String requiresToken = 'requiresToken';
   static const String imageUrl = 'imageUrl';
+  static const String bodyPhotoId = 'bodyPhotoId';
+  static const String fromUpload = 'fromUpload';
 }

@@ -4,13 +4,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/errors/server_error.dart';
 import 'package:thunder/features/auth/models/states/phone_auth_state.dart';
 import 'package:thunder/core/providers/device_info_provider.dart';
+import 'package:thunder/features/auth/providers/auth_state_provider.dart';
 import 'package:thunder/features/auth/repositories/auth_repository.dart';
 
 class PhoneAuthNotifier extends StateNotifier<PhoneAuthState> {
   final AuthRepository _repository;
   final DeviceInfoProvider _deviceInfoProvider;
-
-  PhoneAuthNotifier(this._repository, this._deviceInfoProvider)
+  final AuthNotifier _authNotifier;
+  PhoneAuthNotifier(
+      this._repository, this._deviceInfoProvider, this._authNotifier)
       : super(PhoneAuthState());
 
   Future<void> sendVerificationCode({
@@ -63,6 +65,9 @@ class PhoneAuthNotifier extends StateNotifier<PhoneAuthState> {
         smsCode: smsCode,
         deviceId: deviceId,
       );
+      if (isExist) {
+        _authNotifier.login();
+      }
       state = state.copyWith(
         isCodeVerifying: false,
         isVerified: true,
@@ -85,5 +90,6 @@ final phoneAuthProvider =
   return PhoneAuthNotifier(
     ref.read(authRepoProvider),
     ref.read(deviceInfoProvider),
+    ref.read(authStateProvider.notifier),
   );
 });

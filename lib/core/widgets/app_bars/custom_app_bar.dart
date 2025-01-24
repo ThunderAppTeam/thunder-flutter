@@ -4,15 +4,25 @@ import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/theme/icon/thunder_icons_icons.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 
+enum CustomAppBarActionType {
+  text,
+  icon,
+  child,
+}
+
 class CustomAppBarAction {
+  final CustomAppBarActionType type;
   final String? text;
   final IconData? icon;
   final VoidCallback? onTap;
+  final Widget? child;
 
   CustomAppBarAction({
+    required this.type,
     this.text,
     this.icon,
-    required this.onTap,
+    this.child,
+    this.onTap,
   });
 }
 
@@ -78,33 +88,36 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   direction: Axis.horizontal,
                   spacing: Sizes.spacing20,
                   children: actions!.map((action) {
-                    if (action.text != null) {
-                      return InkWell(
-                        onTap: action.onTap,
-                        borderRadius: BorderRadius.circular(Sizes.radius16),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: Sizes.spacing8,
-                            vertical: Sizes.spacing4,
+                    switch (action.type) {
+                      case CustomAppBarActionType.text:
+                        return InkWell(
+                          onTap: action.onTap,
+                          borderRadius: BorderRadius.circular(Sizes.radius16),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: Sizes.spacing8,
+                              vertical: Sizes.spacing4,
+                            ),
+                            child: Text(
+                              action.text!,
+                              style: textTheme.textTitle18,
+                            ),
                           ),
-                          child: Text(
-                            action.text!,
-                            style: textTheme.textTitle18,
+                        );
+                      case CustomAppBarActionType.icon:
+                        return InkWell(
+                          onTap: action.onTap,
+                          child: Icon(
+                            action.icon!,
+                            size: Sizes.icon24,
+                            color: ColorName.white,
                           ),
-                        ),
-                      );
-                    } else if (action.icon != null) {
-                      return InkWell(
-                        customBorder: const CircleBorder(),
-                        onTap: action.onTap,
-                        child: Icon(
-                          action.icon,
-                          size: Sizes.icon24,
-                          color: ColorName.white,
-                        ),
-                      );
+                        );
+                      case CustomAppBarActionType.child:
+                        return action.child!;
+                      default:
+                        return const SizedBox.shrink();
                     }
-                    return const SizedBox.shrink();
                   }).toList(),
                 ),
               ),

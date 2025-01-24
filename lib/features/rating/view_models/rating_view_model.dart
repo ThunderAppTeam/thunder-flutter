@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/errors/server_error.dart';
+import 'package:thunder/features/auth/providers/auth_state_provider.dart';
 import 'package:thunder/features/rating/models/data/body_check_data.dart';
 import 'package:thunder/features/rating/repositories/rating_repository.dart';
 
@@ -27,6 +28,14 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
   @override
   FutureOr<List<BodyCheckData>> build() async {
     _repository = ref.read(ratingRepositoryProvider);
+
+    final link = ref.keepAlive();
+    ref.listen(authStateProvider, (prev, next) {
+      if (!next.isLoggedIn) {
+        link.close(); // 로그아웃 시 강제 해제
+      }
+    });
+
     state = const AsyncLoading();
     _list = await _fetchData(_initialFetchCount);
     return _list;
@@ -109,6 +118,6 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
 }
 
 final ratingViewModelProvider =
-    AutoDisposeAsyncNotifierProvider<RatingViewModel, List<BodyCheckData>>(
+    AsyncNotifierProvider.autoDispose<RatingViewModel, List<BodyCheckData>>(
   () => RatingViewModel(),
 );

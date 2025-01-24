@@ -18,7 +18,7 @@ class ThunderNetworkImage extends StatelessWidget {
       loadStateChanged: (state) {
         switch (state.extendedImageLoadState) {
           case LoadState.loading:
-            return const CustomCircularIndicator();
+            return const Center(child: CustomCircularIndicator());
           case LoadState.completed:
             return state.completedWidget;
           case LoadState.failed:

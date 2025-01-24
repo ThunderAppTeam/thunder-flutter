@@ -71,8 +71,11 @@ class Sizes {
   // dialog width
   static const double dialogWidth280 = 280.0;
 
-  // circular indicator size
+  // circular indicator
+  static const double circularIndicatorSize18 = 18.0;
   static const double circularIndicatorSize32 = 32.0;
+
+  static const double circularIndicatorStrokeWidth2 = 2.0;
   static const double circularIndicatorStrokeWidth4 = 4.0;
 
   // border width

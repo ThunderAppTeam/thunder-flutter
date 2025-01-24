@@ -5,7 +5,7 @@ import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
 import 'package:thunder/core/widgets/dialog/custom_alert_dialog.dart';
-import 'package:thunder/features/auth/repositories/auth_repository.dart';
+import 'package:thunder/features/auth/providers/auth_state_provider.dart';
 import 'package:thunder/generated/l10n.dart';
 
 class SettingsPage extends ConsumerWidget {
@@ -22,7 +22,7 @@ class SettingsPage extends ConsumerWidget {
       ),
     );
     if (confirmed == true && context.mounted) {
-      await ref.read(authRepoProvider).signOut();
+      await ref.read(authStateProvider.notifier).signOut();
       if (context.mounted) {
         ref.read(safeRouterProvider).goToWelcome(context);
       }

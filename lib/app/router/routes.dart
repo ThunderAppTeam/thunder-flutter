@@ -28,7 +28,7 @@ final class Routes {
 
   static const bodyCheck = (
     name: 'bodyCheck',
-    path: '/bodyCheck',
+    path: '/bodyCheck/:bodyPhotoId',
   );
 
   static const settings = (
