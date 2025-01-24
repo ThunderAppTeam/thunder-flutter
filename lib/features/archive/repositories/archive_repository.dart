@@ -1,7 +1,7 @@
-import 'dart:math';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/core/constants/key_contst.dart';
+import 'package:thunder/core/network/dio_options.dart';
 import 'package:thunder/core/network/dio_provider.dart';
 
 class ArchiveRepository {
@@ -10,22 +10,13 @@ class ArchiveRepository {
   ArchiveRepository(this._dio);
 
   Future<List<Map<String, dynamic>>> fetchArchive() async {
-    // final path = '/v1/body/archive';
-    // final response = await _dio.get(path);
-    // return response.data;
-    return fetchDummyArchive();
-  }
-
-  List<Map<String, dynamic>> fetchDummyArchive() {
-    return List.generate(100, generateDummyArchive);
-  }
-
-  Map<String, dynamic> generateDummyArchive(int index) {
-    return {
-      'imageUrl': 'https://picsum.photos/id/${index + 1}/200/300',
-      'date': DateTime.now().subtract(Duration(days: index)).toIso8601String(),
-      'averageRating': Random().nextDouble() * 10,
-    };
+    final path = '/v1/body/photo';
+    final response = await _dio.get(
+      path,
+      options: DioOptions.tokenOptions,
+    );
+    final data = response.data[KeyConst.data];
+    return List<Map<String, dynamic>>.from(data);
   }
 }
 

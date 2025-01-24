@@ -14,4 +14,5 @@ class KeyConst {
   static const String imageUrl = 'imageUrl';
   static const String bodyPhotoId = 'bodyPhotoId';
   static const String fromUpload = 'fromUpload';
+  static const String pointText = 'pointText';
 }

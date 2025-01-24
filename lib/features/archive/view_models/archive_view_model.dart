@@ -1,48 +1,44 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/features/archive/models/data/body_check_preview_data.dart';
 import 'package:thunder/features/archive/repositories/archive_repository.dart';
 
-class BodyCheckPreview {
-  final String imageUrl;
-  final DateTime date;
-  final double averageRating;
-
-  BodyCheckPreview({
-    required this.imageUrl,
-    required this.date,
-    required this.averageRating,
-  });
-
-  factory BodyCheckPreview.fromJson(Map<String, dynamic> json) {
-    return BodyCheckPreview(
-      imageUrl: json['imageUrl'],
-      date: DateTime.parse(json['date']),
-      averageRating: json['averageRating'],
-    );
-  }
-}
-
 class ArchiveViewModel
-    extends AutoDisposeAsyncNotifier<List<BodyCheckPreview>> {
+    extends AutoDisposeAsyncNotifier<List<BodyCheckPreviewData>> {
   late final ArchiveRepository _repository;
+  List<BodyCheckPreviewData> _list = [];
 
   @override
-  Future<List<BodyCheckPreview>> build() async {
+  Future<List<BodyCheckPreviewData>> build() async {
     _repository = ref.read(archiveRepositoryProvider);
-    return await _fetchArchive();
+    state = const AsyncLoading();
+    _list = await _fetchArchive();
+    return _list;
   }
 
-  Future<List<BodyCheckPreview>> _fetchArchive() async {
-    final archive = await _repository.fetchArchive();
-    return archive.map((e) => BodyCheckPreview.fromJson(e)).toList();
+  Future<List<BodyCheckPreviewData>> _fetchArchive() async {
+    try {
+      final archive = await _repository.fetchArchive();
+      return archive.map((e) => BodyCheckPreviewData.fromJson(e)).toList();
+    } catch (e) {
+      log('error: $e');
+      throw Exception('Failed to fetch archive');
+    }
   }
 
   Future<void> refresh() async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() => _fetchArchive());
+    state = await AsyncValue.guard(
+      () async {
+        _list = await _fetchArchive();
+        return _list;
+      },
+    );
   }
 }
 
-final archiveViewModelProvider =
-    AutoDisposeAsyncNotifierProvider<ArchiveViewModel, List<BodyCheckPreview>>(
+final archiveViewModelProvider = AutoDisposeAsyncNotifierProvider<
+    ArchiveViewModel, List<BodyCheckPreviewData>>(
   () => ArchiveViewModel(),
 );

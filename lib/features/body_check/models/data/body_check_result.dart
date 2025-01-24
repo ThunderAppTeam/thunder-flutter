@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:thunder/core/enums/gender.dart';
 
 part 'body_check_result.freezed.dart';
 part 'body_check_result.g.dart';
@@ -9,8 +10,11 @@ class BodyCheckResult with _$BodyCheckResult {
     required int bodyPhotoId,
     required String imageUrl,
     required bool isReviewCompleted,
-    required double totalScore,
-    required double genderTopPercent,
+    required int reviewCount,
+    required double progressRate,
+    required Gender gender,
+    required double reviewScore,
+    required double genderTopRate,
     required DateTime createdAt,
   }) = _BodyCheckResult;
 

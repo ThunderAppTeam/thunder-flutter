@@ -45,7 +45,7 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
     final Rect? cropRect = editorState.getCropRect();
     if (cropRect == null) return;
 
-    final bodyPhotoId = await _viewModel.cropAndUploadImage(
+    final imageData = await _viewModel.cropAndUploadImage(
       imagePath: imagePath,
       cropRect: cropRect,
     );
@@ -54,10 +54,11 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
         context,
         Routes.bodyCheck.name,
         pathParameters: {
-          KeyConst.bodyPhotoId: bodyPhotoId.toString(),
+          KeyConst.bodyPhotoId: imageData.bodyPhotoId.toString(),
         },
         extra: {
           KeyConst.fromUpload: true,
+          KeyConst.imageUrl: imageData.imageUrl,
         },
       );
     }

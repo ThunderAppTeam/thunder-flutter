@@ -12,12 +12,14 @@ class SafeRouter {
   Future<T?> pushNamed<T>(
     BuildContext context,
     String name, {
+    Map<String, String>? pathParameters,
     Object? extra,
   }) async {
     if (_isNavigating) return null;
     _isNavigating = true;
     try {
-      return context.pushNamed<T>(name, extra: extra);
+      return context.pushNamed<T>(name,
+          pathParameters: pathParameters ?? {}, extra: extra);
     } finally {
       await Future.delayed(TimeConst.navigationDuration);
       _isNavigating = false;
