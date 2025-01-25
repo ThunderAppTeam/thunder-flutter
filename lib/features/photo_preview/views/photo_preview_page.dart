@@ -25,6 +25,7 @@ class PhotoPreviewPage extends ConsumerStatefulWidget {
 class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
   final GlobalKey<ExtendedImageEditorState> _editorKey =
       GlobalKey<ExtendedImageEditorState>();
+  bool _isProcessing = false;
 
   late final PhotoPreviewViewModel _viewModel;
 
@@ -39,6 +40,11 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
   }
 
   Future<void> _onComplete(String imagePath) async {
+    if (_isProcessing) return;
+    setState(() {
+      _isProcessing = true;
+    });
+
     final editorState = _editorKey.currentState;
     if (editorState == null) return;
 
@@ -62,20 +68,20 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
         },
       );
     }
+    setState(() {
+      _isProcessing = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final uploadState = ref.watch(photoPreviewProvider);
     final isNavigating = ref.watch(safeRouterProvider).isNavigating;
-    final isProcessing = uploadState.isLoading;
-
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
           title: S.of(context).photoPreviewTitle,
           actions: [
-            if (isProcessing || isNavigating)
+            if (_isProcessing || isNavigating)
               CustomAppBarAction(
                 type: CustomAppBarActionType.child,
                 child: CustomCircularIndicator(),
