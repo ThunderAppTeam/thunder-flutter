@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image/image.dart' as img;
 import 'package:thunder/core/constants/image_const.dart';
 import 'package:thunder/core/utils/image_utils.dart';
+import 'package:thunder/features/photo_preview/models/image_data.dart';
 import 'package:thunder/features/photo_preview/repositories/photo_preview_repository.dart';
 
 class PhotoPreviewViewModel extends AsyncNotifier<void> {
@@ -17,12 +18,12 @@ class PhotoPreviewViewModel extends AsyncNotifier<void> {
     return null;
   }
 
-  Future<int> cropAndUploadImage({
+  Future<ImageData> cropAndUploadImage({
     required String imagePath,
     required Rect cropRect,
   }) async {
     state = const AsyncLoading();
-    late final int bodyPhotoId;
+    late final ImageData imageData;
     state = await AsyncValue.guard(() async {
       final file = File(imagePath);
       final bytes = await file.readAsBytes();
@@ -45,9 +46,10 @@ class PhotoPreviewViewModel extends AsyncNotifier<void> {
 
       await logImageInfo('Output Image', compressed);
       await file.writeAsBytes(compressed);
-      bodyPhotoId = await _repository.uploadImage(imagePath);
+      final response = await _repository.uploadImage(imagePath);
+      imageData = ImageData.fromJson(response);
     });
-    return bodyPhotoId;
+    return imageData;
   }
 }
 

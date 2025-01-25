@@ -25,6 +25,7 @@ class PhotoPreviewPage extends ConsumerStatefulWidget {
 class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
   final GlobalKey<ExtendedImageEditorState> _editorKey =
       GlobalKey<ExtendedImageEditorState>();
+  bool _isProcessing = false;
 
   late final PhotoPreviewViewModel _viewModel;
 
@@ -39,13 +40,18 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
   }
 
   Future<void> _onComplete(String imagePath) async {
+    if (_isProcessing) return;
+    setState(() {
+      _isProcessing = true;
+    });
+
     final editorState = _editorKey.currentState;
     if (editorState == null) return;
 
     final Rect? cropRect = editorState.getCropRect();
     if (cropRect == null) return;
 
-    final bodyPhotoId = await _viewModel.cropAndUploadImage(
+    final imageData = await _viewModel.cropAndUploadImage(
       imagePath: imagePath,
       cropRect: cropRect,
     );
@@ -54,37 +60,37 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
         context,
         Routes.bodyCheck.name,
         pathParameters: {
-          KeyConst.bodyPhotoId: bodyPhotoId.toString(),
+          KeyConst.bodyPhotoId: imageData.bodyPhotoId.toString(),
         },
         extra: {
           KeyConst.fromUpload: true,
+          KeyConst.imageUrl: imageData.imageUrl,
         },
       );
     }
+    setState(() {
+      _isProcessing = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final uploadState = ref.watch(photoPreviewProvider);
     final isNavigating = ref.watch(safeRouterProvider).isNavigating;
-    final isProcessing = uploadState.isLoading;
-
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
           title: S.of(context).photoPreviewTitle,
           actions: [
-            if (isProcessing || isNavigating)
-              CustomAppBarAction(
-                type: CustomAppBarActionType.child,
-                child: CustomCircularIndicator(),
-              )
-            else
-              CustomAppBarAction(
-                type: CustomAppBarActionType.text,
-                text: S.of(context).commonComplete,
-                onTap: () => _onComplete(widget.imagePath),
-              ),
+            CustomAppBarAction(
+              type: _isProcessing || isNavigating
+                  ? CustomAppBarActionType.child
+                  : CustomAppBarActionType.text,
+              child: CustomCircularIndicator(),
+              text: S.of(context).commonComplete,
+              onTap: () => _isProcessing || isNavigating
+                  ? null
+                  : _onComplete(widget.imagePath),
+            ),
           ],
           onBack: _onBack,
         ),

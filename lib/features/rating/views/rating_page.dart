@@ -22,7 +22,6 @@ class RatingPage extends ConsumerStatefulWidget {
 class _RatingPageState extends ConsumerState<RatingPage>
     with SingleTickerProviderStateMixin {
   late final AnimationController _animationController;
-  late final Animation<double> _fadeAnimation;
   late final RatingViewModel _viewModel;
 
   int _selectedRating = 0;
@@ -40,14 +39,6 @@ class _RatingPageState extends ConsumerState<RatingPage>
       duration: _ratingAnimationDuration,
       vsync: this,
     );
-
-    _fadeAnimation = Tween<double>(
-      begin: 1.0,
-      end: 0.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.linear,
-    ));
   }
 
   @override
@@ -162,15 +153,12 @@ class _RatingPageState extends ConsumerState<RatingPage>
                     ),
                   // 현재 카드 (애니메이션 적용)
                   if (currentIdx < bodyCheckList.length)
-                    FadeTransition(
-                      opacity: _fadeAnimation,
-                      child: BodyCheckWidget(
-                        bodyCheckData: bodyCheckList[currentIdx],
-                        rating: _selectedRating,
-                        onRatingChanged: _onRatingChanged,
-                        onRatingComplete: _onRatingComplete,
-                        onMoreTap: _onMoreTap,
-                      ),
+                    BodyCheckWidget(
+                      bodyCheckData: bodyCheckList[currentIdx],
+                      rating: _selectedRating,
+                      onRatingChanged: _onRatingChanged,
+                      onRatingComplete: _onRatingComplete,
+                      onMoreTap: _onMoreTap,
                     ),
                 ],
               );

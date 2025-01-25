@@ -40,6 +40,7 @@ class Sizes {
   static const double lineHeight48 = 48.0;
 
   // icon size
+  static const double icon12 = 12.0;
   static const double icon14 = 14.0;
   static const double icon20 = 20.0;
   static const double icon24 = 24.0;
@@ -66,7 +67,10 @@ class Sizes {
   static const double navigationTabWidth = 60.0;
 
   // app bar height
-  static const double appBarHeight48 = 48.0;
+  static const double appBarHeight48 = 48;
+
+  // bottom navigation bar height
+  static const double bottomNavigationBarHeight54 = 54;
 
   // dialog width
   static const double dialogWidth280 = 280.0;

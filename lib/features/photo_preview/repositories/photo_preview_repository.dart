@@ -11,7 +11,7 @@ class PhotoPreviewRepository {
 
   PhotoPreviewRepository(this._dio);
 
-  Future<int> uploadImage(String imagePath) async {
+  Future<Map<String, dynamic>> uploadImage(String imagePath) async {
     log('upload Image: $imagePath');
     final path = '/v1/body/photo';
     final formData = FormData.fromMap({
@@ -28,8 +28,7 @@ class PhotoPreviewRepository {
         options: DioOptions.multipartTokenOptions,
       );
       final data = response.data[KeyConst.data];
-      final bodyPhotoId = data[KeyConst.bodyPhotoId];
-      return bodyPhotoId;
+      return data;
     } on DioException catch (e) {
       throw DioErrorParser.parseDio(e);
     }

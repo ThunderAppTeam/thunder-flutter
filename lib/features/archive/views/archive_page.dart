@@ -1,11 +1,17 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
+import 'package:thunder/core/constants/key_contst.dart';
+import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/core/widgets/custom_circular_indicator.dart';
 import 'package:thunder/core/widgets/empty_widget.dart';
+import 'package:thunder/features/archive/models/data/body_check_preview_data.dart';
 import 'package:thunder/features/archive/view_models/archive_view_model.dart';
 import 'package:thunder/features/archive/views/widgets/archive_item.dart';
 import 'package:thunder/generated/l10n.dart';
@@ -19,18 +25,15 @@ class ArchivePage extends ConsumerStatefulWidget {
 
 class _ArchivePageState extends ConsumerState<ArchivePage> {
   final int _crossAxisCount = 3;
-
-  Future<void> _onRefresh() async {
-    await Future.delayed(const Duration(seconds: 1));
-    ref.read(archiveViewModelProvider.notifier).refresh();
-  }
+  final AutoScrollController _scrollController =
+      AutoScrollController(); // AutoScrollController 사용
 
   void _onButtonTap() {
-    // 카메라 페이지로 이동
     ref.read(safeRouterProvider).pushNamed(context, Routes.measure.name);
   }
 
   void _onError(error) {
+    log('error: $error');
     showModalBottomSheet(
       context: context,
       builder: (context) => CustomBottomSheet(
@@ -38,6 +41,23 @@ class _ArchivePageState extends ConsumerState<ArchivePage> {
         subtitle: S.of(context).commonErrorUnknownSubtitle,
       ),
     );
+  }
+
+  void _onItemTap(BodyCheckPreviewData item, int index) async {
+    // 페이지 이동
+    ref.read(safeRouterProvider).pushNamed(
+      context,
+      Routes.bodyCheck.name,
+      pathParameters: {
+        KeyConst.bodyPhotoId: item.bodyPhotoId.toString(),
+      },
+      extra: {
+        KeyConst.imageUrl: item.imageUrl,
+        KeyConst.pointText:
+            item.reviewCount == 0 ? '?.?' : item.reviewScore.toString(),
+      },
+    );
+    _scrollController.scrollToIndex(index);
   }
 
   @override
@@ -63,33 +83,37 @@ class _ArchivePageState extends ConsumerState<ArchivePage> {
                   onButtonTap: _onButtonTap,
                 );
               }
-              return RefreshIndicator(
-                onRefresh: _onRefresh,
-                color: ColorName.white,
-                child: GridView.builder(
-                  padding: EdgeInsets.zero,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: _crossAxisCount,
-                    crossAxisSpacing: 1, // 1px 간격
-                    mainAxisSpacing: 1, // 1px 간격
-                    childAspectRatio: itemWidth / itemHeight, // 추가: 가로/세로 비율 지정
-                  ),
-                  itemCount: items.length,
-                  itemBuilder: (context, index) {
-                    final item = items[index];
-                    return SizedBox(
-                      width: itemWidth,
-                      height: itemHeight,
-                      child: ArchiveItem(item: item),
-                    );
-                  },
+              return GridView.builder(
+                controller: _scrollController, // AutoScrollController 적용
+                padding: EdgeInsets.zero,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: _crossAxisCount,
+                  crossAxisSpacing: Sizes.borderWidth1,
+                  mainAxisSpacing: Sizes.borderWidth1,
+                  childAspectRatio: itemWidth / itemHeight,
                 ),
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  final item = items[index];
+                  return AutoScrollTag(
+                    // 스크롤 태그 추가
+                    key: ValueKey(index),
+                    controller: _scrollController,
+                    index: index,
+                    child: GestureDetector(
+                      onTap: () => _onItemTap(item, index),
+                      child: SizedBox(
+                        width: itemWidth,
+                        height: itemHeight,
+                        child: ArchiveItem(item: item),
+                      ),
+                    ),
+                  );
+                },
               );
             },
-            error: (error, stack) => Center(
-              child: Text('Error: $error'),
-            ),
-            loading: () => const CustomCircularIndicator(),
+            error: (error, stack) => const SizedBox.shrink(),
+            loading: () => const Center(child: CustomCircularIndicator()),
           );
         },
       ),
