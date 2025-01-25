@@ -81,17 +81,16 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
         appBar: CustomAppBar(
           title: S.of(context).photoPreviewTitle,
           actions: [
-            if (_isProcessing || isNavigating)
-              CustomAppBarAction(
-                type: CustomAppBarActionType.child,
-                child: CustomCircularIndicator(),
-              )
-            else
-              CustomAppBarAction(
-                type: CustomAppBarActionType.text,
-                text: S.of(context).commonComplete,
-                onTap: () => _onComplete(widget.imagePath),
-              ),
+            CustomAppBarAction(
+              type: _isProcessing || isNavigating
+                  ? CustomAppBarActionType.child
+                  : CustomAppBarActionType.text,
+              child: CustomCircularIndicator(),
+              text: S.of(context).commonComplete,
+              onTap: () => _isProcessing || isNavigating
+                  ? null
+                  : _onComplete(widget.imagePath),
+            ),
           ],
           onBack: _onBack,
         ),
