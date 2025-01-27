@@ -8,12 +8,16 @@ import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/constants/styles.dart';
 import 'package:thunder/core/theme/gen/assets.gen.dart';
 import 'package:thunder/core/theme/icon/thunder_icons_icons.dart';
+import 'package:thunder/core/utils/bottom_sheet_utils.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
+import 'package:thunder/core/widgets/bottom_sheets/action_bottom_sheet.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/core/widgets/buttons/custom_wide_button.dart';
 import 'package:thunder/core/widgets/custom_circular_indicator.dart';
+import 'package:thunder/core/widgets/dialog/custom_alert_dialog.dart';
 import 'package:thunder/core/widgets/thunder_network_image.dart';
+import 'package:thunder/features/archive/view_models/archive_view_model.dart';
 import 'package:thunder/features/body_check/view_models/body_check_result_view_model.dart';
 import 'package:thunder/generated/l10n.dart';
 
@@ -39,6 +43,7 @@ class BodyCheckResultPage extends ConsumerStatefulWidget {
 class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
   bool _isAnimationStarted = false;
   final Duration _animationDuration = const Duration(milliseconds: 700);
+  late final BodyCheckResultViewModel _viewModel;
   @override
   void initState() {
     super.initState();
@@ -51,6 +56,7 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
         });
       });
     });
+    _viewModel = ref.read(bodyCheckResultProvider(widget.bodyPhotoId).notifier);
   }
 
   void _onError(BuildContext context) {
@@ -65,6 +71,37 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
 
   void _onShare() {
     // TODO: 공유하기 기능 구현
+  }
+
+  void _onDelete() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => CustomAlertDialog(
+        title: S.of(context).bodyCheckResultDeleteTitle,
+        subtitle: S.of(context).bodyCheckResultDeleteSubtitle,
+        confirmText: S.of(context).commonDelete,
+        cancelText: S.of(context).commonCancel,
+      ),
+    );
+    if (confirmed == true && context.mounted) {
+      final deleted =
+          await _viewModel.deleteBodyCheckResult(widget.bodyPhotoId);
+      if (deleted) {
+        ref
+            .read(archiveViewModelProvider.notifier)
+            .removeItem(widget.bodyPhotoId);
+        if (mounted) {
+          ref.read(safeRouterProvider).pop(context);
+        }
+      }
+    }
+  }
+
+  void _onMoreTap() {
+    final modalActions = [
+      ModalActionItem(text: S.of(context).commonDelete, onTap: _onDelete),
+    ];
+    showActionBottomSheet(context, modalActions);
   }
 
   Widget _buildAnimatedOpacity({
@@ -92,12 +129,12 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
-          title: S.of(context).bodyCheckWaitingTitle,
+          title: S.of(context).bodyCheckResultTitle,
           actions: [
             CustomAppBarAction(
               type: CustomAppBarActionType.icon,
               icon: ThunderIcons.moreHoriz,
-              onTap: () {},
+              onTap: _onMoreTap,
             ),
             if (widget.fromUpload)
               CustomAppBarAction(
@@ -214,12 +251,14 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
                                         : '눈바디 측정 중... ${result.progressRate.toStringAsFixed(0)}% 완료',
                                     style: textTheme.textBody16,
                                   ),
-                                  Gaps.h4,
-                                  CustomCircularIndicator(
-                                    size: Sizes.circularIndicatorSize18,
-                                    strokeWidth:
-                                        Sizes.circularIndicatorStrokeWidth2,
-                                  ),
+                                  if (!result.isReviewCompleted) ...[
+                                    Gaps.h4,
+                                    CustomCircularIndicator(
+                                      size: Sizes.circularIndicatorSize18,
+                                      strokeWidth:
+                                          Sizes.circularIndicatorStrokeWidth2,
+                                    ),
+                                  ],
                                 ],
                               ),
                               orElse: () =>

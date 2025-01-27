@@ -28,27 +28,34 @@ class CustomAlertDialog extends StatelessWidget {
       color: ColorName.white,
       child: InkWell(
         onTap: onTap,
-        child: Container(
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(
-            vertical: Sizes.spacing16,
-            horizontal: Sizes.spacing20,
-          ),
-          decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                width: 0.33,
+        child: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: Sizes.spacing16,
+                horizontal: Sizes.spacing20,
+              ),
+              child: Center(
+                child: Text(
+                  text,
+                  style: getTextTheme(context).textTitle18.copyWith(
+                        color: isConfirm ? ColorName.alertRed : ColorName.black,
+                        height: Sizes.lineHeight22 / Sizes.fontSize18,
+                      ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+              top: 0,
+              child: Container(
+                height: 0.33,
                 color: ColorName.alertGrayLight.withOpacity(0.55),
               ),
             ),
-          ),
-          child: Text(
-            text,
-            style: getTextTheme(context).textTitle18.copyWith(
-                  color: isConfirm ? ColorName.alertRed : ColorName.black,
-                ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ),
       ),
     );
@@ -80,18 +87,20 @@ class CustomAlertDialog extends StatelessWidget {
                 children: [
                   Text(
                     title,
+                    textAlign: TextAlign.center,
                     style: textTheme.textTitle18.copyWith(
                       color: ColorName.black,
-                      height: Sizes.lineHeight22 / Sizes.fontSize18,
+                      height: Sizes.fontHeight14,
                     ),
                   ),
                   Gaps.v12,
                   Text(
                     subtitle,
+                    textAlign: TextAlign.center,
                     style: textTheme.textSubtitle14.copyWith(
                       color: ColorName.alertGray,
                       fontWeight: FontWeight.w500,
-                      height: Sizes.lineHeight18 / Sizes.fontSize14,
+                      height: Sizes.fontHeight14,
                       letterSpacing: -0.08,
                     ),
                   ),

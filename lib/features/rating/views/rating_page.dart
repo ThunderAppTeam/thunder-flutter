@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
+import 'package:thunder/core/utils/bottom_sheet_utils.dart';
 import 'package:thunder/core/widgets/bottom_sheets/action_bottom_sheet.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/features/rating/view_models/rating_view_model.dart';
@@ -89,14 +90,7 @@ class _RatingPageState extends ConsumerState<RatingPage>
       ModalActionItem(text: S.of(context).commonReport, onTap: _onReportTap),
       ModalActionItem(text: S.of(context).commonBlock, onTap: _onBlockTap),
     ];
-    showModalBottomSheet(
-      context: context,
-      useRootNavigator: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) {
-        return ActionBottomSheet(actions: modalActions);
-      },
-    );
+    showActionBottomSheet(context, modalActions);
   }
 
   void _onReportTap() {
