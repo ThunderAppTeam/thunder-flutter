@@ -96,5 +96,6 @@
   "ratingEmptyGuideText": "대기 중인 눈바디 사진을 모두 확인했어요.\n잠시 후 다시 시도해주세요.",
   "@_ARCHIVE": {},
   "archiveEmptyGuideText": "아직 측정된 눈바디가 없어요.\n지금 측정하러 가볼까요?",
-  "archiveEmptyButtonText": "눈바디 측정하기"
+  "archiveEmptyButtonText": "눈바디 측정하기",
+  "bodyCheckResultShareTitle": "눈바디 측정결과 1장"
 }
