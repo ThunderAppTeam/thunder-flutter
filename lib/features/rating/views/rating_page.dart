@@ -27,7 +27,7 @@ class _RatingPageState extends ConsumerState<RatingPage>
   int _selectedRating = 0;
   bool _isAnimating = false; // 애니메이션 진행 상태
 
-  final Duration _ratingAnimationDelay = const Duration(milliseconds: 300);
+  final Duration _ratingAnimationDelay = const Duration(milliseconds: 200);
   final Duration _ratingAnimationDuration = const Duration(milliseconds: 200);
   final Duration _ratingResetDelay = const Duration(milliseconds: 100);
 
@@ -71,8 +71,8 @@ class _RatingPageState extends ConsumerState<RatingPage>
       _isAnimating = true;
     });
     await Future.delayed(_ratingAnimationDelay);
-    await _animationController.forward();
     _viewModel.rate(rating);
+    await _animationController.forward();
     setState(() {
       _isAnimating = false; // 애니메이션 완료 후 입력 활성화
       _selectedRating = 0;
