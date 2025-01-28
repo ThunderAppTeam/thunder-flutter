@@ -82,6 +82,7 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          toolbarHeight: Sizes.appBarHeight48,
           backgroundColor: Colors.transparent,
           centerTitle: false,
           title: Padding(

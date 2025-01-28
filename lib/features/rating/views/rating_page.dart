@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
-import 'package:thunder/core/utils/bottom_sheet_utils.dart';
+import 'package:thunder/core/utils/show_utils.dart';
 import 'package:thunder/core/widgets/bottom_sheets/action_bottom_sheet.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/features/rating/view_models/rating_view_model.dart';
@@ -93,12 +93,38 @@ class _RatingPageState extends ConsumerState<RatingPage>
     showActionBottomSheet(context, modalActions);
   }
 
-  void _onReportTap() {
-    print('신고');
+  Future<void> _onReportTap() async {
+    final reportOptions = [
+      S.of(context).reportOptionSexualContent,
+      S.of(context).reportOptionNonRelatedContent,
+      S.of(context).reportOptionFakeProfile,
+      S.of(context).reportOptionBadWords,
+      S.of(context).reportOptionChildSexualContent,
+      S.of(context).reportOptionOther,
+    ];
+
+    final result = await showSurveyBottomSheet(
+      context,
+      title: S.of(context).commonReport,
+      options: reportOptions,
+      buttonText: S.of(context).commonConfirm,
+      onButtonTap: () {},
+      hasOtherOption: true,
+    );
+    if (result == null) return;
+    _viewModel.skip();
   }
 
-  void _onBlockTap() {
-    print('차단');
+  void _onBlockTap() async {
+    final confirmed = await showBlockBottomSheet(
+      context,
+      title: S.of(context).ratingBlockTitle,
+      subtitle: S.of(context).ratingBlockSubtitle,
+      confirmText: S.of(context).commonBlock,
+    );
+    if (confirmed == true && context.mounted) {
+      _viewModel.block();
+    }
   }
 
   void _onError(error) {
@@ -129,7 +155,7 @@ class _RatingPageState extends ConsumerState<RatingPage>
             data: (bodyCheckList) {
               return Stack(
                 children: [
-                  if (currentIdx == bodyCheckList.length)
+                  if (currentIdx >= bodyCheckList.length)
                     EmptyWidget(
                       onButtonTap: _onRefresh,
                       guideText: S.of(context).ratingEmptyGuideText,

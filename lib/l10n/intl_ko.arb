@@ -94,8 +94,20 @@
   "bodyCheckResultDeleteSubtitle": "삭제된 데이터를 복구할 수 없습니다.",
   "@_RATING": {},
   "ratingEmptyGuideText": "대기 중인 눈바디 사진을 모두 확인했어요.\n잠시 후 다시 시도해주세요.",
+  "ratingBlockTitle": "이 사용자를 차단하시겠어요?",
+  "ratingBlockSubtitle": "이 사용자를 차단하면 Thunder에서 서로의 프로필 또는 콘텐츠를 찾거나 볼 수 없습니다.",
   "@_ARCHIVE": {},
   "archiveEmptyGuideText": "아직 측정된 눈바디가 없어요.\n지금 측정하러 가볼까요?",
   "archiveEmptyButtonText": "눈바디 측정하기",
-  "bodyCheckResultShareTitle": "눈바디 측정결과 1장"
+  "bodyCheckResultShareTitle": "눈바디 측정결과 1장",
+  "@_REPORT": {},
+  "reportOptionSexualContent": "성적인 콘텐츠",
+  "reportOptionNonRelatedContent": "눈바디와 관련 없는 콘텐츠",
+  "reportOptionFakeProfile": "타인 사칭 또는 사진 도용",
+  "reportOptionBadWords": "비속어 또는 혐오 표현",
+  "reportOptionChildSexualContent": "아동 및 청소년 성착취물",
+  "reportOptionOther": "기타",
+  "@_SURVEY": {},
+  "surveyTitle": "어떤 문제가 있나요?",
+  "surveySubtitle": "아래 항목들 중 최대한 비슷한 항목을 선택해주세요."
 }

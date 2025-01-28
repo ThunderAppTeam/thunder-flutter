@@ -35,4 +35,8 @@
 
     <!-- Divider -->
     <color name="divider_gray">#FFBFBFBF</color>
+
+    <color name="dark_fill_2">#4D787880</color>
+    <color name="dark_line_2">#A6545458</color>
+    <color name="dark_gray_3">#FF8E8D93</color>
 </resources>
