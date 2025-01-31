@@ -14,7 +14,13 @@
   "commonBlock": "차단",
   "commonDelete": "삭제",
   "commonErrorUnknownTitle": "알 수 없는 오류가 발생했어요",
-  "commonErrorUnknownSubtitle": "다시 한 번 시도해주세요. 만일 문제가 지속될 경우 고객센터로 문의해주세요.\n\n고객센터: thunderteam.korea@gmail.com",
+  "commonErrorUnknownSubtitle": "다시 한 번 시도해주세요. 만일 문제가 지속될 경우 고객센터로 문의해주세요.\n\n고객센터: {supportEmail}",
+  "@commonErrorUnknownSubtitle": {
+    "supportEmail": {
+      "description": "supportEmail",
+      "example": "thunderteam.korea@gmail.com"
+    }
+  },
   "@_NAVIGATION": {},
   "navigationLabelHome": "홈",
   "navigationLabelMeasure": "측정",
@@ -42,6 +48,8 @@
   "verificationErrorNotFoundMobileNumberSubtitle": "입력하신 휴대폰 번호가 존재하지 않는 번호입니다. 입력하신 정보를 다시 한 번 확인해주세요.",
   "verificationErrorInvalidVerificationCodeTitle": "올바른 인증번호를 입력해주세요",
   "verificationErrorInvalidVerificationCodeSubtitle": "입력하신 숫자가 인증번호와 일치하지 않습니다. 인증문자를 다시 한 번 확인해주세요.",
+  "verificationErrorExpiredVerificationCodeTitle": "인증 코드가 만료되었습니다.",
+  "verificationErrorExpiredVerificationCodeSubtitle": "인증 코드를 다시 발송해주세요.",
   "@_NICKNAME": {},
   "nicknameTitle": "회원등록을 시작할게요!\n어떤 닉네임을 사용하시겠어요?",
   "nicknameHint": "최소 2자 최대 8자",
@@ -86,8 +94,20 @@
   "@_SETTINGS": {},
   "settingsTitle": "설정",
   "settingsLogout": "로그아웃",
+  "settingsNotification": "알림",
+  "settingsAccount": "계정",
+  "settingsInfo": "정보",
+  "settingsContact": "문의하기",
   "settingsLogoutTitle": "로그아웃을 하시겠어요?",
   "settingsLogoutSubtitle": "로그아웃을 하면 시작 화면으로 이동합니다.",
+  "settingsAccountNickname": "닉네임",
+  "settingsAccountPhoneNumber": "휴대폰 번호",
+  "settingsAccountJoinedDate": "가입한 날짜",
+  "settingsAccountDelete": "계정 삭제",
+  "settingsInfoTermsOfService": "이용약관",
+  "settingsInfoPrivacyPolicy": "개인정보 처리방침",
+  "settingsInfoOpenSourceLicense": "오픈소스 라이센스",
+  "settingsInfoAppVersion": "앱 버전",
   "@_BODY_CHECK_RESULT": {},
   "bodyCheckResultTitle": "내 눈바디",
   "bodyCheckResultDeleteTitle": "이 눈바디 측정 결과를\n삭제하시겠어요?",
@@ -106,8 +126,35 @@
   "reportOptionFakeProfile": "타인 사칭 또는 사진 도용",
   "reportOptionBadWords": "비속어 또는 혐오 표현",
   "reportOptionChildSexualContent": "아동 및 청소년 성착취물",
-  "reportOptionOther": "기타",
   "@_SURVEY": {},
   "surveyTitle": "어떤 문제가 있나요?",
-  "surveySubtitle": "아래 항목들 중 최대한 비슷한 항목을 선택해주세요."
+  "surveySubtitle": "아래 항목들 중 최대한 비슷한 항목을 선택해주세요.",
+  "surveyOtherOption": "기타",
+  "@_DELETE_ACCOUNT": {},
+  "deleteAccountOptionLessInterest": "서비스에 대한 관심이 줄어듬",
+  "deleteAccountOptionUnreliableResult": "눈바디 측정 결과를 신뢰할 수 없음",
+  "deleteAccountOptionLongProcess": "눈바디 측정 과정이 너무 오래 걸림",
+  "deleteAccountOptionNoFeature": "원하는 기능이 없음",
+  "deleteAccountOptionServiceError": "서비스 오류가 잦음",
+  "deleteAccountOptionUncomfortable": "서비스 이용이 불편함",
+  "deleteAccountOptionBetterService": "더 나은 서비스를 발견함",
+  "deleteAccountConfirmTitle": "계정을 삭제하시겠어요?",
+  "deleteAccountConfirmSubtitle": "계정을 삭제하면 계정 내 모든 데이터가 삭제됩니다. 삭제된 계정은 복원할 수 없습니다.",
+  "@_CONTACT": {},
+  "contactSubject": "Thunder 문의하기: {nickname}",
+  "@contactSubject": {
+    "nickname": {
+      "description": "user.nickname",
+      "example": "구피닉네임999"
+    }
+  },
+  "contactBodyGuide": "이곳에 문의사항을 기재해주세요.",
+  "contactErrorTitle": "메일 앱을 실행할 수 없어요",
+  "contactErrorSubtitle": "회원님의 기기에 설치된 기본 메일 앱을 실행할 수 없는 상태에요. 문의사항을 아래 고객센터 이메일로 직접 문의해주세요.\n\n고객센터: {supportEmail}",
+  "@contactErrorSubtitle": {
+    "supportEmail": {
+      "description": "supportEmail",
+      "example": "thunderteam.korea@gmail.com"
+    }
+  }
 }

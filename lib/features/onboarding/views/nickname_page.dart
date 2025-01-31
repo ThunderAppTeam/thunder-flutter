@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/core/constants/app_const.dart';
 import 'package:thunder/core/constants/time_const.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/features/auth/models/states/nickname_check_state.dart';
@@ -62,7 +63,8 @@ class _NicknamePageState extends ConsumerState<NicknamePage> {
           break;
         case NicknameCheckError.unknown:
           title = S.of(context).commonErrorUnknownTitle;
-          subtitle = S.of(context).commonErrorUnknownSubtitle;
+          subtitle =
+              S.of(context).commonErrorUnknownSubtitle(AppConst.supportEmail);
           break;
       }
       showModalBottomSheet(

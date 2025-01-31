@@ -5,7 +5,6 @@ import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/show_utils.dart';
 import 'package:thunder/core/widgets/bottom_sheets/action_bottom_sheet.dart';
-import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/features/rating/view_models/rating_view_model.dart';
 import 'package:thunder/features/rating/widgets/default_widget.dart';
 import 'package:thunder/core/widgets/empty_widget.dart';
@@ -100,7 +99,7 @@ class _RatingPageState extends ConsumerState<RatingPage>
       S.of(context).reportOptionFakeProfile,
       S.of(context).reportOptionBadWords,
       S.of(context).reportOptionChildSexualContent,
-      S.of(context).reportOptionOther,
+      S.of(context).surveyOtherOption,
     ];
 
     final result = await showSurveyBottomSheet(
@@ -116,7 +115,7 @@ class _RatingPageState extends ConsumerState<RatingPage>
   }
 
   void _onBlockTap() async {
-    final confirmed = await showBlockBottomSheet(
+    final confirmed = await showAlertDialog(
       context,
       title: S.of(context).ratingBlockTitle,
       subtitle: S.of(context).ratingBlockSubtitle,
@@ -128,13 +127,7 @@ class _RatingPageState extends ConsumerState<RatingPage>
   }
 
   void _onError(error) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => CustomBottomSheet(
-        title: S.of(context).commonErrorUnknownTitle,
-        subtitle: S.of(context).commonErrorUnknownSubtitle,
-      ),
-    );
+    showCommonUnknownErrorBottomSheet(context);
   }
 
   @override

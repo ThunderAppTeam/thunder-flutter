@@ -3,16 +3,16 @@ import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/errors/server_error.dart';
 import 'package:thunder/features/auth/models/states/phone_auth_state.dart';
-import 'package:thunder/core/providers/device_info_provider.dart';
+import 'package:thunder/core/providers/device_id_provider.dart';
 import 'package:thunder/features/auth/providers/auth_state_provider.dart';
 import 'package:thunder/features/auth/repositories/auth_repository.dart';
 
 class PhoneAuthNotifier extends StateNotifier<PhoneAuthState> {
   final AuthRepository _repository;
-  final DeviceInfoProvider _deviceInfoProvider;
+  final DeviceIdProvider _deviceIdProvider;
   final AuthNotifier _authNotifier;
   PhoneAuthNotifier(
-      this._repository, this._deviceInfoProvider, this._authNotifier)
+      this._repository, this._deviceIdProvider, this._authNotifier)
       : super(PhoneAuthState());
 
   Future<void> sendVerificationCode({
@@ -20,7 +20,7 @@ class PhoneAuthNotifier extends StateNotifier<PhoneAuthState> {
     required String countryCode,
   }) async {
     state = state.copyWith(isCodeSending: true, error: null);
-    final deviceId = await _deviceInfoProvider.deviceId;
+    final deviceId = await _deviceIdProvider.deviceId;
     if (deviceId == null) {
       log('deviceId is null after initialization');
       state = state.copyWith(error: PhoneAuthError.unknown);
@@ -52,7 +52,7 @@ class PhoneAuthNotifier extends StateNotifier<PhoneAuthState> {
   }) async {
     state =
         state.copyWith(isCodeVerifying: true, isVerified: false, error: null);
-    final deviceId = await _deviceInfoProvider.deviceId;
+    final deviceId = await _deviceIdProvider.deviceId;
     if (deviceId == null) {
       log('deviceId is null after initialization');
       state = state.copyWith(error: PhoneAuthError.unknown);
@@ -89,7 +89,7 @@ final phoneAuthProvider =
     StateNotifierProvider.autoDispose<PhoneAuthNotifier, PhoneAuthState>((ref) {
   return PhoneAuthNotifier(
     ref.read(authRepoProvider),
-    ref.read(deviceInfoProvider),
+    ref.read(deviceIdProvider),
     ref.read(authStateProvider.notifier),
   );
 });

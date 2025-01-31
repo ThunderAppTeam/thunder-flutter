@@ -8,7 +8,7 @@ import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/constants/key_contst.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
-import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
+import 'package:thunder/core/utils/show_utils.dart';
 import 'package:thunder/core/widgets/custom_circular_indicator.dart';
 import 'package:thunder/core/widgets/empty_widget.dart';
 import 'package:thunder/features/archive/models/data/body_check_preview_data.dart';
@@ -34,13 +34,7 @@ class _ArchivePageState extends ConsumerState<ArchivePage> {
 
   void _onError(error) {
     log('error: $error');
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => CustomBottomSheet(
-        title: S.of(context).commonErrorUnknownTitle,
-        subtitle: S.of(context).commonErrorUnknownSubtitle,
-      ),
-    );
+    showCommonUnknownErrorBottomSheet(context);
   }
 
   void _onItemTap(BodyCheckPreviewData item, int index) async {

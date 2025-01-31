@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thunder/core/constants/app_const.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/widgets/bottom_sheets/action_bottom_sheet.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
@@ -12,18 +13,32 @@ void showActionBottomSheet(
     context: context,
     backgroundColor: Colors.transparent,
     useRootNavigator: true,
-    builder: (context) => ActionBottomSheet(
-      actions: actions,
-    ),
+    builder: (context) => ActionBottomSheet(actions: actions),
   );
 }
 
 void showCommonUnknownErrorBottomSheet(BuildContext context) {
-  showBottomSheet(
+  showModalBottomSheet(
     context: context,
+    useRootNavigator: true,
     builder: (context) => CustomBottomSheet(
       title: S.of(context).commonErrorUnknownTitle,
-      subtitle: S.of(context).commonErrorUnknownSubtitle,
+      subtitle: S.of(context).commonErrorUnknownSubtitle(AppConst.supportEmail),
+    ),
+  );
+}
+
+void showCustomBottomSheet(
+  BuildContext context, {
+  required String title,
+  required String subtitle,
+}) {
+  showModalBottomSheet(
+    context: context,
+    useRootNavigator: true,
+    builder: (context) => CustomBottomSheet(
+      title: title,
+      subtitle: subtitle,
     ),
   );
 }
@@ -61,7 +76,7 @@ Future<SurveyResult?> showSurveyBottomSheet(
   return result;
 }
 
-Future<bool?> showBlockBottomSheet(
+Future<bool?> showAlertDialog(
   BuildContext context, {
   required String title,
   required String subtitle,

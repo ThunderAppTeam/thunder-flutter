@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thunder/core/constants/key_contst.dart';
 import 'package:uuid/uuid.dart';
 
-class DeviceInfoProvider {
+class DeviceIdProvider {
   String? _cachedDeviceId;
 
   Future<String?> get deviceId async {
@@ -40,6 +40,6 @@ class DeviceInfoProvider {
   }
 }
 
-final deviceInfoProvider = Provider<DeviceInfoProvider>((ref) {
-  return DeviceInfoProvider();
+final deviceIdProvider = Provider<DeviceIdProvider>((ref) {
+  return DeviceIdProvider();
 });

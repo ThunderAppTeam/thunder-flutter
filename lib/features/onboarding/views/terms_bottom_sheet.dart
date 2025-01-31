@@ -5,6 +5,7 @@ import 'package:thunder/core/constants/url_const.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
+import 'package:thunder/core/utils/show_utils.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/core/widgets/web_view_page.dart';
@@ -181,13 +182,7 @@ class _TermsBottomSheetState extends ConsumerState<TermsBottomSheet> {
       setState(() {
         _isPressed = false;
       });
-      showModalBottomSheet(
-        context: context,
-        builder: (context) => CustomBottomSheet(
-          title: S.of(context).commonErrorUnknownTitle,
-          subtitle: S.of(context).commonErrorUnknownSubtitle,
-        ),
-      );
+      showCommonUnknownErrorBottomSheet(context);
     }
   }
 

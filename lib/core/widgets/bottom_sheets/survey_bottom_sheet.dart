@@ -160,7 +160,9 @@ class _SurveyBottomSheetState extends State<SurveyBottomSheet> {
                                 ),
                                 child: Row(
                                   children: [
-                                    SizedBox(
+                                    Container(
+                                      padding:
+                                          const EdgeInsets.all(Sizes.spacing2),
                                       width: Sizes.icon24,
                                       height: Sizes.icon24,
                                       child: Container(
@@ -175,10 +177,10 @@ class _SurveyBottomSheetState extends State<SurveyBottomSheet> {
                                           child: AnimatedContainer(
                                             duration: Styles.duration100,
                                             width: _selectedIndex == index
-                                                ? Sizes.icon12
+                                                ? Sizes.icon10
                                                 : 0,
                                             height: _selectedIndex == index
-                                                ? Sizes.icon12
+                                                ? Sizes.icon10
                                                 : 0,
                                             decoration: const BoxDecoration(
                                               shape: BoxShape.circle,
@@ -220,6 +222,7 @@ class _SurveyBottomSheetState extends State<SurveyBottomSheet> {
                             ),
                             padding: EdgeInsets.all(Sizes.spacing10),
                             child: TextField(
+                              autofocus: true,
                               maxLines: 3,
                               maxLength: 200,
                               scrollPadding: EdgeInsets.only(
@@ -262,7 +265,6 @@ class _SurveyBottomSheetState extends State<SurveyBottomSheet> {
                   text: widget.buttonText,
                   isEnabled: _selectedIndex != null,
                   onPressed: () {
-                    widget.onButtonTap();
                     Navigator.of(context).pop(
                       SurveyResult(
                         index: _selectedIndex!,
@@ -270,6 +272,7 @@ class _SurveyBottomSheetState extends State<SurveyBottomSheet> {
                         otherOptionText: _otherOptionText,
                       ),
                     );
+                    widget.onButtonTap();
                   },
                 ),
               ),

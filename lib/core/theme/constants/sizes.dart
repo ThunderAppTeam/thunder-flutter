@@ -42,6 +42,7 @@ class Sizes {
   static const double lineHeight48 = 48.0;
 
   // icon size
+  static const double icon10 = 10.0;
   static const double icon12 = 12.0;
   static const double icon14 = 14.0;
   static const double icon20 = 20.0;

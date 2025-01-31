@@ -18,7 +18,6 @@ import 'package:thunder/core/utils/show_utils.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
 import 'package:thunder/core/widgets/bottom_sheets/action_bottom_sheet.dart';
-import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/core/widgets/buttons/custom_wide_button.dart';
 import 'package:thunder/core/widgets/custom_circular_indicator.dart';
 import 'package:thunder/core/widgets/dialog/custom_alert_dialog.dart';
@@ -70,13 +69,7 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
   }
 
   void _onError(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => CustomBottomSheet(
-        title: S.of(context).commonErrorUnknownTitle,
-        subtitle: S.of(context).commonErrorUnknownSubtitle,
-      ),
-    );
+    showCommonUnknownErrorBottomSheet(context);
   }
 
   void _onDelete() async {
@@ -97,7 +90,11 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
             .read(archiveViewModelProvider.notifier)
             .removeItem(widget.bodyPhotoId);
         if (mounted) {
-          ref.read(safeRouterProvider).pop(context);
+          if (widget.fromUpload) {
+            ref.read(safeRouterProvider).goToHome(context);
+          } else {
+            ref.read(safeRouterProvider).pop(context);
+          }
         }
       }
     }
