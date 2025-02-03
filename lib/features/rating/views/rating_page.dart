@@ -70,14 +70,15 @@ class _RatingPageState extends ConsumerState<RatingPage>
     setState(() {
       _isAnimating = true;
     });
-    await Future.delayed(_ratingAnimationDelay);
     _viewModel.rate(rating);
+    await Future.delayed(_ratingAnimationDelay);
     await _animationController.forward();
     setState(() {
       _isAnimating = false; // 애니메이션 완료 후 입력 활성화
       _selectedRating = 0;
     });
     _animationController.reset();
+    _viewModel.completeRating();
   }
 
   void _onRefresh() {
@@ -138,7 +139,8 @@ class _RatingPageState extends ConsumerState<RatingPage>
       }
     });
     final providerState = ref.watch(ratingViewModelProvider);
-    final currentIdx = _viewModel.currentIdx;
+
+    final viewedIdx = _viewModel.viewedIdx;
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(vertical: Sizes.spacing8),
@@ -148,26 +150,26 @@ class _RatingPageState extends ConsumerState<RatingPage>
             data: (bodyCheckList) {
               return Stack(
                 children: [
-                  if (currentIdx >= bodyCheckList.length)
+                  if (viewedIdx >= bodyCheckList.length)
                     EmptyWidget(
                       onButtonTap: _onRefresh,
                       guideText: S.of(context).ratingEmptyGuideText,
                       buttonText: S.of(context).commonRefresh,
                     ),
                   // 다음 카드 미리 대기
-                  if (currentIdx < bodyCheckList.length - 1)
+                  if (viewedIdx < bodyCheckList.length - 1)
                     AnimatedOpacity(
                       opacity: _isAnimating ? 1.0 : 0.0,
                       duration: const Duration(milliseconds: 200),
                       child: BodyCheckWidget(
-                        bodyCheckData: bodyCheckList[currentIdx + 1],
+                        bodyCheckData: bodyCheckList[viewedIdx + 1],
                         rating: 0,
                       ),
                     ),
                   // 현재 카드 (애니메이션 적용)
-                  if (currentIdx < bodyCheckList.length)
+                  if (viewedIdx < bodyCheckList.length)
                     BodyCheckWidget(
-                      bodyCheckData: bodyCheckList[currentIdx],
+                      bodyCheckData: bodyCheckList[viewedIdx],
                       rating: _selectedRating,
                       onRatingChanged: _onRatingChanged,
                       onRatingComplete: _onRatingComplete,
