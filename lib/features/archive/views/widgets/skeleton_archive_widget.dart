@@ -19,7 +19,7 @@ class SkeletonArchiveWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
       baseColor: ColorName.darkBackground2,
-      highlightColor: ColorName.darkBackground3,
+      highlightColor: ColorName.darkSkeletonBase,
       child: GridView.builder(
         physics: const NeverScrollableScrollPhysics(),
         padding: EdgeInsets.zero,
