@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
@@ -28,7 +30,7 @@ class SurveyBottomSheet extends StatefulWidget {
   final String title;
   final List<String> options;
   final String buttonText;
-  final VoidCallback onButtonTap;
+  final FutureOr<void> Function()? onButtonTap;
   final bool hasOtherOption;
 
   const SurveyBottomSheet({
@@ -36,7 +38,7 @@ class SurveyBottomSheet extends StatefulWidget {
     required this.title,
     required this.options,
     required this.buttonText,
-    required this.onButtonTap,
+    this.onButtonTap,
     this.hasOtherOption = false,
   });
 
@@ -264,15 +266,17 @@ class _SurveyBottomSheetState extends State<SurveyBottomSheet> {
                   textColor: ColorName.white,
                   text: widget.buttonText,
                   isEnabled: _selectedIndex != null,
-                  onPressed: () {
-                    Navigator.of(context).pop(
-                      SurveyResult(
-                        index: _selectedIndex!,
-                        isOtherOption: _isOtherSelected,
-                        otherOptionText: _otherOptionText,
-                      ),
-                    );
-                    widget.onButtonTap();
+                  onPressed: () async {
+                    await widget.onButtonTap?.call();
+                    if (context.mounted) {
+                      Navigator.of(context).pop(
+                        SurveyResult(
+                          index: _selectedIndex!,
+                          isOtherOption: _isOtherSelected,
+                          otherOptionText: _otherOptionText,
+                        ),
+                      );
+                    }
                   },
                 ),
               ),

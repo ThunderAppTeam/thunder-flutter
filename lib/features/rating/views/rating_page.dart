@@ -5,6 +5,8 @@ import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/show_utils.dart';
 import 'package:thunder/core/widgets/bottom_sheets/action_bottom_sheet.dart';
+import 'package:thunder/features/rating/models/data/flag_reason_data.dart';
+import 'package:thunder/features/rating/view_models/flag_view_model.dart';
 import 'package:thunder/features/rating/view_models/rating_view_model.dart';
 import 'package:thunder/features/rating/widgets/default_widget.dart';
 import 'package:thunder/core/widgets/empty_widget.dart';
@@ -23,6 +25,9 @@ class _RatingPageState extends ConsumerState<RatingPage>
     with SingleTickerProviderStateMixin {
   late final AnimationController _animationController;
   late final RatingViewModel _viewModel;
+  late final FlagViewModel _flagViewModel;
+
+  late final List<FlagReasonData> _flagDataList;
 
   int _selectedRating = 0;
   bool _isAnimating = false; // 애니메이션 진행 상태
@@ -35,10 +40,15 @@ class _RatingPageState extends ConsumerState<RatingPage>
   void initState() {
     super.initState();
     _viewModel = ref.read(ratingViewModelProvider.notifier);
+    _flagViewModel = ref.read(flagViewModelProvider.notifier);
     _animationController = AnimationController(
       duration: _ratingAnimationDuration,
       vsync: this,
     );
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final flagList = await _flagViewModel.fetchFlagList();
+      _flagDataList = flagList;
+    });
   }
 
   @override
@@ -94,25 +104,23 @@ class _RatingPageState extends ConsumerState<RatingPage>
   }
 
   Future<void> _onReportTap() async {
-    final reportOptions = [
-      S.of(context).reportOptionSexualContent,
-      S.of(context).reportOptionNonRelatedContent,
-      S.of(context).reportOptionFakeProfile,
-      S.of(context).reportOptionBadWords,
-      S.of(context).reportOptionChildSexualContent,
-      S.of(context).surveyOtherOption,
-    ];
-
-    final result = await showSurveyBottomSheet(
-      context,
-      title: S.of(context).commonReport,
-      options: reportOptions,
-      buttonText: S.of(context).commonConfirm,
-      onButtonTap: () {},
-      hasOtherOption: true,
-    );
-    if (result == null) return;
-    _viewModel.skip();
+    if (_flagDataList.isEmpty) _onError();
+    if (mounted) {
+      final result = await showSurveyBottomSheet(
+        context,
+        title: S.of(context).commonReport,
+        options: _flagDataList.map((e) => e.description).toList(),
+        buttonText: S.of(context).commonConfirm,
+        hasOtherOption: true,
+      );
+      if (result == null) return;
+      final flagData = _flagDataList[result.index];
+      _flagViewModel.flag(
+        _viewModel.viewedBodyPhotoId,
+        flagData.flagReason,
+      );
+      _viewModel.skip();
+    }
   }
 
   void _onBlockTap() async {
@@ -123,11 +131,12 @@ class _RatingPageState extends ConsumerState<RatingPage>
       confirmText: S.of(context).commonBlock,
     );
     if (confirmed == true && context.mounted) {
+      _flagViewModel.block(_viewModel.viewedMemberId);
       _viewModel.block();
     }
   }
 
-  void _onError(error) {
+  void _onError() {
     showCommonUnknownErrorBottomSheet(context);
   }
 
@@ -135,7 +144,12 @@ class _RatingPageState extends ConsumerState<RatingPage>
   Widget build(BuildContext context) {
     ref.listen(ratingViewModelProvider, (previous, next) {
       if (next.error != null && !next.isLoading) {
-        _onError(next.error);
+        _onError();
+      }
+    });
+    ref.listen(flagViewModelProvider, (previous, next) {
+      if (next.error != null && !next.isLoading) {
+        _onError();
       }
     });
     final providerState = ref.watch(ratingViewModelProvider);

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:thunder/core/constants/app_const.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
@@ -48,7 +50,7 @@ Future<SurveyResult?> showSurveyBottomSheet(
   required String title,
   required List<String> options,
   required String buttonText,
-  required VoidCallback onButtonTap,
+  FutureOr<void> Function()? onButtonTap,
   bool hasOtherOption = false,
 }) async {
   final mediaQuery = MediaQuery.of(context);

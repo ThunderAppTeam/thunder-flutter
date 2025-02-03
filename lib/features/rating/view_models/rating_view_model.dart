@@ -20,8 +20,10 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
   int _viewedIdx = 0;
   bool _noMoreData = false;
 
-  int get currentIdx => _currentIdx;
   int get viewedIdx => _viewedIdx;
+  int get viewedBodyPhotoId => _list[_viewedIdx].bodyPhotoId;
+  int get viewedMemberId => _list[_viewedIdx].memberId;
+
   bool _isRatingInProgress = false;
 
   bool get isRatingInProgress => _isRatingInProgress;
@@ -62,6 +64,7 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
   void skip() async {
     _currentIdx++;
     if (_needFetchMore()) await _fetchMore();
+    _viewedIdx = _currentIdx;
     state = AsyncData(_list);
   }
 
