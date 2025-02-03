@@ -28,6 +28,10 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
 
   bool get isRatingInProgress => _isRatingInProgress;
 
+  bool _searching = false;
+
+  bool get searching => _searching;
+
   bool _needFetchMore() =>
       _currentIdx >= _list.length - _threshold && !_noMoreData;
 
@@ -128,15 +132,16 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
     _noMoreData = false;
     _currentIdx = 0;
     _list.clear();
-
+    _searching = true;
     // 최소 로딩 시간 보장
     final start = DateTime.now();
-    final fetched = await _fetchData(_initialFetchCount);
     final elapsed = DateTime.now().difference(start);
     final remaining = _refreshDuration - elapsed;
     if (remaining > Duration.zero) {
       await Future.delayed(remaining);
     }
+    final fetched = await _fetchData(_initialFetchCount);
+    _searching = false;
     _list = fetched;
     state = AsyncData(_list);
   }

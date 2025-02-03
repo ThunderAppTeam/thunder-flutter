@@ -23,6 +23,7 @@ dependencies:
   #=== UI & Design
   flutter_svg: ^2.0.16
   scroll_to_index: any
+  shimmer: ^3.0.0
 
   #=== State Management
   flutter_riverpod: ^2.6.1

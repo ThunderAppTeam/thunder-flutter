@@ -20,7 +20,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     debugLogDiagnostics: true,
     // initialLocation: Routes.home.path,
-    initialLocation: !kDebugMode ? Routes.home.path : Routes.home.path,
+    initialLocation: !kDebugMode ? Routes.home.path : Routes.archive.path,
     redirect: (context, state) {
       final isLoggedIn = ref.read(authStateProvider).isLoggedIn;
       // 웰컴 페이지나 온보딩 페이지면 리다이렉트 하지 않음

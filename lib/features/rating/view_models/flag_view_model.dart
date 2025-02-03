@@ -39,4 +39,5 @@ class FlagViewModel extends AutoDisposeAsyncNotifier<void> {
 
 final flagViewModelProvider =
     AutoDisposeAsyncNotifierProvider<FlagViewModel, void>(
-        () => FlagViewModel());
+  () => FlagViewModel(),
+);
