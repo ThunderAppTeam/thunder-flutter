@@ -13,6 +13,7 @@ import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/constants/styles.dart';
 import 'package:thunder/core/theme/gen/assets.gen.dart';
+import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/theme/icon/thunder_icons_icons.dart';
 import 'package:thunder/core/utils/show_utils.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
@@ -138,7 +139,7 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
       if (boundary == null) return;
 
       // 2) 이미지를 만들어서 Byte 형식으로 변환
-      final image = await boundary.toImage(pixelRatio: 2.0);
+      final image = await boundary.toImage(pixelRatio: 2);
       final byteData = await image.toByteData(format: ImageByteFormat.png);
       if (byteData == null) return;
 
@@ -200,8 +201,6 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
         body: Padding(
           padding: const EdgeInsets.only(
             top: Sizes.spacing16,
-            left: Sizes.spacing16,
-            right: Sizes.spacing16,
             bottom: Sizes.spacing8,
           ),
           child: Column(
@@ -213,13 +212,10 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
                   children: [
                     Hero(
                       tag: 'body_check_image_${widget.bodyPhotoId}',
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(Sizes.radius16),
-                        child: ThunderNetworkImage(
-                          imageUrl: resultState.maybeWhen(
-                            data: (result) => result.imageUrl,
-                            orElse: () => widget.imageUrl,
-                          ),
+                      child: ThunderNetworkImage(
+                        imageUrl: resultState.maybeWhen(
+                          data: (result) => result.imageUrl,
+                          orElse: () => widget.imageUrl,
                         ),
                       ),
                     ),
@@ -251,17 +247,19 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Hero(
-                                  tag: 'body_check_score_${widget.bodyPhotoId}',
-                                  child: Material(
+                            _buildAnimatedOpacity(
+                              hasValue: resultState.hasValue,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Material(
                                     color: Colors.transparent,
                                     child: Row(
+                                      mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Assets.images.logos.thunderSymbolW
-                                            .svg(),
+                                        Assets.images.logos.thunderSymbolW.svg(
+                                          height: 30,
+                                        ),
                                         Gaps.h8,
                                         if (widget.pointText != null)
                                           Text(
@@ -283,34 +281,43 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
                                       ],
                                     ),
                                   ),
-                                ),
-                                _buildAnimatedOpacity(
-                                  hasValue: resultState.hasValue,
-                                  child:
-                                      Text('점', style: textTheme.textTitle16),
-                                ),
-                              ],
+                                  Text('점', style: textTheme.textTitle16),
+                                ],
+                              ),
                             ),
                             Gaps.v12,
                             _buildAnimatedOpacity(
                               hasValue: resultState.hasValue,
                               child: resultState.maybeWhen(
                                 data: (result) => Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      result.isReviewCompleted
-                                          ? '최근 30일 기준 ${result.gender.toDisplayString(context)} 상위 ${result.genderTopRate.toStringAsFixed(0)}%'
-                                          : '눈바디 측정 중... ${result.progressRate.toStringAsFixed(0)}% 완료',
-                                      style: textTheme.textBody16,
+                                    Row(
+                                      children: [
+                                        Text(
+                                          result.isReviewCompleted
+                                              ? '최근 30일 기준 ${result.gender.toDisplayString(context)} 상위 ${result.genderTopRate.toStringAsFixed(0)}%'
+                                              : '눈바디 측정 중... ${result.progressRate.toStringAsFixed(0)}% 완료',
+                                          style: textTheme.textBody16,
+                                        ),
+                                        if (!result.isReviewCompleted) ...[
+                                          Gaps.h4,
+                                          CustomCircularIndicator(
+                                            size: Sizes.circularIndicatorSize18,
+                                            strokeWidth: Sizes
+                                                .circularIndicatorStrokeWidth2,
+                                          ),
+                                        ],
+                                      ],
                                     ),
-                                    if (!result.isReviewCompleted) ...[
-                                      Gaps.h4,
-                                      CustomCircularIndicator(
-                                        size: Sizes.circularIndicatorSize18,
-                                        strokeWidth:
-                                            Sizes.circularIndicatorStrokeWidth2,
+                                    Assets.images.logos.thunderLogotypeW.svg(
+                                      height: Sizes.fontSize16,
+                                      colorFilter: ColorFilter.mode(
+                                        ColorName.white.withOpacity(0.8),
+                                        BlendMode.srcIn,
                                       ),
-                                    ],
+                                    ),
                                   ],
                                 ),
                                 orElse: () =>
@@ -325,15 +332,19 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
                 ),
               )),
               Gaps.v16,
-              CustomWideButton(
-                text: S.of(context).commonShare,
-                isEnabled: !_isSharing &&
-                    _isAnimationCompleted &&
-                    resultState.maybeWhen(
-                      data: (result) => result.isReviewCompleted,
-                      orElse: () => false,
-                    ),
-                onPressed: _onShare,
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: Sizes.spacing16),
+                child: CustomWideButton(
+                  text: S.of(context).commonShare,
+                  isEnabled: !_isSharing &&
+                      _isAnimationCompleted &&
+                      resultState.maybeWhen(
+                        data: (result) => result.isReviewCompleted,
+                        orElse: () => false,
+                      ),
+                  onPressed: _onShare,
+                ),
               ),
             ],
           ),

@@ -7,7 +7,7 @@ part 'flag_reason_data.g.dart';
 class FlagReasonData with _$FlagReasonData {
   const factory FlagReasonData({
     @JsonKey(name: "flagReason") required String flagReason,
-    @JsonKey(name: "descriptionKR") required String description,
+    @JsonKey(name: "description") required String description,
   }) = _FlagReasonData;
 
   factory FlagReasonData.fromJson(Map<String, dynamic> json) =>

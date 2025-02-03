@@ -143,15 +143,13 @@ class _RatingPageState extends ConsumerState<RatingPage>
   @override
   Widget build(BuildContext context) {
     ref.listen(ratingViewModelProvider, (previous, next) {
-      if (next.error != null && !next.isLoading) {
+      if (next.error != null &&
+          previous?.error != next.error &&
+          !next.isLoading) {
         _onError();
       }
     });
-    ref.listen(flagViewModelProvider, (previous, next) {
-      if (next.error != null && !next.isLoading) {
-        _onError();
-      }
-    });
+
     final providerState = ref.watch(ratingViewModelProvider);
 
     final viewedIdx = _viewModel.viewedIdx;

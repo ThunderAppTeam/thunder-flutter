@@ -103,7 +103,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           final pointText = extra?[KeyConst.pointText];
           return CustomTransitionPage<void>(
             key: state.pageKey,
-            transitionDuration: Styles.pageTransitionDuration500,
+            transitionDuration: Styles.pageTransitionDuration400,
             reverseTransitionDuration: Styles.pageTransitionDuration300,
             child: BodyCheckResultPage(
               bodyPhotoId: bodyPhotoId,

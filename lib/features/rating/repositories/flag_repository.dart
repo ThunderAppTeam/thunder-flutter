@@ -11,7 +11,7 @@ class FlagRepository {
   FlagRepository(this._dio);
 
   Future<void> flag(int bodyPhotoId, String flagReasonString) async {
-    final path = '/v1/flag';
+    final path = '/v1/body/flag';
     await _dio.post(path, options: DioOptions.tokenOptions, data: {
       KeyConst.bodyPhotoId: bodyPhotoId,
       KeyConst.flagReason: flagReasonString,
@@ -19,7 +19,7 @@ class FlagRepository {
   }
 
   Future<List<Map<String, dynamic>>> fetchFlagList() async {
-    final path = '/v1/flag';
+    final path = '/v1/body/flag';
     try {
       final response = await _dio.get(path, options: DioOptions.tokenOptions);
       final data = response.data[KeyConst.data];

@@ -197,6 +197,8 @@ class _SurveyBottomSheetState extends State<SurveyBottomSheet> {
                                       widget.options[index],
                                       style: textTheme.textBody18.copyWith(
                                         color: ColorName.black,
+                                        height: Sizes.lineHeight22 /
+                                            Sizes.fontSize18,
                                       ),
                                     ),
                                   ],

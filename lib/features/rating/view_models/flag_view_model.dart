@@ -13,7 +13,7 @@ class FlagViewModel extends AutoDisposeAsyncNotifier<void> {
   }
 
   Future<List<FlagReasonData>> fetchFlagList() async {
-    late final List<FlagReasonData> result;
+    List<FlagReasonData> result = [];
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       final data = await _repository.fetchFlagList();

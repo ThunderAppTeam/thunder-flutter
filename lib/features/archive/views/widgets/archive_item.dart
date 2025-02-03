@@ -23,21 +23,15 @@ class ArchiveItem extends StatelessWidget {
           left: Sizes.spacing8,
           right: Sizes.spacing8,
           bottom: Sizes.spacing8,
-          child: Hero(
-            tag: 'body_check_score_${item.bodyPhotoId}',
-            child: Material(
-              color: Colors.transparent,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Assets.images.logos.thunderSymbolW.svg(height: Sizes.icon12),
-                  Text(
-                    item.reviewCount == 0 ? '?.?' : item.reviewScore.toString(),
-                    style: textTheme.textSubtitle14,
-                  ),
-                ],
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Assets.images.logos.thunderSymbolW.svg(height: Sizes.icon12),
+              Text(
+                item.reviewCount == 0 ? '?.?' : item.reviewScore.toString(),
+                style: textTheme.textSubtitle14,
               ),
-            ),
+            ],
           ),
         ),
       ],

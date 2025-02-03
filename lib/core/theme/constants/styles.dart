@@ -28,5 +28,6 @@ abstract class Styles {
 
   // Page Transition Duration
   static const Duration pageTransitionDuration300 = Duration(milliseconds: 300);
+  static const Duration pageTransitionDuration400 = Duration(milliseconds: 400);
   static const Duration pageTransitionDuration500 = Duration(milliseconds: 500);
 }
