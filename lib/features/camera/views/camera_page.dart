@@ -9,8 +9,8 @@ import 'package:thunder/core/constants/time_const.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
+import 'package:thunder/core/utils/show_utils.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
-import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/core/widgets/custom_circular_indicator.dart';
 import 'package:thunder/features/camera/controllers/camera_controller.dart';
 import 'package:thunder/features/camera/models/camera_state.dart';
@@ -51,24 +51,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
   }
 
   void _showErrorBottomSheet(CameraError error) {
-    // final errorMessage = switch (error) {
-    //   CameraError.initializationFailed => '카메라 초기화 도중 오류가 발생했습니다',
-    //   CameraError.flashModeChangeFailed => '플래시 모드 변경 도중 오류가 발생했습니다',
-    //   CameraError.settingsOpenFailed => '카메라 접근 권한 설정 실패',
-    //   CameraError.imagePickFailed => '이미지 선택 도중 오류가 발생했습니다',
-    //   CameraError.captureError => '사진 촬영 도중 오류가 발생했습니다',
-    //   CameraError.switchCameraFailed => '카메라 전환 도중 오류가 발생했습니다',
-    // };
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => CustomBottomSheet(
-        title: S.of(context).commonErrorUnknownTitle,
-        subtitle: S.of(context).commonErrorUnknownSubtitle,
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
-    );
+    showCommonUnknownErrorBottomSheet(context);
   }
 
   Future<void> _onFocusTap(

@@ -15,4 +15,6 @@ class KeyConst {
   static const String bodyPhotoId = 'bodyPhotoId';
   static const String fromUpload = 'fromUpload';
   static const String pointText = 'pointText';
+  static const String flagReason = 'flagReason';
+  static const String blockedMemberId = 'blockedMemberId';
 }

@@ -8,7 +8,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/router.dart';
+import 'package:thunder/core/constants/app_const.dart';
 import 'package:thunder/core/providers/token_provider.dart';
+import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/theme/text/default.dart';
 import 'package:thunder/firebase_options.dart';
 import 'package:thunder/generated/l10n.dart';
@@ -47,7 +49,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
-      title: 'Thunder',
+      title: AppConst.appName,
       localizationsDelegates: [
         S.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -63,6 +65,10 @@ class MyApp extends ConsumerWidget {
         extensions: [
           defaultTextTheme,
         ],
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: ColorName.black,
+          selectionHandleColor: ColorName.black,
+        ),
       ),
       routerConfig: ref.read(routerProvider),
     );

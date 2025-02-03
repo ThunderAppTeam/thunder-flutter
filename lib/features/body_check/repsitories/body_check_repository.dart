@@ -20,6 +20,15 @@ class BodyCheckRepository {
       throw DioErrorParser.parseDio(e);
     }
   }
+
+  Future<void> deleteBodyCheckResult(int bodyPhotoId) async {
+    final path = '/v1/body/photo/$bodyPhotoId';
+    try {
+      await _dio.delete(path, options: DioOptions.tokenOptions);
+    } on DioException catch (e) {
+      throw DioErrorParser.parseDio(e);
+    }
+  }
 }
 
 final bodyCheckRepositoryProvider = Provider<BodyCheckRepository>((ref) {

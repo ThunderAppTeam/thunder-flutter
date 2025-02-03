@@ -30,6 +30,17 @@ class BodyCheckResultViewModel
     state = const AsyncLoading();
     state = AsyncData(await _fetchBodyCheckResult(bodyPhotoId));
   }
+
+  Future<bool> deleteBodyCheckResult(int bodyPhotoId) async {
+    state = const AsyncLoading();
+    try {
+      await _repository.deleteBodyCheckResult(bodyPhotoId);
+      return true;
+    } catch (e) {
+      state = AsyncError(e, StackTrace.current);
+      return false;
+    }
+  }
 }
 
 final bodyCheckResultProvider = AsyncNotifierProvider.autoDispose

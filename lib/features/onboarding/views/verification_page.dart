@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/core/constants/app_const.dart';
 import 'package:thunder/core/constants/time_const.dart';
 import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
@@ -98,11 +99,13 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
           break;
         case PhoneAuthError.unknown:
           title = S.of(context).commonErrorUnknownTitle;
-          subtitle = S.of(context).commonErrorUnknownSubtitle;
+          subtitle =
+              S.of(context).commonErrorUnknownSubtitle(AppConst.supportEmail);
           break;
         case PhoneAuthError.expiredVerificationCode:
-          title = "인증 코드가 만료되었습니다.";
-          subtitle = "인증 코드를 다시 발송해주세요.";
+          title = S.of(context).verificationErrorExpiredVerificationCodeTitle;
+          subtitle =
+              S.of(context).verificationErrorExpiredVerificationCodeSubtitle;
           break;
       }
       showModalBottomSheet(

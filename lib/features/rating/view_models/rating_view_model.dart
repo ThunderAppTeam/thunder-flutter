@@ -17,13 +17,19 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
   final Duration _refreshDuration = const Duration(milliseconds: 800);
 
   int _currentIdx = 0;
+  int _viewedIdx = 0;
   bool _noMoreData = false;
 
-  int get currentIdx => _currentIdx;
+  int get viewedIdx => _viewedIdx;
+  int get viewedBodyPhotoId => _list[_viewedIdx].bodyPhotoId;
+  int get viewedMemberId => _list[_viewedIdx].memberId;
 
   bool _isRatingInProgress = false;
 
   bool get isRatingInProgress => _isRatingInProgress;
+
+  bool _needFetchMore() =>
+      _currentIdx >= _list.length - _threshold && !_noMoreData;
 
   @override
   FutureOr<List<BodyCheckData>> build() async {
@@ -55,6 +61,23 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
     }
   }
 
+  void skip() async {
+    _currentIdx++;
+    if (_needFetchMore()) await _fetchMore();
+    _viewedIdx = _currentIdx;
+    state = AsyncData(_list);
+  }
+
+  void block() async {
+    final blockedContents =
+        _list.where((e) => e.memberId == _list[_currentIdx].memberId);
+    _list.removeWhere((e) => e.memberId == _list[_currentIdx].memberId);
+    if (_needFetchMore()) {
+      await _fetchMore(count: blockedContents.length);
+    }
+    state = AsyncData(_list);
+  }
+
   /// 사용자가 "카드 하나를 스와이프/평가"했을 때 호출
   void rate(int rating) async {
     if (_isRatingInProgress) return;
@@ -62,10 +85,7 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
     final bodyCheckData = _list[_currentIdx++];
     try {
       await _repository.rate(bodyCheckData.bodyPhotoId, rating);
-      if (_currentIdx >= _list.length - _threshold) {
-        if (!_noMoreData) await _fetchMore();
-      }
-      state = AsyncData(_list); // 인덱스 정보도 같이 업데이트 되어야함.
+      if (_needFetchMore()) await _fetchMore();
     } on ServerError catch (e) {
       if (e == ServerError.alreadyReviewed) {
         return; // 이미 평가한 경우 무시
@@ -81,8 +101,8 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
   }
 
   /// 추가 데이터 가져오기
-  Future<void> _fetchMore() async {
-    final newList = await _fetchData(_fetchCount);
+  Future<void> _fetchMore({int count = 0}) async {
+    final newList = await _fetchData(_fetchCount + count);
     // 새로 가져온 리스트가 < fetchCount 면 이번이 마지막
     // 기존 리스트 뒤에 덧붙임
     _list.addAll(newList);
@@ -94,6 +114,11 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
         _currentIdx = 0;
       }
     }
+  }
+
+  void completeRating() {
+    _viewedIdx = _currentIdx;
+    state = AsyncData(_list);
   }
 
   /// 데이터 전체를 새로고침

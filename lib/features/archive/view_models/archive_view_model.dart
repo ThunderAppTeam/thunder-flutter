@@ -36,6 +36,11 @@ class ArchiveViewModel
       },
     );
   }
+
+  void removeItem(int bodyPhotoId) {
+    _list.removeWhere((element) => element.bodyPhotoId == bodyPhotoId);
+    state = AsyncData(_list);
+  }
 }
 
 final archiveViewModelProvider = AutoDisposeAsyncNotifierProvider<
