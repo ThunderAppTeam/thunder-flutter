@@ -12,6 +12,7 @@ import 'package:thunder/features/onboarding/controllers/verification_controller.
 
 import 'package:thunder/core/widgets/buttons/custom_wide_button.dart';
 import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
+import 'package:thunder/features/onboarding/services/permission_navigation_service.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_scaffold.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_small_button.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_text_field.dart';
@@ -52,7 +53,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
     _controller.verifyCode(smsCode);
   }
 
-  void _onVerifySuccess(bool isExistUser) {
+  void _onVerifySuccess(bool isExistUser) async {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.invalidate(verificationTimerProvider);
     });
@@ -60,7 +61,12 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref.invalidate(onboardingProvider);
       });
-      ref.read(safeRouterProvider).goToHome(context);
+      final isRouted =
+          await PermissionNavigationService.requestPermissionsAndRoute(
+              context, ref);
+      if (!isRouted && mounted) {
+        ref.read(safeRouterProvider).goToHome(context);
+      }
     } else {
       ref.read(onboardingProvider.notifier).pushNextStep(
             context: context,

@@ -1,11 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
-import 'package:thunder/core/constants/time_const.dart';
 import 'package:thunder/core/services/permission_service.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
@@ -35,26 +32,8 @@ enum Tabs {
 }
 
 class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _requestPermissions();
-    });
-  }
-
-  Future<void> _requestPermissions() async {
-    // 알림 권한 요청
-    await PermissionService.requestNotificationPermission();
-    // 앱 추적 권한 요청 (iOS only)
-    if (Platform.isIOS) {
-      await Future.delayed(TimeConst.permissionPopupDuration);
-      await PermissionService.requestTrackingPermission();
-    }
-  }
-
   void _onMeasureTap() async {
-    await PermissionService.requestCameraPermission();
+    await PermissionService.requestPermission(PermissionType.camera);
     if (mounted) {
       ref.read(safeRouterProvider).pushNamed(context, Routes.measure.name);
     }

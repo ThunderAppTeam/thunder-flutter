@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 @immutable
 class AppTextTheme extends ThemeExtension<AppTextTheme> {
+  // Custom
+  final TextStyle customStyle;
   // Head
   final TextStyle textHead32;
   final TextStyle textHead24;
@@ -23,6 +25,7 @@ class AppTextTheme extends ThemeExtension<AppTextTheme> {
   final TextStyle textBody12;
 
   const AppTextTheme({
+    required this.customStyle,
     required this.textHead32,
     required this.textHead24,
     required this.textTitle24,
@@ -39,6 +42,7 @@ class AppTextTheme extends ThemeExtension<AppTextTheme> {
 
   @override
   ThemeExtension<AppTextTheme> copyWith({
+    TextStyle? customStyle,
     TextStyle? textHead32,
     TextStyle? textHead24,
     TextStyle? textTitle24,
@@ -53,6 +57,7 @@ class AppTextTheme extends ThemeExtension<AppTextTheme> {
     TextStyle? textBody12,
   }) {
     return AppTextTheme(
+      customStyle: customStyle ?? this.customStyle,
       textHead32: textHead32 ?? this.textHead32,
       textHead24: textHead24 ?? this.textHead24,
       textTitle24: textTitle24 ?? this.textTitle24,
@@ -78,6 +83,7 @@ class AppTextTheme extends ThemeExtension<AppTextTheme> {
     }
 
     return AppTextTheme(
+      customStyle: TextStyle.lerp(customStyle, other.customStyle, t)!,
       textHead32: TextStyle.lerp(textHead32, other.textHead32, t)!,
       textHead24: TextStyle.lerp(textHead24, other.textHead24, t)!,
       textTitle24: TextStyle.lerp(textTitle24, other.textTitle24, t)!,

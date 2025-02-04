@@ -10,6 +10,8 @@ import 'package:thunder/core/theme/constants/styles.dart';
 import 'package:thunder/features/archive/views/archive_page.dart';
 import 'package:thunder/features/auth/providers/auth_state_provider.dart';
 import 'package:thunder/features/camera/views/camera_page.dart';
+import 'package:thunder/features/permission/views/notification_permission_page.dart';
+import 'package:thunder/features/permission/views/traking_permission_page.dart';
 import 'package:thunder/features/rating/views/rating_page.dart';
 import 'package:thunder/features/body_check/views/body_check_result_page.dart';
 import 'package:thunder/features/onboarding/views/phone_number_page.dart';
@@ -125,6 +127,16 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: Routes.settings.path,
         name: Routes.settings.name,
         builder: (context, state) => const SettingsPage(),
+      ),
+      GoRoute(
+        path: Routes.permissionNotification.path,
+        name: Routes.permissionNotification.name,
+        builder: (context, state) => const NotificationPermissionPage(),
+      ),
+      GoRoute(
+        path: Routes.permissionTracking.path,
+        name: Routes.permissionTracking.name,
+        builder: (context, state) => const TrackingPermissionPage(),
       ),
     ],
   );
