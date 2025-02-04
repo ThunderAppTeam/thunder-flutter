@@ -35,8 +35,9 @@ class PermissionModal extends StatelessWidget {
 
   Widget _buildEmoji() {
     return Transform.translate(
-      offset: const Offset(0, 30),
-      child: IgnorePointer(child: Text('👆', style: TextStyle(fontSize: 32))),
+      offset: const Offset(0, 36),
+      child: IgnorePointer(
+          child: Text('👆', style: TextStyle(fontSize: 32, height: 1.0))),
     );
   }
 
