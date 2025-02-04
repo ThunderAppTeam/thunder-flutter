@@ -12,6 +12,7 @@ import 'package:thunder/features/rating/widgets/default_widget.dart';
 import 'package:thunder/core/widgets/empty_widget.dart';
 import 'package:thunder/features/rating/widgets/body_check_widget.dart';
 import 'package:thunder/features/rating/widgets/loading_widget.dart';
+import 'package:thunder/features/rating/widgets/skeleton_body_check_widget.dart';
 import 'package:thunder/generated/l10n.dart';
 
 class RatingPage extends ConsumerStatefulWidget {
@@ -31,6 +32,7 @@ class _RatingPageState extends ConsumerState<RatingPage>
 
   int _selectedRating = 0;
   bool _isAnimating = false; // 애니메이션 진행 상태
+  bool _isShowingError = false; // 에러 메시지 표시 상태 추적
 
   final Duration _ratingAnimationDelay = const Duration(milliseconds: 200);
   final Duration _ratingAnimationDuration = const Duration(milliseconds: 200);
@@ -137,12 +139,24 @@ class _RatingPageState extends ConsumerState<RatingPage>
   }
 
   void _onError() {
-    showCommonUnknownErrorBottomSheet(context);
+    if (_isShowingError) return;
+    _isShowingError = true;
+    if (!mounted) return;
+    showCommonUnknownErrorBottomSheet(context).then((_) {
+      _isShowingError = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     ref.listen(ratingViewModelProvider, (previous, next) {
+      if (next.error != null &&
+          previous?.error != next.error &&
+          !next.isLoading) {
+        _onError();
+      }
+    });
+    ref.listen(flagViewModelProvider, (previous, next) {
       if (next.error != null &&
           previous?.error != next.error &&
           !next.isLoading) {
@@ -198,7 +212,11 @@ class _RatingPageState extends ConsumerState<RatingPage>
               );
             },
             loading: () {
-              return LoadingWidget();
+              if (_viewModel.searching) {
+                return LoadingWidget();
+              } else {
+                return SkeletonBodyCheckWidget();
+              }
             },
           ),
         ),

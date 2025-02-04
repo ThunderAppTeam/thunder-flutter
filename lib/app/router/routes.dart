@@ -35,4 +35,14 @@ final class Routes {
     name: 'settings',
     path: '/settings',
   );
+
+  static const permissionNotification = (
+    name: 'permissionNotification',
+    path: '/permission/notification',
+  );
+
+  static const permissionTracking = (
+    name: 'permissionTracking',
+    path: '/permission/tracking',
+  );
 }

@@ -4,6 +4,11 @@ import 'package:thunder/core/theme/constants/sizes.dart';
 import 'app_text_theme.dart';
 
 const AppTextTheme defaultTextTheme = AppTextTheme(
+  customStyle: TextStyle(
+    fontFamily: FontFamily.pretendard,
+    color: Colors.white,
+    height: Sizes.defaultFontHeight,
+  ),
   // #####--- Heading styles (큰 텍스트, 화면 제목 및 메인 글자)
   textHead32: TextStyle(
     fontFamily: FontFamily.pretendard,

@@ -12,6 +12,7 @@ import 'package:thunder/core/widgets/web_view_page.dart';
 import 'package:thunder/features/auth/models/states/sign_up_state.dart';
 import 'package:thunder/features/auth/providers/sign_up_provider.dart';
 import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
+import 'package:thunder/features/onboarding/services/permission_navigation_service.dart';
 import 'package:thunder/generated/l10n.dart';
 
 enum Terms {
@@ -171,13 +172,18 @@ class _TermsBottomSheetState extends ConsumerState<TermsBottomSheet> {
     );
   }
 
-  void _onSignUpStateChange(SignUpState? prev, SignUpState next) {
+  void _onSignUpStateChange(SignUpState? prev, SignUpState next) async {
     if (next.isSuccess) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref.invalidate(onboardingProvider);
         ref.invalidate(signUpProvider);
       });
-      ref.read(safeRouterProvider).goToHome(context);
+      final isRouted =
+          await PermissionNavigationService.requestPermissionsAndRoute(
+              context, ref);
+      if (!isRouted && mounted) {
+        ref.read(safeRouterProvider).goToHome(context);
+      }
     } else if (prev?.isError != next.isError && next.isError) {
       setState(() {
         _isPressed = false;

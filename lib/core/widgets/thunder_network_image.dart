@@ -1,7 +1,7 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
-import 'package:thunder/core/widgets/custom_circular_indicator.dart';
 
 class ThunderNetworkImage extends StatelessWidget {
   final String imageUrl;
@@ -18,7 +18,13 @@ class ThunderNetworkImage extends StatelessWidget {
       loadStateChanged: (state) {
         switch (state.extendedImageLoadState) {
           case LoadState.loading:
-            return const Center(child: CustomCircularIndicator());
+            return Shimmer.fromColors(
+              baseColor: ColorName.darkBackground2,
+              highlightColor: ColorName.darkBackground3,
+              child: Container(
+                color: Colors.white,
+              ),
+            );
           case LoadState.completed:
             return state.completedWidget;
           case LoadState.failed:

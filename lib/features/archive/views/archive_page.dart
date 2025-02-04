@@ -9,11 +9,11 @@ import 'package:thunder/core/constants/key_contst.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/show_utils.dart';
-import 'package:thunder/core/widgets/custom_circular_indicator.dart';
 import 'package:thunder/core/widgets/empty_widget.dart';
 import 'package:thunder/features/archive/models/data/body_check_preview_data.dart';
 import 'package:thunder/features/archive/view_models/archive_view_model.dart';
 import 'package:thunder/features/archive/views/widgets/archive_item.dart';
+import 'package:thunder/features/archive/views/widgets/skeleton_archive_widget.dart';
 import 'package:thunder/generated/l10n.dart';
 
 class ArchivePage extends ConsumerStatefulWidget {
@@ -107,7 +107,13 @@ class _ArchivePageState extends ConsumerState<ArchivePage> {
               );
             },
             error: (error, stack) => const SizedBox.shrink(),
-            loading: () => const Center(child: CustomCircularIndicator()),
+            loading: () {
+              return SkeletonArchiveWidget(
+                crossAxisCount: _crossAxisCount,
+                itemWidth: itemWidth,
+                itemHeight: itemHeight,
+              );
+            },
           );
         },
       ),

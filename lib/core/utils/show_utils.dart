@@ -19,8 +19,8 @@ void showActionBottomSheet(
   );
 }
 
-void showCommonUnknownErrorBottomSheet(BuildContext context) {
-  showModalBottomSheet(
+Future<void> showCommonUnknownErrorBottomSheet(BuildContext context) async {
+  await showModalBottomSheet(
     context: context,
     useRootNavigator: true,
     builder: (context) => CustomBottomSheet(
