@@ -200,7 +200,6 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
         ),
         body: Padding(
           padding: const EdgeInsets.only(
-            top: Sizes.spacing16,
             bottom: Sizes.spacing8,
           ),
           child: Column(

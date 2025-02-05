@@ -9,10 +9,10 @@ import 'package:thunder/features/rating/repositories/rating_repository.dart';
 class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
   late final RatingRepository _repository;
   List<BodyCheckData> _list = [];
-  static const _initialFetchCount = 2;
+  static const _initialFetchCount = 1;
   static const _fetchCount = 1;
-  static const _threshold = 1; // 리스트의 마지막 몇 개 더 전에 가져오기 시작할지.
-  final int _maxLength = 2;
+  static const _threshold = 0; // 리스트의 마지막 몇 개 더 전에 가져오기 시작할지.
+  final int _maxLength = 1;
 
   final Duration _refreshDuration = const Duration(milliseconds: 800);
 
@@ -45,7 +45,6 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
         link.close(); // 로그아웃 시 강제 해제
       }
     });
-
     state = const AsyncLoading();
     _list = await _fetchData(_initialFetchCount);
     return _list;
@@ -53,7 +52,7 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
 
   Future<List<BodyCheckData>> _fetchData(int count) async {
     try {
-      final data = await _repository.fetchRatingList(count);
+      final data = await _repository.fetchRatings(count);
       if (data.length < count) {
         // 요구한 데이터 수보다 적게 가져온 경우
         _noMoreData = true;
@@ -72,15 +71,25 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
     state = AsyncData(_list);
   }
 
-  void block() async {
-    final blockedContents =
-        _list.where((e) => e.memberId == _list[_currentIdx].memberId);
-    _list.removeWhere((e) => e.memberId == _list[_currentIdx].memberId);
-    if (_needFetchMore()) {
-      await _fetchMore(count: blockedContents.length);
-    }
-    state = AsyncData(_list);
-  }
+  // void block() async {
+  //   final blockedMemberId = _list[_currentIdx++].memberId;
+  //   // 현재 인덱스까지는 유지하고, 그 이후의 리스트만 필터링
+  //   final beforeList = _list.sublist(0, _currentIdx);
+  //   final afterList = _list.skip(_currentIdx);
+
+  //   final blockedList =
+  //       afterList.where((e) => e.memberId == blockedMemberId).toList();
+  //   final remainingList =
+  //       afterList.where((e) => e.memberId != blockedMemberId).toList();
+  //   // 필터링된 리스트 합치기
+  //   _list = [...beforeList, ...remainingList];
+  //   if (_needFetchMore()) {
+  //     await _fetchMore(
+  //         count: _fetchCount + blockedList.length); // 삭제된 리스트 갯수만큼 추가.
+  //   }
+  //   _viewedIdx = _currentIdx;
+  //   state = AsyncData(_list);
+  // }
 
   /// 사용자가 "카드 하나를 스와이프/평가"했을 때 호출
   void rate(int rating) async {
@@ -105,9 +114,8 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
   }
 
   /// 추가 데이터 가져오기
-  Future<void> _fetchMore({int count = 0}) async {
-    final newList = await _fetchData(_fetchCount + count);
-    // 새로 가져온 리스트가 < fetchCount 면 이번이 마지막
+  Future<void> _fetchMore({int count = _fetchCount}) async {
+    final newList = await _fetchData(count);
     // 기존 리스트 뒤에 덧붙임
     _list.addAll(newList);
     if (_list.length > _maxLength) {
@@ -131,6 +139,7 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
     state = const AsyncLoading();
     _noMoreData = false;
     _currentIdx = 0;
+    _viewedIdx = 0;
     _list.clear();
     _searching = true;
     // 최소 로딩 시간 보장
