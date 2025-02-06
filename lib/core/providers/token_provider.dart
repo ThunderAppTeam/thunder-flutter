@@ -1,8 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:thunder/core/constants/key_contst.dart';
+import 'package:thunder/core/services/log_service.dart';
 
 class TokenProvider {
   final _storage = const FlutterSecureStorage();
@@ -22,7 +21,7 @@ class TokenProvider {
 
   Future<void> initialize() async {
     _cachedToken = await _storage.read(key: KeyConst.accessToken);
-    log('AccessToken: $_cachedToken');
+    LogService.info('AccessToken: $_cachedToken');
   }
 }
 

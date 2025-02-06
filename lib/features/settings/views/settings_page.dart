@@ -69,7 +69,7 @@ class SettingsPage extends ConsumerWidget {
   void _onContactTap(BuildContext context, WidgetRef ref) async {
     final nickname = "구피닉네임999";
     try {
-      await EmailService().sendSupportEmail(
+      await EmailService.sendSupportEmail(
         nickname: nickname,
         subject: S.of(context).contactSubject(nickname),
         bodyGuide: S.of(context).contactBodyGuide,

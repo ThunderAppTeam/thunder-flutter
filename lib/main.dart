@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -10,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/router.dart';
 import 'package:thunder/core/constants/app_const.dart';
 import 'package:thunder/core/providers/token_provider.dart';
+import 'package:thunder/core/services/log_service.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/theme/text/default.dart';
 import 'package:thunder/firebase_options.dart';
@@ -19,8 +19,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
   final baseUrl = dotenv.env['BASE_URL'];
+  // TODO: change this logic to not use dotenv
   if (baseUrl == null || baseUrl.isEmpty) {
-    log('Error: BASE_URL is not defined in .env file.');
+    LogService.fatal('Error: BASE_URL is not defined in .env file.');
     // 앱 종료
     exit(0);
   }
