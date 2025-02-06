@@ -117,10 +117,11 @@ class _RatingPageState extends ConsumerState<RatingPage>
       );
       if (result == null) return;
       final flagData = _flagDataList[result.index];
-      _flagViewModel.flag(
+      await _flagViewModel.flag(
         _viewModel.viewedBodyPhotoId,
         flagData.flagReason,
       );
+      await Future.delayed(_ratingAnimationDelay);
       _viewModel.skip();
     }
   }
@@ -133,8 +134,9 @@ class _RatingPageState extends ConsumerState<RatingPage>
       confirmText: S.of(context).commonBlock,
     );
     if (confirmed == true && context.mounted) {
-      _flagViewModel.block(_viewModel.viewedMemberId);
-      _viewModel.block();
+      await _flagViewModel.block(_viewModel.viewedMemberId);
+      await Future.delayed(_ratingAnimationDelay);
+      _viewModel.skip();
     }
   }
 

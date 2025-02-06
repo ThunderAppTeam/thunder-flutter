@@ -150,5 +150,16 @@
       "description": "supportEmail",
       "example": "thunderteam.korea@gmail.com"
     }
-  }
+  },
+  "@_PERMISSION": {},
+  "permissionNotificationTitle": "Thunder를 편리하게 이용하려면\n알림을 허용해주세요",
+  "permittionNotificationModalTitle": "‘Thunder’에서 알림을\n보내고자 합니다.",
+  "permissionNotificationModalDescription": "경고, 사운드 및 아이콘 배지가 알림에 포함될 수 있습니다. 설정에서 이를 구성할 수 있습니다.",
+  "permissionNotificationModalDenyText": "허용 안 함",
+  "permissionNotificationModalAllowText": "허용",
+  "permissionTrackingTitle": "불필요한 광고를 보지 않으시려면\n추적을 허용해주세요",
+  "permissionTrackingModalTitle": "Thunder 앱이 다른 회사의 앱 및 웹사이트에 걸친 사용자의 활동을 추적하도록 허용하겠습니까?",
+  "permissionTrackingModalDescription": "허용을 누르면 불필요한 내용의 광고가 아닌 관심사 기반 맞춤형 정보를 제공해드려요.",
+  "permissionTrackingModalDenyText": "앱에 추적 금지 요청",
+  "permissionTrackingModalAllowText": "허용"
 }

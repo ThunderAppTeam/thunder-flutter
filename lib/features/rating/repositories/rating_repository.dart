@@ -10,14 +10,27 @@ class RatingRepository {
 
   RatingRepository(this._dio);
 
-  Future<List<Map<String, dynamic>>> fetchRatingList(int refreshCount) async {
-    final path = '/v1/body/review/refresh';
+  // 이전 공통 대기열 기준 API
+  // Future<List<Map<String, dynamic>>> fetchRatingList(int refreshCount) async {
+  //   final path = '/v1/body/review/refresh';
+  //   try {
+  //     final response = await _dio.post(
+  //       path,
+  //       options: DioOptions.tokenOptions,
+  //       queryParameters: {'refreshCount': refreshCount},
+  //     );
+  //     final data = response.data[KeyConst.data];
+  //     return List<Map<String, dynamic>>.from(data);
+  //   } on DioException catch (e) {
+  //     throw DioErrorParser.parseDio(e);
+  //   }
+  // }
+
+  Future<List<Map<String, dynamic>>> fetchRatings(int count) async {
+    final path = '/v1/body/review';
     try {
-      final response = await _dio.post(
-        path,
-        options: DioOptions.tokenOptions,
-        queryParameters: {'refreshCount': refreshCount},
-      );
+      final response = await _dio.get(path,
+          options: DioOptions.tokenOptions, queryParameters: {'size': count});
       final data = response.data[KeyConst.data];
       return List<Map<String, dynamic>>.from(data);
     } on DioException catch (e) {

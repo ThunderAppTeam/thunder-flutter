@@ -6,6 +6,7 @@ import 'package:thunder/core/services/permission_service.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/features/permission/widgets/permission_guide_title.dart';
 import 'package:thunder/features/permission/widgets/permission_modal.dart';
+import 'package:thunder/generated/l10n.dart';
 
 class NotificationPermissionPage extends ConsumerWidget {
   const NotificationPermissionPage({super.key});
@@ -47,19 +48,18 @@ class NotificationPermissionPage extends ConsumerWidget {
           Center(
             child: Transform.translate(
               offset: Offset(0, -modalHeight / 2 - Sizes.spacing56),
-              child: const PermissionGuideTitle(
-                title: 'Thunder를 편리하게 이용하려면\n알림을 허용해주세요',
+              child: PermissionGuideTitle(
+                title: S.of(context).permissionNotificationTitle,
               ),
             ),
           ),
           Center(
             child: PermissionModal(
               modalWidth: modalWidth,
-              title: 'Thunder를 편리하게 이용하려면\n알림을 허용해주세요',
-              description:
-                  '경고, 사운드 및 아이콘 배지가 알림에 포함될 수 있습니다. 설정에서 이를 구성할 수 있습니다.',
-              denyText: '허용 안 함',
-              allowText: '허용',
+              title: S.of(context).permittionNotificationModalTitle,
+              description: S.of(context).permissionNotificationModalDescription,
+              denyText: S.of(context).permissionNotificationModalDenyText,
+              allowText: S.of(context).permissionNotificationModalAllowText,
               buttonDirection: PermissionModalButtonDirection.horizontal,
               onTapDeny: () => _onTapDeny(ref, context),
               onTapAllow: () => _onTapAllow(ref, context),
