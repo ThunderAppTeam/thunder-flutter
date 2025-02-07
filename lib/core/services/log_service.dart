@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:logger/logger.dart';
 
 enum LogLevel {
@@ -19,17 +20,37 @@ enum LogLevel {
   // Examples: System crashes, database corruption
 }
 
+class DeveloperConsoleOutput extends LogOutput {
+  @override
+  void output(OutputEvent event) {
+    final StringBuffer buffer = StringBuffer();
+    event.lines.forEach(buffer.writeln);
+    log(buffer.toString());
+  }
+}
+
 class LogService {
   static final Logger _logger = Logger(
     printer: PrettyPrinter(
       methodCount: 0, // Number of method calls to be displayed
       errorMethodCount: 8, // Number of method calls if stacktrace is provided
-      lineLength: 120, // Width of the output
+      lineLength: 100, // Width of the output
       colors: true, // Colorful log messages
       printEmojis:
           true, // Print an emoji for each log message  // Should each log print contain a timestamp
-      dateTimeFormat: DateTimeFormat.dateAndTime,
+      // dateTimeFormat: DateTimeFormat.dateAndTime,
+      levelColors: {
+        Level.trace: AnsiColor.fg(AnsiColor.grey(0.5)),
+        Level.debug: AnsiColor.fg(250),
+        Level.info: AnsiColor.fg(12),
+        Level.warning: AnsiColor.fg(208),
+        Level.error: AnsiColor.fg(196),
+        Level.fatal: AnsiColor.fg(199),
+      },
     ),
+    output: MultiOutput([
+      DeveloperConsoleOutput(),
+    ]),
   );
 
   LogService._();

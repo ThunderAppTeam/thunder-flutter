@@ -53,6 +53,9 @@ class AnalyticsValue {
 
   // Share Values
   static const ShareType share = ShareType();
+
+  // const
+  static const String nullValue = 'null';
 }
 
 class AuthMethod {

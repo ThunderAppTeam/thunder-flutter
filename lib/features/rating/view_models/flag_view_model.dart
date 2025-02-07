@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/core/services/analytics_service.dart';
 import 'package:thunder/features/rating/models/data/flag_reason_data.dart';
 import 'package:thunder/features/rating/repositories/flag_repository.dart';
 
@@ -26,6 +27,7 @@ class FlagViewModel extends AutoDisposeAsyncNotifier<void> {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       await _repository.flag(bodyPhotoId, flagReason);
+      AnalyticsService.reportContent(bodyPhotoId);
     });
   }
 
@@ -33,6 +35,7 @@ class FlagViewModel extends AutoDisposeAsyncNotifier<void> {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       await _repository.block(memberId);
+      AnalyticsService.blockUser(memberId.toString());
     });
   }
 }

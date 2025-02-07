@@ -7,6 +7,7 @@ import 'package:thunder/core/network/dio_options.dart';
 import 'package:thunder/core/network/dio_provider.dart';
 import 'package:thunder/core/network/repository/base_repository.dart';
 import 'package:thunder/core/providers/token_provider.dart';
+import 'package:thunder/core/services/log_service.dart';
 import 'package:thunder/features/auth/models/data/sign_up_user.dart';
 
 class AuthRepository with BaseRepository {
@@ -45,7 +46,7 @@ class AuthRepository with BaseRepository {
     });
   }
 
-  Future<bool> verifyCodeAndCheckExist({
+  Future<int?> verifyCodeAndCheckExist({
     required String countryCode,
     required String phoneNumber,
     required String smsCode,
@@ -60,12 +61,14 @@ class AuthRepository with BaseRepository {
         KeyConst.deviceId: deviceId,
       });
       final accessToken = data[KeyConst.accessToken];
-      if (accessToken != null) {
+      final memberId = data[KeyConst.memberId];
+      if (accessToken != null && memberId != null) {
         await _tokenProvider.setToken(accessToken);
-        return true;
+        return memberId;
       }
-      return false;
+      return null;
     } catch (e) {
+      LogService.error('Verification process failed: $e');
       throw Exception('Verification process failed: $e');
     }
   }
@@ -75,12 +78,17 @@ class AuthRepository with BaseRepository {
     await get(path, queryParameters: {KeyConst.nickname: nickname});
   }
 
-  Future<void> signUp(SignUpUser signUpUser) async {
+  Future<int> signUp(SignUpUser signUpUser) async {
     final path = '/v1/member/signup';
-    final data = await post(path, data: signUpUser.toJson());
-    final accessToken = data[KeyConst.accessToken];
-    if (accessToken != null) {
+    try {
+      final data = await post(path, data: signUpUser.toJson());
+      final accessToken = data[KeyConst.accessToken];
+      final memberId = data[KeyConst.memberId];
       await _tokenProvider.setToken(accessToken);
+      return memberId;
+    } catch (e) {
+      LogService.error('Failed to sign up: $e');
+      throw Exception('Failed to sign up: $e');
     }
   }
 
@@ -91,7 +99,7 @@ class AuthRepository with BaseRepository {
   }
 
   Future<void> deleteAccount(String reason) async {
-    final path = '/v1/member/deletion';
+    // final path = '/v1/member/deletion';
     // TODO: api 개발 이후에 구현
   }
 }

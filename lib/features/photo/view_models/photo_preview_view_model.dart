@@ -5,6 +5,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image/image.dart' as img;
 import 'package:thunder/core/constants/image_const.dart';
+import 'package:thunder/core/services/analytics_service.dart';
 import 'package:thunder/core/utils/image_utils.dart';
 import 'package:thunder/features/photo/models/data/image_data.dart';
 import 'package:thunder/features/photo/repositories/photo_preview_repository.dart';
@@ -48,6 +49,7 @@ class PhotoPreviewViewModel extends AsyncNotifier<void> {
       await file.writeAsBytes(compressed);
       final response = await _repository.uploadImage(imagePath);
       imageData = ImageData.fromJson(response);
+      AnalyticsService.uploadPhoto();
     });
     return imageData;
   }

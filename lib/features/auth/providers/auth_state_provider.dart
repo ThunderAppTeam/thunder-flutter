@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/core/services/analytics_service.dart';
 import 'package:thunder/features/auth/repositories/auth_repository.dart';
 
 class AuthState {
@@ -20,13 +21,20 @@ class AuthNotifier extends Notifier<AuthState> {
     return AuthState(isLoggedIn: _authRepository.isLoggedIn);
   }
 
-  void login() {
+  void login(int memberId) {
     state = state.copyWith(isLoggedIn: true);
+    AnalyticsService.setUserId(memberId.toString());
+  }
+
+  void logout() {
+    state = state.copyWith(isLoggedIn: false);
+    AnalyticsService.resetUserId();
   }
 
   Future<void> signOut() async {
     await _authRepository.signOut();
-    state = state.copyWith(isLoggedIn: false);
+    logout();
+    AnalyticsService.logout();
   }
 }
 

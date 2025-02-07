@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/constants/app_const.dart';
 import 'package:thunder/core/constants/time_const.dart';
 import 'package:thunder/app/router/safe_router.dart';
+import 'package:thunder/core/services/analytics_service.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/features/auth/models/states/phone_auth_state.dart';
@@ -55,6 +56,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
   }
 
   void _onVerifySuccess(bool isExistUser) async {
+    AnalyticsService.authPhone();
     if (isExistUser) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref.invalidate(onboardingProvider);

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/errors/server_error.dart';
+import 'package:thunder/core/services/analytics_service.dart';
 import 'package:thunder/core/services/log_service.dart';
 import 'package:thunder/features/auth/providers/auth_state_provider.dart';
 import 'package:thunder/features/rating/models/data/body_check_data.dart';
@@ -98,6 +99,10 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
     final bodyCheckData = _list[_currentIdx++];
     try {
       await _repository.rate(bodyCheckData.bodyPhotoId, rating);
+      AnalyticsService.reviewBody(
+        contentId: bodyCheckData.bodyPhotoId.toString(),
+        score: rating,
+      );
       if (_needFetchMore()) await _fetchMore();
     } on ServerError catch (e) {
       if (e == ServerError.alreadyReviewed) {

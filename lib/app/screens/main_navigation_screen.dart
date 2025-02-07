@@ -64,6 +64,13 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
   }
 
   void _onTap(BuildContext context, Tabs tab) {
+    AnalyticsService.tabTap(
+      switch (tab) {
+        Tabs.home => AnalyticsTabName.home,
+        Tabs.measure => AnalyticsTabName.check,
+        Tabs.archive => AnalyticsTabName.archive,
+      },
+    );
     if (tab == Tabs.measure) {
       _onMeasureTap();
       return;

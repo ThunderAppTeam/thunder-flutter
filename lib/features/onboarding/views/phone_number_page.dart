@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/formatters/phone_number_formatter.dart';
+import 'package:thunder/core/services/analytics_service.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/constants/styles.dart';
@@ -38,6 +39,7 @@ class _PhoneNumberPageState extends ConsumerState<PhoneNumberPage> {
   void initState() {
     super.initState();
     _notifier = ref.read(onboardingProvider.notifier);
+    AnalyticsService.authPhoneStart();
   }
 
   @override

@@ -22,7 +22,7 @@ final dioProvider = Provider<Dio>((ref) {
       handler.next(options); // 요청을 다음 Interceptor로 넘김
     },
     onResponse: (response, handler) {
-      LogService.debug(
+      LogService.trace(
           'Response[${response.statusCode}] => RESPONSE: ${response.data}');
 
       handler.next(response); // 응답 처리 완료

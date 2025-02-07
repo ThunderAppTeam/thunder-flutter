@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:thunder/core/constants/image_const.dart';
+import 'package:thunder/core/services/analytics_service.dart';
 import 'package:thunder/core/services/cache_service.dart';
 import 'package:thunder/core/services/log_service.dart';
 import 'package:thunder/core/services/permission_service.dart';
@@ -192,6 +193,7 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
         await _flipImageHorizontally(newFile.path);
       }
       state = state.copyWith(selectedImagePath: newFile.path);
+      AnalyticsService.selectPhoto(AnalyticsPhotoSource.camera);
     } catch (e) {
       state = state.copyWith(
         error: CameraError.captureError,
@@ -237,6 +239,7 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
         selectedImagePath: compressedFile!.path,
         isCompressing: false,
       );
+      AnalyticsService.selectPhoto(AnalyticsPhotoSource.gallery);
     } catch (e) {
       state = state.copyWith(
         error: CameraError.imagePickFailed,

@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/core/services/analytics_service.dart';
 import 'package:thunder/features/body_check/models/data/body_check_result.dart';
 import 'package:thunder/features/body_check/repositories/body_check_repository.dart';
 
@@ -17,6 +18,7 @@ class BodyCheckResultViewModel
   Future<BodyCheckResult> _fetchBodyCheckResult(int bodyPhotoId) async {
     try {
       final data = await _repository.getBodyCheckResult(bodyPhotoId);
+      AnalyticsService.viewBodyResult(bodyPhotoId);
       return BodyCheckResult.fromJson(data);
     } catch (e) {
       state = AsyncError(e, StackTrace.current);
@@ -35,6 +37,7 @@ class BodyCheckResultViewModel
     state = const AsyncLoading();
     try {
       await _repository.deleteBodyCheckResult(bodyPhotoId);
+      AnalyticsService.deleteContent(bodyPhotoId);
       return true;
     } catch (e) {
       state = AsyncError(e, StackTrace.current);

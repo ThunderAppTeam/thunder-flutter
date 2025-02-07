@@ -26,7 +26,11 @@ class AnalyticsService {
   }) async {
     try {
       if (kDebugMode) {
-        LogService.debug('Analytics Event: $name, Params: $parameters');
+        if (parameters != null) {
+          LogService.info('Analytics Event: $name, Params: $parameters');
+        } else {
+          LogService.info('Analytics Event: $name');
+        }
       }
       await _analytics.logEvent(
         name: name,
@@ -45,9 +49,18 @@ class AnalyticsService {
   static Future<void> setUserId(String? userId) async {
     try {
       await _analytics.setUserId(id: userId);
-      LogService.debug('Analytics: Set User ID - $userId');
+      LogService.info('Analytics: Set User ID - $userId');
     } catch (e, stack) {
       LogService.error('Failed to set user ID', error: e, stackTrace: stack);
+    }
+  }
+
+  static Future<void> resetUserId() async {
+    try {
+      await _analytics.setUserId(id: AnalyticsValue.nullValue);
+      LogService.info('Analytics: Reset User ID');
+    } catch (e, stack) {
+      LogService.error('Failed to reset user ID', error: e, stackTrace: stack);
     }
   }
 
@@ -69,7 +82,7 @@ class AnalyticsService {
           value: age.toString(),
         );
       }
-      LogService.debug(
+      LogService.info(
           'Analytics: Set User Properties - Gender: $gender, Age: $age');
     } catch (e, stack) {
       LogService.error('Failed to set user properties',
@@ -87,7 +100,7 @@ class AnalyticsService {
         screenName: screenName,
         screenClass: screenClass,
       );
-      LogService.debug('Analytics: Screen View - $screenName');
+      LogService.info('Analytics: Screen View - $screenName');
     } catch (e, stack) {
       LogService.error('Failed to log screen view',
           error: e, stackTrace: stack);
@@ -123,6 +136,10 @@ class AnalyticsService {
 
   static Future<void> logout() async {
     await _trackEvent(AnalyticsEvent.logout);
+  }
+
+  static Future<void> deleteAccount() async {
+    await _trackEvent(AnalyticsEvent.deleteAccount);
   }
 
   // Content Events
@@ -164,7 +181,7 @@ class AnalyticsService {
     );
   }
 
-  static Future<void> uploadPhoto(int photoId) async {
+  static Future<void> uploadPhoto() async {
     await _trackEvent(AnalyticsEvent.uploadPhoto);
   }
 
@@ -174,7 +191,7 @@ class AnalyticsService {
     });
   }
 
-  static Future<void> shareBodyResult(int bodyPhotoId) async {
+  static Future<void> share(int bodyPhotoId) async {
     await _trackEvent(AnalyticsEvent.share, parameters: {
       AnalyticsParam.method: AnalyticsValue.share.image,
       AnalyticsParam.contentType: AnalyticsValue.share.bodyResult,
@@ -182,19 +199,19 @@ class AnalyticsService {
     });
   }
 
-  static Future<void> deleteBodyResult(int bodyPhotoId) async {
+  static Future<void> deleteContent(int bodyPhotoId) async {
     await _trackEvent(AnalyticsEvent.deleteContent, parameters: {
       AnalyticsParam.deletedContentId: bodyPhotoId,
     });
   }
 
-  static Future<void> reportBodyResult(int bodyPhotoId) async {
+  static Future<void> reportContent(int bodyPhotoId) async {
     await _trackEvent(AnalyticsEvent.reportContent, parameters: {
       AnalyticsParam.reportedContentId: bodyPhotoId,
     });
   }
 
-  static Future<void> blockUser(int userId) async {
+  static Future<void> blockUser(String userId) async {
     await _trackEvent(AnalyticsEvent.blockUser, parameters: {
       AnalyticsParam.blockedUserId: userId,
     });

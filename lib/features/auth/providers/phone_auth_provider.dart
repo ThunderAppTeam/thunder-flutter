@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/errors/server_error.dart';
+import 'package:thunder/core/services/analytics_service.dart';
 import 'package:thunder/core/services/log_service.dart';
 import 'package:thunder/features/auth/models/states/phone_auth_state.dart';
 import 'package:thunder/core/providers/device_id_provider.dart';
@@ -62,19 +63,20 @@ class PhoneAuthNotifier extends StateNotifier<PhoneAuthState> {
       return false;
     }
     try {
-      final isExist = await _repository.verifyCodeAndCheckExist(
+      final memberId = await _repository.verifyCodeAndCheckExist(
         countryCode: countryCode,
         phoneNumber: phoneNumber,
         smsCode: smsCode,
         deviceId: deviceId,
       );
-      if (isExist) {
-        _authNotifier.login();
+      if (memberId != null) {
+        _authNotifier.login(memberId);
+        AnalyticsService.login();
       }
       state = state.copyWith(
         isCodeVerifying: false,
         isVerified: true,
-        isExistUser: isExist,
+        isExistUser: memberId != null,
       );
       return true;
     } on ServerError catch (e) {

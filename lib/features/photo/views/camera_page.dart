@@ -83,9 +83,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
 
     // 새로운 이미지가 선택되었을 때 미리보기 페이지로 이동
     if (prev?.selectedImagePath == null && next.selectedImagePath != null) {
-      // 새로운 이
       if (mounted) {
-        //
         await context.pushNamed(
           Routes.photoPreview.name,
           extra: next.selectedImagePath,

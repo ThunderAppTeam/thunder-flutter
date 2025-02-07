@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/constants/app_const.dart';
+import 'package:thunder/core/constants/value_const.dart';
 import 'package:thunder/core/services/email_service.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/icon/thunder_icons_icons.dart';
@@ -95,8 +96,8 @@ class SettingsPage extends ConsumerWidget {
               title: S.of(context).settingsContact,
               onTap: () => _onContactTap(
                 context,
-                memberData.valueOrNull?.nickname ?? "unknown",
-                memberData.valueOrNull?.memberUuid ?? "unknown",
+                memberData.valueOrNull?.nickname ?? ValueConst.unknown,
+                memberData.valueOrNull?.memberUuid ?? ValueConst.unknown,
               ),
             ),
             SettingsListTile(
