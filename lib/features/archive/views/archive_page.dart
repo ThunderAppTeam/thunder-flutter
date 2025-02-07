@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
@@ -7,6 +8,7 @@ import 'package:thunder/core/constants/key_contst.dart';
 import 'package:thunder/core/services/log_service.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
+import 'package:thunder/core/utils/event_control/debouncer.dart';
 import 'package:thunder/core/utils/show_utils.dart';
 import 'package:thunder/core/widgets/empty_widget.dart';
 import 'package:thunder/features/archive/models/data/body_check_preview_data.dart';
@@ -24,8 +26,13 @@ class ArchivePage extends ConsumerStatefulWidget {
 
 class _ArchivePageState extends ConsumerState<ArchivePage> {
   final int _crossAxisCount = 3;
-  final AutoScrollController _scrollController =
-      AutoScrollController(); // AutoScrollController 사용
+  final AutoScrollController _scrollController = AutoScrollController();
+  final _refreshDebouncer = Debouncer(duration: const Duration(seconds: 1));
+  @override
+  void dispose() {
+    _refreshDebouncer.dispose();
+    super.dispose();
+  }
 
   void _onButtonTap() {
     ref.read(safeRouterProvider).pushNamed(context, Routes.camera.name);
@@ -53,6 +60,48 @@ class _ArchivePageState extends ConsumerState<ArchivePage> {
     _scrollController.scrollToIndex(index);
   }
 
+  Future<void> _onRefresh() async {
+    await _refreshDebouncer.run(() async {
+      await ref.read(archiveViewModelProvider.notifier).refresh(
+            keepPreviousData: true,
+          );
+    });
+  }
+
+  SliverGrid _buildGrid(
+    List<BodyCheckPreviewData> items, {
+    required double itemWidth,
+    required double itemHeight,
+  }) {
+    return SliverGrid(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: _crossAxisCount,
+        crossAxisSpacing: Sizes.borderWidth1,
+        mainAxisSpacing: Sizes.borderWidth1,
+        childAspectRatio: itemWidth / itemHeight,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final item = items[index];
+          return AutoScrollTag(
+            key: ValueKey(index),
+            controller: _scrollController,
+            index: index,
+            child: GestureDetector(
+              onTap: () => _onItemTap(item, index),
+              child: SizedBox(
+                width: itemWidth,
+                height: itemHeight,
+                child: ArchiveItem(item: item),
+              ),
+            ),
+          );
+        },
+        childCount: items.length,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final archive = ref.watch(archiveViewModelProvider);
@@ -61,60 +110,49 @@ class _ArchivePageState extends ConsumerState<ArchivePage> {
         _onError(next.error);
       }
     });
+    final itemWidth = MediaQuery.of(context).size.width / _crossAxisCount;
+    final itemHeight = MediaQuery.of(context).size.height / _crossAxisCount;
+
     return Scaffold(
       backgroundColor: ColorName.darkBackground2,
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final itemWidth = constraints.maxWidth / _crossAxisCount;
-          final itemHeight = constraints.maxHeight / _crossAxisCount;
-          return archive.when(
+      body: CustomScrollView(
+        controller: _scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          CupertinoSliverRefreshControl(onRefresh: _onRefresh),
+          archive.maybeWhen(
+            skipError: true,
             data: (items) {
               if (items.isEmpty) {
-                return EmptyWidget(
-                  guideText: S.of(context).archiveEmptyGuideText,
-                  buttonText: S.of(context).archiveEmptyButtonText,
-                  onButtonTap: _onButtonTap,
+                return SliverFillRemaining(
+                  child: EmptyWidget(
+                    onButtonTap: _onButtonTap,
+                    guideText: S.of(context).archiveEmptyGuideText,
+                    buttonText: S.of(context).archiveEmptyButtonText,
+                  ),
                 );
               }
-              return GridView.builder(
-                controller: _scrollController, // AutoScrollController 적용
-                padding: EdgeInsets.zero,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: _crossAxisCount,
-                  crossAxisSpacing: Sizes.borderWidth1,
-                  mainAxisSpacing: Sizes.borderWidth1,
-                  childAspectRatio: itemWidth / itemHeight,
-                ),
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  final item = items[index];
-                  return AutoScrollTag(
-                    // 스크롤 태그 추가
-                    key: ValueKey(index),
-                    controller: _scrollController,
-                    index: index,
-                    child: GestureDetector(
-                      onTap: () => _onItemTap(item, index),
-                      child: SizedBox(
-                        width: itemWidth,
-                        height: itemHeight,
-                        child: ArchiveItem(item: item),
-                      ),
+              return _buildGrid(items,
+                  itemWidth: itemWidth, itemHeight: itemHeight);
+            },
+            loading: () => archive.value == null
+                ? SliverFillRemaining(
+                    child: SkeletonArchiveWidget(
+                      crossAxisCount: _crossAxisCount,
+                      itemWidth: itemWidth,
+                      itemHeight: itemHeight,
                     ),
-                  );
-                },
-              );
-            },
-            error: (error, stack) => const SizedBox.shrink(),
-            loading: () {
-              return SkeletonArchiveWidget(
-                crossAxisCount: _crossAxisCount,
-                itemWidth: itemWidth,
-                itemHeight: itemHeight,
-              );
-            },
-          );
-        },
+                  )
+                : _buildGrid(
+                    archive.value!,
+                    itemWidth: itemWidth,
+                    itemHeight: itemHeight,
+                  ),
+            orElse: () => const SliverFillRemaining(
+              child: SizedBox.shrink(),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -26,8 +26,13 @@ class ArchiveViewModel
     }
   }
 
-  Future<void> refresh() async {
-    state = const AsyncLoading();
+  Future<void> refresh({bool keepPreviousData = false}) async {
+    if (keepPreviousData) {
+      state = const AsyncValue<List<BodyCheckPreviewData>>.loading()
+          .copyWithPrevious(state);
+    } else {
+      state = const AsyncLoading();
+    }
     state = await AsyncValue.guard(
       () async {
         _list = await _fetchArchive();
