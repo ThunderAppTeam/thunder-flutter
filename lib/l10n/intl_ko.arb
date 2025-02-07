@@ -18,7 +18,7 @@
   "@commonErrorUnknownSubtitle": {
     "supportEmail": {
       "description": "supportEmail",
-      "example": "thunderteam.korea@gmail.com"
+      "example": "example@gmail.com"
     }
   },
   "@_NAVIGATION": {},
@@ -148,7 +148,7 @@
   "@contactErrorSubtitle": {
     "supportEmail": {
       "description": "supportEmail",
-      "example": "thunderteam.korea@gmail.com"
+      "example": "example@gmail.com"
     }
   },
   "@_PERMISSION": {},

@@ -30,7 +30,7 @@ class SurveyBottomSheet extends StatefulWidget {
   final String title;
   final List<String> options;
   final String buttonText;
-  final FutureOr<void> Function()? onButtonTap;
+  final FutureOr<bool?> Function()? onBeforeConfirm;
   final bool hasOtherOption;
 
   const SurveyBottomSheet({
@@ -38,7 +38,7 @@ class SurveyBottomSheet extends StatefulWidget {
     required this.title,
     required this.options,
     required this.buttonText,
-    this.onButtonTap,
+    this.onBeforeConfirm,
     this.hasOtherOption = false,
   });
 
@@ -269,8 +269,8 @@ class _SurveyBottomSheetState extends State<SurveyBottomSheet> {
                   text: widget.buttonText,
                   isEnabled: _selectedIndex != null,
                   onPressed: () async {
-                    await widget.onButtonTap?.call();
-                    if (context.mounted) {
+                    final confirmed = await widget.onBeforeConfirm?.call();
+                    if (confirmed == true && context.mounted) {
                       Navigator.of(context).pop(
                         SurveyResult(
                           index: _selectedIndex!,

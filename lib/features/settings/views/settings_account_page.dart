@@ -1,25 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:thunder/core/services/log_service.dart';
 import 'package:thunder/core/utils/show_utils.dart';
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
+import 'package:thunder/features/auth/models/data/deletion_reason_data.dart';
+import 'package:thunder/features/auth/providers/delete_account_provider.dart';
+import 'package:thunder/features/member/view_models/member_view_model.dart';
 import 'package:thunder/features/settings/widgets/settings_list_tile.dart';
 import 'package:thunder/generated/l10n.dart';
 
-class SettingsAccountPage extends StatelessWidget {
+class SettingsAccountPage extends ConsumerStatefulWidget {
   const SettingsAccountPage({super.key});
 
+  @override
+  ConsumerState<SettingsAccountPage> createState() =>
+      _SettingsAccountPageState();
+}
+
+class _SettingsAccountPageState extends ConsumerState<SettingsAccountPage> {
+  late final List<DeletionReasonData> _deletionReasons;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _deletionReasons =
+          await ref.read(deleteAccountProvider.notifier).getDeletionReasons();
+    });
+  }
+
   void _onDeleteAccountTap(BuildContext context) async {
-    final options = [
-      S.of(context).deleteAccountOptionLessInterest,
-      S.of(context).deleteAccountOptionUnreliableResult,
-      S.of(context).deleteAccountOptionLongProcess,
-      S.of(context).deleteAccountOptionNoFeature,
-      S.of(context).deleteAccountOptionServiceError,
-      S.of(context).deleteAccountOptionUncomfortable,
-      S.of(context).deleteAccountOptionBetterService,
-      S.of(context).surveyOtherOption,
-    ];
+    final options = _deletionReasons.map((e) => e.description).toList();
 
     final result = await showSurveyBottomSheet(
       context,
@@ -27,49 +39,54 @@ class SettingsAccountPage extends StatelessWidget {
       options: options,
       buttonText: S.of(context).settingsAccountDelete,
       hasOtherOption: true,
-      onButtonTap: () => _surveyButtonTap(context),
+      onBeforeConfirm: () => _surveyButtonTap(context),
     );
-    LogService.trace('delete account option: $result');
+    LogService.info('delete account option: $result');
     // TODO: 계정 삭제 요청 접수
   }
 
-  void _surveyButtonTap(BuildContext context) async {
+  Future<bool?> _surveyButtonTap(BuildContext context) async {
     final confirmed = await showAlertDialog(
       context,
       title: S.of(context).deleteAccountConfirmTitle,
       subtitle: S.of(context).deleteAccountConfirmSubtitle,
       confirmText: S.of(context).commonDelete,
     );
-    if (confirmed == true) {
-      // TODO: 계정 삭제 요청 접수
-    }
+    return confirmed;
   }
 
   @override
   Widget build(BuildContext context) {
+    final memberDataState = ref.watch(memberDataProvider);
     return Scaffold(
       appBar: CustomAppBar(title: S.of(context).settingsAccount),
-      body: Column(
-        children: [
-          SettingsListTile(
-            title: S.of(context).settingsAccountNickname,
-            trailing: SettingsTrailing.text("닉네임"),
-          ),
-          SettingsListTile(
-            title: S.of(context).settingsAccountPhoneNumber,
-            trailing: SettingsTrailing.text("010-9005-9948"),
-          ),
-          SettingsListTile(
-            title: S.of(context).settingsAccountJoinedDate,
-            trailing: SettingsTrailing.text(
-                DateFormat.yMMMd().format(DateTime.now())),
-          ),
-          SettingsListTile(
-            title: S.of(context).settingsAccountDelete,
-            onTap: () => _onDeleteAccountTap(context),
-            isGray: true,
-          ),
-        ],
+      body: memberDataState.when(
+        data: (data) => Column(
+          children: [
+            SettingsListTile(
+              title: S.of(context).settingsAccountNickname,
+              trailing: SettingsTrailing.text(data.nickname),
+            ),
+            SettingsListTile(
+              title: S.of(context).settingsAccountPhoneNumber,
+              trailing: SettingsTrailing.text(data.mobileNumber),
+            ),
+            SettingsListTile(
+              title: S.of(context).settingsAccountJoinedDate,
+              trailing: SettingsTrailing.text(
+                  DateFormat.yMMMd().format(data.registeredAt)),
+            ),
+            SettingsListTile(
+              title: S.of(context).settingsAccountDelete,
+              onTap: () => _onDeleteAccountTap(context),
+              isGray: true,
+            ),
+          ],
+        ),
+        loading: () => const Center(
+          child: CircularProgressIndicator(),
+        ),
+        error: (error, stackTrace) => const SizedBox.shrink(),
       ),
     );
   }

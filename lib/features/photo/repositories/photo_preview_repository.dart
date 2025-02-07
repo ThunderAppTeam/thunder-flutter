@@ -1,14 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thunder/core/constants/key_contst.dart';
-import 'package:thunder/core/network/dio_error_parser.dart';
 import 'package:thunder/core/network/dio_options.dart';
 import 'package:thunder/core/network/dio_provider.dart';
+import 'package:thunder/core/network/repository/base_repository.dart';
 
-class PhotoPreviewRepository {
-  final Dio _dio;
+class PhotoPreviewRepository with BaseRepository {
+  @override
+  final Dio dio;
 
-  PhotoPreviewRepository(this._dio);
+  PhotoPreviewRepository(this.dio);
 
   Future<Map<String, dynamic>> uploadImage(String imagePath) async {
     final path = '/v1/body/photo';
@@ -18,18 +18,8 @@ class PhotoPreviewRepository {
         contentType: DioMediaType('image', 'jpeg'),
       ),
     });
-
-    try {
-      final response = await _dio.post(
-        path,
-        data: formData,
-        options: DioOptions.multipartTokenOptions,
-      );
-      final data = response.data[KeyConst.data];
-      return data;
-    } on DioException catch (e) {
-      throw DioErrorParser.parseDio(e);
-    }
+    return post(path,
+        options: DioOptions.multipartTokenOptions, data: formData);
   }
 }
 

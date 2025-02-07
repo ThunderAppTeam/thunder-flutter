@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/features/body_check/models/data/body_check_result.dart';
-import 'package:thunder/features/body_check/repsitories/body_check_repository.dart';
+import 'package:thunder/features/body_check/repositories/body_check_repository.dart';
 
 class BodyCheckResultViewModel
     extends AutoDisposeFamilyAsyncNotifier<BodyCheckResult, int> {

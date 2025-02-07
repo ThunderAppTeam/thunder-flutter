@@ -9,10 +9,11 @@ import 'package:thunder/core/services/log_service.dart';
 class EmailService {
   static Future<void> sendSupportEmail({
     required String nickname,
+    required String userId,
     required String subject,
     required String bodyGuide,
   }) async {
-    final userInfo = await _getUserInfo(nickname);
+    final userInfo = await _getUserInfo(nickname, userId);
     final body = '$bodyGuide\n\n\n-----\n$userInfo';
 
     final mail = Email(
@@ -29,7 +30,7 @@ class EmailService {
     }
   }
 
-  static Future<String> _getUserInfo(String nickname) async {
+  static Future<String> _getUserInfo(String nickname, String userId) async {
     DeviceInfo deviceInfo;
     try {
       if (kIsWeb) {
@@ -61,7 +62,7 @@ class EmailService {
 - OS Version: ${deviceInfo.osVersion}
 - App Version: $appVersion
 - Nickname: $nickname
-- ID: ???''';
+- ID: $userId''';
   }
 
   static Future<DeviceInfo> _getAndroidDeviceInfo() async {
