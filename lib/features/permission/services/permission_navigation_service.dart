@@ -16,7 +16,7 @@ class PermissionNavigationService {
       if (context.mounted) {
         ref
             .read(safeRouterProvider)
-            .pushNamed(context, Routes.permissionNotification.name);
+            .pushNamed(context, Routes.permission.notification.name);
       }
       return true;
     }
@@ -26,7 +26,7 @@ class PermissionNavigationService {
       if (context.mounted) {
         ref
             .read(safeRouterProvider)
-            .pushNamed(context, Routes.permissionTracking.name);
+            .pushNamed(context, Routes.permission.tracking.name);
       }
       return true;
     }

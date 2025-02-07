@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/core/services/log_service.dart';
 import 'package:thunder/features/archive/models/data/body_check_preview_data.dart';
 import 'package:thunder/features/archive/repositories/archive_repository.dart';
 
@@ -22,7 +21,7 @@ class ArchiveViewModel
       final archive = await _repository.fetchArchive();
       return archive.map((e) => BodyCheckPreviewData.fromJson(e)).toList();
     } catch (e) {
-      log('error: $e');
+      LogService.error('error: $e');
       throw Exception('Failed to fetch archive');
     }
   }

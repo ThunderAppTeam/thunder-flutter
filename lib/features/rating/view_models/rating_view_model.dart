@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/errors/server_error.dart';
+import 'package:thunder/core/services/log_service.dart';
 import 'package:thunder/features/auth/providers/auth_state_provider.dart';
 import 'package:thunder/features/rating/models/data/body_check_data.dart';
 import 'package:thunder/features/rating/repositories/rating_repository.dart';
@@ -105,7 +105,7 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
       }
       rethrow;
     } catch (e, st) {
-      log('rate error: $e, $st');
+      LogService.error('rate error: $e, $st');
       state = AsyncError(e, st);
       return;
     } finally {

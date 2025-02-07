@@ -17,4 +17,5 @@ class KeyConst {
   static const String pointText = 'pointText';
   static const String flagReason = 'flagReason';
   static const String blockedMemberId = 'blockedMemberId';
+  static const String skipAnalytics = 'skipAnalytics';
 }

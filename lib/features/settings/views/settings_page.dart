@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/services/email_service.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
@@ -7,9 +8,6 @@ import 'package:thunder/core/theme/icon/thunder_icons_icons.dart';
 import 'package:thunder/core/utils/show_utils.dart';
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
 import 'package:thunder/features/auth/providers/auth_state_provider.dart';
-import 'package:thunder/features/settings/views/settings_account_page.dart';
-import 'package:thunder/features/settings/views/settings_info_page.dart';
-import 'package:thunder/features/settings/views/settings_notification_page.dart';
 import 'package:thunder/features/settings/widgets/settings_list_tile.dart';
 import 'package:thunder/generated/l10n.dart';
 
@@ -53,17 +51,13 @@ class SettingsPage extends ConsumerWidget {
   }
 
   void _onAccountTap(BuildContext context, WidgetRef ref) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const SettingsAccountPage()),
-    );
+    ref
+        .read(safeRouterProvider)
+        .pushNamed(context, Routes.settings.account.name);
   }
 
   void _onInfoTap(BuildContext context, WidgetRef ref) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const SettingsInfoPage()),
-    );
+    ref.read(safeRouterProvider).pushNamed(context, Routes.settings.info.name);
   }
 
   void _onContactTap(BuildContext context, WidgetRef ref) async {
@@ -85,10 +79,9 @@ class SettingsPage extends ConsumerWidget {
   }
 
   void _onNotificationTap(BuildContext context, WidgetRef ref) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const SettingsNotificationPage()),
-    );
+    ref
+        .read(safeRouterProvider)
+        .pushNamed(context, Routes.settings.notification.name);
   }
 
   @override

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/assets.gen.dart';
-import 'package:thunder/features/camera/views/widgets/camera_button.dart';
-import 'package:thunder/features/camera/views/widgets/ios_style_capture_button.dart';
+import 'package:thunder/features/photo/views/widgets/camera_button.dart';
+import 'package:thunder/features/photo/views/widgets/ios_style_capture_button.dart';
 
 class CameraBottomControls extends StatelessWidget {
   final VoidCallback onGalleryTap;

@@ -30,7 +30,7 @@ class NotificationPermissionPage extends ConsumerWidget {
       if (isDenied) {
         ref
             .read(safeRouterProvider)
-            .pushNamed(context, Routes.permissionTracking.name);
+            .pushNamed(context, Routes.permission.tracking.name);
       } else {
         ref.read(safeRouterProvider).goToHome(context);
       }

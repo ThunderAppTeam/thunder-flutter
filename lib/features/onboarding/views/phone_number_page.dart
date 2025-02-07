@@ -32,6 +32,14 @@ class _PhoneNumberPageState extends ConsumerState<PhoneNumberPage> {
   bool _isPressed = false;
   bool get _isButtonEnabled => _phoneNumber.length >= _minLength;
 
+  late final OnboardingNotifier _notifier;
+
+  @override
+  void initState() {
+    super.initState();
+    _notifier = ref.read(onboardingProvider.notifier);
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -56,9 +64,8 @@ class _PhoneNumberPageState extends ConsumerState<PhoneNumberPage> {
       });
       return;
     }
-    final notifier = ref.read(onboardingProvider.notifier);
-    notifier.setPhoneNumber(_phoneNumber);
-    notifier.pushNextStep(
+    _notifier.setPhoneNumber(_phoneNumber);
+    _notifier.pushNextStep(
       context: context,
       currentStep: OnboardingStep.phoneNumber,
     );

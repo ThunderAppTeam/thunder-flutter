@@ -1,11 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/constants/key_contst.dart';
+import 'package:thunder/core/services/log_service.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/show_utils.dart';
@@ -29,11 +28,11 @@ class _ArchivePageState extends ConsumerState<ArchivePage> {
       AutoScrollController(); // AutoScrollController 사용
 
   void _onButtonTap() {
-    ref.read(safeRouterProvider).pushNamed(context, Routes.measure.name);
+    ref.read(safeRouterProvider).pushNamed(context, Routes.camera.name);
   }
 
   void _onError(error) {
-    log('error: $error');
+    LogService.error('error: $error');
     showCommonUnknownErrorBottomSheet(context);
   }
 

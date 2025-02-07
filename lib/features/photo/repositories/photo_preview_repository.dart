@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/constants/key_contst.dart';
@@ -12,7 +11,6 @@ class PhotoPreviewRepository {
   PhotoPreviewRepository(this._dio);
 
   Future<Map<String, dynamic>> uploadImage(String imagePath) async {
-    log('upload Image: $imagePath');
     final path = '/v1/body/photo';
     final formData = FormData.fromMap({
       'file': await MultipartFile.fromFile(

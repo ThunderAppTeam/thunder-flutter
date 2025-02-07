@@ -10,7 +10,8 @@ import 'package:thunder/core/constants/key_contst.dart';
 
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
 import 'package:thunder/core/widgets/custom_circular_indicator.dart';
-import 'package:thunder/features/photo_preview/view_models/photo_preview_view_model.dart';
+import 'package:thunder/features/archive/view_models/archive_view_model.dart';
+import 'package:thunder/features/photo/view_models/photo_preview_view_model.dart';
 import 'package:thunder/generated/l10n.dart';
 
 class PhotoPreviewPage extends ConsumerStatefulWidget {
@@ -56,7 +57,9 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
       cropRect: cropRect,
     );
     if (mounted) {
-      ref.read(safeRouterProvider).goNamed(
+      ref.read(archiveViewModelProvider.notifier).refresh();
+      ref.read(safeRouterProvider).goToArchive(context, skip: true);
+      ref.read(safeRouterProvider).pushNamed(
         context,
         Routes.bodyCheck.name,
         pathParameters: {
@@ -75,7 +78,7 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isNavigating = ref.watch(safeRouterProvider).isNavigating;
+    final isNavigating = ref.watch(safeRouterStateProvider);
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(

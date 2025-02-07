@@ -19,6 +19,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
   final baseUrl = dotenv.env['BASE_URL'];
+
   // TODO: change this logic to not use dotenv
   if (baseUrl == null || baseUrl.isEmpty) {
     LogService.fatal('Error: BASE_URL is not defined in .env file.');
@@ -28,6 +29,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);

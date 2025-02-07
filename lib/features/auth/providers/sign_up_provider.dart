@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/core/services/log_service.dart';
 import 'package:thunder/features/auth/models/data/sign_up_user.dart';
 import 'package:thunder/features/auth/models/states/sign_up_state.dart';
 import 'package:thunder/features/auth/providers/auth_state_provider.dart';
@@ -20,17 +19,17 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
     try {
       await _repository.signUp(user);
       _authNotifier.login();
-      log('signUp success');
+      LogService.trace('signUp success');
       state = state.copyWith(isLoading: false, isSuccess: true);
     } catch (e) {
-      log('signUp error: $e');
+      LogService.error('signUp error: $e');
       state = state.copyWith(isLoading: false, isError: true);
     }
   }
 
   @override
   void dispose() {
-    log('SignUpNotifier dispose');
+    LogService.trace('SignUpNotifier dispose');
     super.dispose();
   }
 }

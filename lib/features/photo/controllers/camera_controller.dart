@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -9,9 +8,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:thunder/core/constants/image_const.dart';
 import 'package:thunder/core/services/cache_service.dart';
+import 'package:thunder/core/services/log_service.dart';
 import 'package:thunder/core/services/permission_service.dart';
 import 'package:thunder/core/utils/image_utils.dart';
-import 'package:thunder/features/camera/models/camera_state.dart';
+import 'package:thunder/features/photo/models/camera_state.dart';
 import 'package:image/image.dart' as img;
 
 class CameraStateNotifier extends StateNotifier<CameraState> {
@@ -101,7 +101,7 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
       }
       await _initController(_controller!);
     } catch (e) {
-      log('switchCamera error: $e');
+      LogService.error('switchCamera error: $e');
       state = state.copyWith(
         error: CameraError.switchCameraFailed,
       );
@@ -145,7 +145,7 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
       _currentZoom = (_baseScale * scale).clamp(_minZoom, _maxZoom);
       await _controller!.setZoomLevel(_currentZoom);
     } catch (e) {
-      log('setZoomLevel error: $e');
+      LogService.error('setZoomLevel error: $e');
     } finally {
       state = state.copyWith(isProcessing: false);
     }
@@ -174,7 +174,7 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
       await _controller!.setFocusPoint(Offset(x, y));
       await _controller!.setExposurePoint(Offset(x, y));
     } catch (e) {
-      log('setFocusPoint error: $e');
+      LogService.error('setFocusPoint error: $e');
     } finally {
       state = state.copyWith(isProcessing: false);
     }
@@ -250,9 +250,9 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   Future<void> clearSelectedImageStates() async {
     try {
       await clearImage(state.selectedImagePath!);
-      log('Image deleted: ${state.selectedImagePath!}');
+      LogService.trace('Image deleted: ${state.selectedImagePath!}');
     } catch (e) {
-      log('Failed to delete image: $e');
+      LogService.error('Failed to delete image: $e');
     }
     state = state.copyWith(
       selectedImagePath: null,
@@ -282,10 +282,10 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
 
   @override
   void dispose() async {
-    log('camera dispose');
     if (_controller != null) {
       await _controller!.dispose();
     }
+    LogService.trace('camera dispose');
     super.dispose();
   }
 }

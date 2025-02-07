@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:thunder/core/services/log_service.dart';
 import 'package:thunder/core/utils/show_utils.dart';
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
 import 'package:thunder/features/settings/widgets/settings_list_tile.dart';
@@ -28,6 +29,7 @@ class SettingsAccountPage extends StatelessWidget {
       hasOtherOption: true,
       onButtonTap: () => _surveyButtonTap(context),
     );
+    LogService.trace('delete account option: $result');
     // TODO: 계정 삭제 요청 접수
   }
 

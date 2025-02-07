@@ -12,7 +12,7 @@ import 'package:thunder/features/onboarding/controllers/verification_controller.
 
 import 'package:thunder/core/widgets/buttons/custom_wide_button.dart';
 import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
-import 'package:thunder/features/onboarding/services/permission_navigation_service.dart';
+import 'package:thunder/features/permission/services/permission_navigation_service.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_scaffold.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_small_button.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_text_field.dart';
@@ -35,6 +35,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
     _controller = ref.read(verificationTimerProvider.notifier);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _controller.init();
+      ref.read(phoneAuthProvider.notifier).reset();
     });
   }
 
@@ -54,12 +55,10 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
   }
 
   void _onVerifySuccess(bool isExistUser) async {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.invalidate(verificationTimerProvider);
-    });
     if (isExistUser) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref.invalidate(onboardingProvider);
+        ref.invalidate(verificationTimerProvider);
       });
       final isRouted =
           await PermissionNavigationService.requestPermissionsAndRoute(
@@ -68,6 +67,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
         ref.read(safeRouterProvider).goToHome(context);
       }
     } else {
+      ref.read(onboardingProvider.notifier).setPhoneNumberVerified(true);
       ref.read(onboardingProvider.notifier).pushNextStep(
             context: context,
             currentStep: OnboardingStep.verification,

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:thunder/app/router/router.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
+import 'package:thunder/core/constants/key_contst.dart';
+import 'package:thunder/core/services/analytics_service.dart';
 import 'package:thunder/core/services/permission_service.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
@@ -32,10 +35,31 @@ enum Tabs {
 }
 
 class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
+  late final RouterDelegate<Object> _routerDelegate;
+  @override
+  void initState() {
+    super.initState();
+    _routerDelegate = ref.read(routerProvider).routerDelegate;
+    _routerDelegate.addListener(_handleRouteChange);
+  }
+
+  void _handleRouteChange() {
+    final config = ref.read(routerProvider).routerDelegate.currentConfiguration;
+    final screenName = config.last.route.name;
+
+    if (screenName != null) {
+      if (screenName == Routes.home.name || screenName == Routes.archive.name) {
+        final extra = config.extra as Map<String, dynamic>?;
+        if (extra?[KeyConst.skipAnalytics] == true) return;
+        AnalyticsService.screenView(screenName: screenName);
+      }
+    }
+  }
+
   void _onMeasureTap() async {
     await PermissionService.requestPermission(PermissionType.camera);
     if (mounted) {
-      ref.read(safeRouterProvider).pushNamed(context, Routes.measure.name);
+      ref.read(safeRouterProvider).pushNamed(context, Routes.camera.name);
     }
   }
 
@@ -57,10 +81,17 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
   }
 
   @override
+  void dispose() {
+    _routerDelegate.removeListener(_handleRouteChange);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          surfaceTintColor: Colors.transparent,
           toolbarHeight: Sizes.appBarHeight48,
           backgroundColor: Colors.transparent,
           centerTitle: false,
