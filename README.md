@@ -1,6 +1,6 @@
-# thunder
+# Thunder - Flutter
 
-A new Flutter project.
+Flutter project for Thunder Client.
 
 ## Getting Started
 
@@ -21,3 +21,7 @@ samples, guidance on mobile development, and a full API reference.
 flutter pub run build_runner build --delete-conflicting-outputs
 flutter pub run intl_utils:generate
 ```
+
+## Author
+
+Developed by [jrsky723](https://github.com/jrsky723)

@@ -11,6 +11,7 @@ import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/event_control/debouncer.dart';
 import 'package:thunder/core/utils/show_utils.dart';
 import 'package:thunder/core/widgets/empty_widget.dart';
+import 'package:thunder/core/widgets/slivers/custom_sliver_refresh_control.dart';
 import 'package:thunder/features/archive/models/data/body_check_preview_data.dart';
 import 'package:thunder/features/archive/view_models/archive_view_model.dart';
 import 'package:thunder/features/archive/views/widgets/archive_item.dart';
@@ -110,50 +111,53 @@ class _ArchivePageState extends ConsumerState<ArchivePage> {
         _onError(next.error);
       }
     });
-    final itemWidth = MediaQuery.of(context).size.width / _crossAxisCount;
-    final itemHeight = MediaQuery.of(context).size.height / _crossAxisCount;
 
     return Scaffold(
       backgroundColor: ColorName.darkBackground2,
-      body: CustomScrollView(
-        controller: _scrollController,
-        physics: const AlwaysScrollableScrollPhysics(),
-        slivers: [
-          CupertinoSliverRefreshControl(onRefresh: _onRefresh),
-          archive.maybeWhen(
-            skipError: true,
-            data: (items) {
-              if (items.isEmpty) {
-                return SliverFillRemaining(
-                  child: EmptyWidget(
-                    onButtonTap: _onButtonTap,
-                    guideText: S.of(context).archiveEmptyGuideText,
-                    buttonText: S.of(context).archiveEmptyButtonText,
-                  ),
-                );
-              }
-              return _buildGrid(items,
-                  itemWidth: itemWidth, itemHeight: itemHeight);
-            },
-            loading: () => archive.value == null
-                ? SliverFillRemaining(
-                    child: SkeletonArchiveWidget(
-                      crossAxisCount: _crossAxisCount,
+      body: LayoutBuilder(builder: (context, constraints) {
+        final itemWidth = constraints.maxWidth / _crossAxisCount;
+        final itemHeight = constraints.maxHeight / _crossAxisCount;
+        return CustomScrollView(
+          controller: _scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            CustomSliverRefreshControl(onRefresh: _onRefresh),
+            // CupertinoSliverRefreshControl(onRefresh: _onRefresh),
+            archive.maybeWhen(
+              skipError: true,
+              data: (items) {
+                if (items.isEmpty) {
+                  return SliverFillRemaining(
+                    child: EmptyWidget(
+                      onButtonTap: _onButtonTap,
+                      guideText: S.of(context).archiveEmptyGuideText,
+                      buttonText: S.of(context).archiveEmptyButtonText,
+                    ),
+                  );
+                }
+                return _buildGrid(items,
+                    itemWidth: itemWidth, itemHeight: itemHeight);
+              },
+              loading: () => archive.value == null
+                  ? SliverFillRemaining(
+                      child: SkeletonArchiveWidget(
+                        crossAxisCount: _crossAxisCount,
+                        itemWidth: itemWidth,
+                        itemHeight: itemHeight,
+                      ),
+                    )
+                  : _buildGrid(
+                      archive.value!,
                       itemWidth: itemWidth,
                       itemHeight: itemHeight,
                     ),
-                  )
-                : _buildGrid(
-                    archive.value!,
-                    itemWidth: itemWidth,
-                    itemHeight: itemHeight,
-                  ),
-            orElse: () => const SliverFillRemaining(
-              child: SizedBox.shrink(),
+              orElse: () => const SliverFillRemaining(
+                child: SizedBox.shrink(),
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      }),
     );
   }
 }
