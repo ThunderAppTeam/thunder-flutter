@@ -10,11 +10,13 @@ class FlagRepository {
 
   FlagRepository(this._dio);
 
-  Future<void> flag(int bodyPhotoId, String flagReasonString) async {
+  Future<void> flag(
+      int bodyPhotoId, String flagReasonString, String? otherReason) async {
     final path = '/v1/body/flag';
     await _dio.post(path, options: DioOptions.tokenOptions, data: {
       KeyConst.bodyPhotoId: bodyPhotoId,
       KeyConst.flagReason: flagReasonString,
+      if (otherReason != null) KeyConst.otherReason: otherReason,
     });
   }
 

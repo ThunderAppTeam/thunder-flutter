@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:thunder/core/services/log_service.dart';
+import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/utils/show_utils.dart';
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
 import 'package:thunder/features/auth/models/data/deletion_reason_data.dart';
@@ -41,8 +41,14 @@ class _SettingsAccountPageState extends ConsumerState<SettingsAccountPage> {
       hasOtherOption: true,
       onBeforeConfirm: () => _surveyButtonTap(context),
     );
-    LogService.info('delete account option: $result');
-    // TODO: 계정 삭제 요청 접수
+    if (result == null) return;
+    final reason = _deletionReasons[result.index];
+    await ref
+        .read(deleteAccountProvider.notifier)
+        .deleteAccount(reason, result.otherOptionText);
+    if (context.mounted) {
+      ref.read(safeRouterProvider).goToWelcome(context);
+    }
   }
 
   Future<bool?> _surveyButtonTap(BuildContext context) async {

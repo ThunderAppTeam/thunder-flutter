@@ -46,7 +46,7 @@ class AuthRepository with BaseRepository {
     });
   }
 
-  Future<int?> verifyCodeAndCheckExist({
+  Future<String?> verifyCodeAndCheckExist({
     required String countryCode,
     required String phoneNumber,
     required String smsCode,
@@ -61,10 +61,10 @@ class AuthRepository with BaseRepository {
         KeyConst.deviceId: deviceId,
       });
       final accessToken = data[KeyConst.accessToken];
-      final memberId = data[KeyConst.memberId];
-      if (accessToken != null && memberId != null) {
+      final memberUuid = data[KeyConst.memberUuid];
+      if (accessToken != null && memberUuid != null) {
         await _tokenProvider.setToken(accessToken);
-        return memberId;
+        return memberUuid;
       }
       return null;
     } catch (e) {
@@ -78,14 +78,13 @@ class AuthRepository with BaseRepository {
     await get(path, queryParameters: {KeyConst.nickname: nickname});
   }
 
-  Future<int> signUp(SignUpUser signUpUser) async {
+  Future<Map<String, dynamic>> signUp(SignUpUser signUpUser) async {
     final path = '/v1/member/signup';
     try {
       final data = await post(path, data: signUpUser.toJson());
       final accessToken = data[KeyConst.accessToken];
-      final memberId = data[KeyConst.memberId];
       await _tokenProvider.setToken(accessToken);
-      return memberId;
+      return data;
     } catch (e) {
       LogService.error('Failed to sign up: $e');
       throw Exception('Failed to sign up: $e');
@@ -98,13 +97,17 @@ class AuthRepository with BaseRepository {
     return List<Map<String, dynamic>>.from(data);
   }
 
-  Future<void> deleteAccount(String reason) async {
-    // final path = '/v1/member/deletion';
-    // TODO: api 개발 이후에 구현
+  Future<void> deleteAccount(String reason, String? otherReason) async {
+    final path = '/v1/member/deletion';
+    await post(path, options: DioOptions.tokenOptions, data: {
+      KeyConst.deletionReason: reason,
+      if (otherReason != null) KeyConst.otherReason: otherReason,
+    });
+    await _tokenProvider.clearToken();
   }
 }
 
-final authRepoProvider = Provider<AuthRepository>((ref) {
+final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final dio = ref.read(dioProvider);
   final tokenService = ref.read(tokenProvider);
   return AuthRepository(dio, tokenService);

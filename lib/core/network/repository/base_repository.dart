@@ -4,7 +4,6 @@ import 'package:thunder/core/network/dio_error_parser.dart';
 
 mixin BaseRepository {
   Dio get dio;
-
   Future<T> get<T>(
     String path, {
     Map<String, dynamic>? queryParameters,

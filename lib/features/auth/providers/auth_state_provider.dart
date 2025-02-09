@@ -17,13 +17,13 @@ class AuthNotifier extends Notifier<AuthState> {
 
   @override
   AuthState build() {
-    _authRepository = ref.read(authRepoProvider);
+    _authRepository = ref.read(authRepositoryProvider);
     return AuthState(isLoggedIn: _authRepository.isLoggedIn);
   }
 
-  void login(int memberId) {
+  void login(String memberUuid) {
     state = state.copyWith(isLoggedIn: true);
-    AnalyticsService.setUserId(memberId.toString());
+    AnalyticsService.setUserId(memberUuid);
   }
 
   void logout() {

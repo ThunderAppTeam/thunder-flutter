@@ -23,10 +23,11 @@ class FlagViewModel extends AutoDisposeAsyncNotifier<void> {
     return result;
   }
 
-  Future<void> flag(int bodyPhotoId, String flagReason) async {
+  Future<void> flag(
+      int bodyPhotoId, String flagReason, String? otherReason) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      await _repository.flag(bodyPhotoId, flagReason);
+      await _repository.flag(bodyPhotoId, flagReason, otherReason);
       AnalyticsService.reportContent(bodyPhotoId);
     });
   }

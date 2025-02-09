@@ -66,22 +66,18 @@ class AnalyticsService {
 
   // User Properties
   static Future<void> setUserProperties({
-    String? gender,
-    int? age,
+    required String gender,
+    required int age,
   }) async {
     try {
-      if (gender != null) {
-        await _analytics.setUserProperty(
-          name: AnalyticsUserProperty.userGender,
-          value: gender,
-        );
-      }
-      if (age != null) {
-        await _analytics.setUserProperty(
-          name: AnalyticsUserProperty.userAge,
-          value: age.toString(),
-        );
-      }
+      await _analytics.setUserProperty(
+        name: AnalyticsUserProperty.userGender,
+        value: gender,
+      );
+      await _analytics.setUserProperty(
+        name: AnalyticsUserProperty.userAge,
+        value: age.toString(),
+      );
       LogService.info(
           'Analytics: Set User Properties - Gender: $gender, Age: $age');
     } catch (e, stack) {

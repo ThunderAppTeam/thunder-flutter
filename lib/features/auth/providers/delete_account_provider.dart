@@ -11,7 +11,7 @@ class DeleteAccountViewModel extends AsyncNotifier<void> {
   late final AuthNotifier _authNotifier;
   @override
   FutureOr<void> build() {
-    _repository = ref.read(authRepoProvider);
+    _repository = ref.read(authRepositoryProvider);
     _authNotifier = ref.read(authStateProvider.notifier);
   }
 
@@ -25,10 +25,11 @@ class DeleteAccountViewModel extends AsyncNotifier<void> {
     return reasons;
   }
 
-  Future<void> deleteAccount(String reason) async {
+  Future<void> deleteAccount(
+      DeletionReasonData reason, String? otherReason) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      await _repository.deleteAccount(reason);
+      await _repository.deleteAccount(reason.reason, otherReason);
       _authNotifier.logout();
       AnalyticsService.deleteAccount();
     });

@@ -43,41 +43,50 @@ class AnalyticsUserProperty {
 
 class AnalyticsValue {
   // Auth Method Values
-  static const AuthMethod auth = AuthMethod();
+  static const AuthMethodValue auth = AuthMethodValue();
+
+  // Gender Values
+  static const GenderValue gender = GenderValue();
 
   // Tab Values
-  static const TabName tab = TabName();
+  static const TabNameValue tab = TabNameValue();
 
   // Photo Source Values
-  static const PhotoSource photo = PhotoSource();
+  static const PhotoSourceValue photo = PhotoSourceValue();
 
   // Share Values
-  static const ShareType share = ShareType();
+  static const ShareTypeValue share = ShareTypeValue();
 
   // const
   static const String nullValue = 'null';
 }
 
-class AuthMethod {
-  const AuthMethod();
+class AuthMethodValue {
+  const AuthMethodValue();
   String get sms => 'sms';
 }
 
-class TabName {
-  const TabName();
+class GenderValue {
+  const GenderValue();
+  String get male => 'male';
+  String get female => 'female';
+}
+
+class TabNameValue {
+  const TabNameValue();
   String get home => 'home';
   String get check => 'check';
   String get archive => 'archive';
 }
 
-class PhotoSource {
-  const PhotoSource();
+class PhotoSourceValue {
+  const PhotoSourceValue();
   String get camera => 'camera';
   String get gallery => 'gallery';
 }
 
-class ShareType {
-  const ShareType();
+class ShareTypeValue {
+  const ShareTypeValue();
   String get image => 'image';
   String get bodyResult => 'body_result';
 }

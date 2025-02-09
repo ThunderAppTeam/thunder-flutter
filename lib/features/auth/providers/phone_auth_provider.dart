@@ -63,20 +63,20 @@ class PhoneAuthNotifier extends StateNotifier<PhoneAuthState> {
       return false;
     }
     try {
-      final memberId = await _repository.verifyCodeAndCheckExist(
+      final memberUuid = await _repository.verifyCodeAndCheckExist(
         countryCode: countryCode,
         phoneNumber: phoneNumber,
         smsCode: smsCode,
         deviceId: deviceId,
       );
-      if (memberId != null) {
-        _authNotifier.login(memberId);
+      if (memberUuid != null) {
+        _authNotifier.login(memberUuid);
         AnalyticsService.login();
       }
       state = state.copyWith(
         isCodeVerifying: false,
         isVerified: true,
-        isExistUser: memberId != null,
+        isExistUser: memberUuid != null,
       );
       return true;
     } on ServerError catch (e) {
@@ -93,7 +93,7 @@ class PhoneAuthNotifier extends StateNotifier<PhoneAuthState> {
 final phoneAuthProvider =
     StateNotifierProvider.autoDispose<PhoneAuthNotifier, PhoneAuthState>((ref) {
   return PhoneAuthNotifier(
-    ref.read(authRepoProvider),
+    ref.read(authRepositoryProvider),
     ref.read(deviceIdProvider),
     ref.read(authStateProvider.notifier),
   );

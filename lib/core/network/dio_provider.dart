@@ -17,8 +17,8 @@ final dioProvider = Provider<Dio>((ref) {
   // (1) 로그 Interceptor
   dio.interceptors.add(InterceptorsWrapper(
     onRequest: (options, handler) {
-      LogService.debug('Request[${options.method}] => PATH: ${options.path}');
-
+      LogService.debug('Request[${options.method}] => PATH: ${options.path} '
+          'PARAMS: ${options.queryParameters} DATA: ${options.data}');
       handler.next(options); // 요청을 다음 Interceptor로 넘김
     },
     onResponse: (response, handler) {
