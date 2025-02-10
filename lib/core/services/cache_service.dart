@@ -6,7 +6,7 @@ import 'package:thunder/core/services/log_service.dart';
 
 class CacheService {
   static const int _maxCacheAgeDays = 7;
-  static const int _maxCacheSizeMB = 100;
+  static const int _maxCacheSizeMB = 50;
 
   static Future<Directory> _getImagesCacheDirectory() async {
     final cacheDir = await getTemporaryDirectory();
@@ -32,7 +32,6 @@ class CacheService {
   static Future<void> cleanOldCache() async {
     try {
       final cacheDir = await getTemporaryDirectory();
-      LogService.trace('Cache directory: ${cacheDir.path}');
       final now = DateTime.now();
       if (await cacheDir.exists()) {
         await for (var entity in cacheDir.list(recursive: true)) {

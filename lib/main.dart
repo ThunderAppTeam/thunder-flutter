@@ -46,6 +46,12 @@ void main() async {
   }
 
   await CacheService.cleanCache();
+  SystemChannels.lifecycle.setMessageHandler((msg) async {
+    if (msg == AppLifecycleState.resumed.toString()) {
+      await CacheService.cleanCache();
+    }
+    return null;
+  });
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
