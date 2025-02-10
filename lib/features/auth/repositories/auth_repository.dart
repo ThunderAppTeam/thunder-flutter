@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
+import 'package:extended_image/extended_image.dart' as extended_image;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/constants/key_contst.dart';
@@ -33,6 +34,7 @@ class AuthRepository with BaseRepository {
       LogService.error('Logout API failed: $e');
     } finally {
       await _tokenProvider.clearToken();
+      await extended_image.clearDiskCachedImages();
     }
   }
 
@@ -110,6 +112,7 @@ class AuthRepository with BaseRepository {
       if (otherReason != null) KeyConst.otherReason: otherReason,
     });
     await _tokenProvider.clearToken();
+    await extended_image.clearDiskCachedImages();
   }
 }
 

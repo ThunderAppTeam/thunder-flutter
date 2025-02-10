@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/services/analytics_service.dart';
+import 'package:thunder/core/services/log_service.dart';
 import 'package:thunder/features/auth/repositories/auth_repository.dart';
 
 class AuthState {
@@ -32,9 +33,13 @@ class AuthNotifier extends Notifier<AuthState> {
   }
 
   Future<void> signOut() async {
-    await _authRepository.signOut();
-    logout();
-    AnalyticsService.logout();
+    try {
+      await _authRepository.signOut();
+      logout();
+      AnalyticsService.logout();
+    } catch (e) {
+      LogService.error('Logout API failed: $e');
+    }
   }
 }
 

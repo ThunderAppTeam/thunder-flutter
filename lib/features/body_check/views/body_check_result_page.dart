@@ -85,8 +85,7 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
       ),
     );
     if (confirmed == true && context.mounted) {
-      final deleted =
-          await _viewModel.deleteBodyCheckResult(widget.bodyPhotoId);
+      final deleted = await _viewModel.deleteBodyCheckResult();
       if (deleted) {
         ref
             .read(archiveViewModelProvider.notifier)
