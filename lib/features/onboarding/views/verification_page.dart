@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/constants/app_const.dart';
 import 'package:thunder/core/constants/time_const.dart';
 import 'package:thunder/app/router/safe_router.dart';
+import 'package:thunder/core/services/analytics_service.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
 import 'package:thunder/features/auth/models/states/phone_auth_state.dart';
@@ -12,7 +13,7 @@ import 'package:thunder/features/onboarding/controllers/verification_controller.
 
 import 'package:thunder/core/widgets/buttons/custom_wide_button.dart';
 import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
-import 'package:thunder/features/onboarding/services/permission_navigation_service.dart';
+import 'package:thunder/features/permission/services/permission_navigation_service.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_scaffold.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_small_button.dart';
 import 'package:thunder/features/onboarding/views/widgets/onboarding_text_field.dart';
@@ -35,6 +36,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
     _controller = ref.read(verificationTimerProvider.notifier);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _controller.init();
+      ref.read(phoneAuthProvider.notifier).reset();
     });
   }
 
@@ -54,12 +56,11 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
   }
 
   void _onVerifySuccess(bool isExistUser) async {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.invalidate(verificationTimerProvider);
-    });
+    AnalyticsService.authPhone();
     if (isExistUser) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref.invalidate(onboardingProvider);
+        ref.invalidate(verificationTimerProvider);
       });
       final isRouted =
           await PermissionNavigationService.requestPermissionsAndRoute(
@@ -68,6 +69,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
         ref.read(safeRouterProvider).goToHome(context);
       }
     } else {
+      ref.read(onboardingProvider.notifier).setPhoneNumberVerified(true);
       ref.read(onboardingProvider.notifier).pushNextStep(
             context: context,
             currentStep: OnboardingStep.verification,

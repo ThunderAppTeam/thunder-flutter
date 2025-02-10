@@ -1,38 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
+import 'package:thunder/core/constants/app_const.dart';
+import 'package:thunder/core/constants/value_const.dart';
 import 'package:thunder/core/services/email_service.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/icon/thunder_icons_icons.dart';
 import 'package:thunder/core/utils/show_utils.dart';
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
 import 'package:thunder/features/auth/providers/auth_state_provider.dart';
-import 'package:thunder/features/settings/views/settings_account_page.dart';
-import 'package:thunder/features/settings/views/settings_info_page.dart';
-import 'package:thunder/features/settings/views/settings_notification_page.dart';
+import 'package:thunder/features/member/view_models/member_view_model.dart';
 import 'package:thunder/features/settings/widgets/settings_list_tile.dart';
 import 'package:thunder/generated/l10n.dart';
-
-class UserInfo {
-  final String deviceModel;
-  final String osVersion;
-  final String appVersion;
-  final String nickname;
-  final String id;
-
-  UserInfo({
-    required this.deviceModel,
-    required this.osVersion,
-    required this.appVersion,
-    required this.nickname,
-    required this.id,
-  });
-
-  @override
-  String toString() {
-    return '- Device Model: $deviceModel\n- OS Version: $osVersion\n- App Version: $appVersion\n- Nickname: $nickname\n- ID: $id';
-  }
-}
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
@@ -53,46 +33,43 @@ class SettingsPage extends ConsumerWidget {
   }
 
   void _onAccountTap(BuildContext context, WidgetRef ref) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const SettingsAccountPage()),
-    );
+    ref
+        .read(safeRouterProvider)
+        .pushNamed(context, Routes.settings.account.name);
   }
 
   void _onInfoTap(BuildContext context, WidgetRef ref) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const SettingsInfoPage()),
-    );
+    ref.read(safeRouterProvider).pushNamed(context, Routes.settings.info.name);
   }
 
-  void _onContactTap(BuildContext context, WidgetRef ref) async {
-    final nickname = "구피닉네임999";
+  void _onContactTap(
+      BuildContext context, String nickname, String memberUuid) async {
     try {
-      await EmailService().sendSupportEmail(
+      await EmailService.sendSupportEmail(
         nickname: nickname,
+        userId: memberUuid,
         subject: S.of(context).contactSubject(nickname),
         bodyGuide: S.of(context).contactBodyGuide,
       );
     } catch (e) {
       if (context.mounted) {
         showCustomBottomSheet(context,
-            title: "메일 앱을 실행할 수 없어요",
+            title: S.of(context).contactErrorTitle,
             subtitle:
-                "회원님의 기기에 설치된 기본 메일 앱을 실행할 수 없는 상태에요. 문의사항을 아래 고객센터 이메일로 직접 문의해주세요.\n\n고객센터: thunderteam.korea@gmail.com");
+                S.of(context).contactErrorSubtitle(AppConst.supportEmail));
       }
     }
   }
 
   void _onNotificationTap(BuildContext context, WidgetRef ref) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const SettingsNotificationPage()),
-    );
+    ref
+        .read(safeRouterProvider)
+        .pushNamed(context, Routes.settings.notification.name);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final memberData = ref.watch(memberDataProvider);
     return Scaffold(
       appBar: CustomAppBar(title: S.of(context).settingsTitle),
       body: Padding(
@@ -117,7 +94,11 @@ class SettingsPage extends ConsumerWidget {
             SettingsListTile(
               icon: ThunderIcons.mail,
               title: S.of(context).settingsContact,
-              onTap: () => _onContactTap(context, ref),
+              onTap: () => _onContactTap(
+                context,
+                memberData.valueOrNull?.nickname ?? ValueConst.unknown,
+                memberData.valueOrNull?.memberUuid ?? ValueConst.unknown,
+              ),
             ),
             SettingsListTile(
               title: S.of(context).settingsLogout,

@@ -1,28 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
-import 'package:thunder/core/constants/url_const.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/show_utils.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
-import 'package:thunder/core/widgets/web_view_page.dart';
 import 'package:thunder/features/auth/models/states/sign_up_state.dart';
 import 'package:thunder/features/auth/providers/sign_up_provider.dart';
+import 'package:thunder/features/onboarding/controllers/verification_controller.dart';
 import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
-import 'package:thunder/features/onboarding/services/permission_navigation_service.dart';
+import 'package:thunder/features/permission/services/permission_navigation_service.dart';
 import 'package:thunder/generated/l10n.dart';
 
 enum Terms {
-  service(true, UrlConst.termsOfService),
-  privacy(true, UrlConst.privacyPolicy),
-  marketing(false, null);
+  service(true, true),
+  privacy(true, true),
+  marketing(false, false);
 
   final bool isRequired;
-  final String? url;
-  const Terms(this.isRequired, this.url);
+  final bool isShowDetail;
+
+  const Terms(this.isRequired, this.isShowDetail);
 }
 
 class TermsBottomSheet extends ConsumerStatefulWidget {
@@ -82,17 +83,15 @@ class _TermsBottomSheetState extends ConsumerState<TermsBottomSheet> {
   }
 
   void _showTermDetails(Terms term) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => WebViewPage(
-          url: term.url!,
-        ),
-      ),
-    );
+    final safeRouter = ref.read(safeRouterProvider);
+    if (term == Terms.service) {
+      safeRouter.pushNamed(context, Routes.webview.terms.name);
+    } else if (term == Terms.privacy) {
+      safeRouter.pushNamed(context, Routes.webview.privacy.name);
+    }
   }
 
-  Widget _buildAllAgreeCheckbox() {
+  Widget buildAllAgreeCheckbox() {
     final textTheme = getTextTheme(context);
     return GestureDetector(
       onTap: () => _toggleAll(!_isAllChecked),
@@ -125,7 +124,7 @@ class _TermsBottomSheetState extends ConsumerState<TermsBottomSheet> {
     );
   }
 
-  Widget _buildTermItem({
+  Widget buildTermItem({
     required Terms term,
     required String label,
     required bool value,
@@ -159,7 +158,7 @@ class _TermsBottomSheetState extends ConsumerState<TermsBottomSheet> {
         ),
         const Spacer(),
         // 상세보기 영역
-        if (term.url != null)
+        if (term.isShowDetail)
           GestureDetector(
             onTap: () => _showTermDetails(term),
             child: Icon(
@@ -172,11 +171,12 @@ class _TermsBottomSheetState extends ConsumerState<TermsBottomSheet> {
     );
   }
 
-  void _onSignUpStateChange(SignUpState? prev, SignUpState next) async {
+  void onSignUpStateChange(SignUpState? prev, SignUpState next) async {
     if (next.isSuccess) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref.invalidate(onboardingProvider);
         ref.invalidate(signUpProvider);
+        ref.invalidate(verificationTimerProvider);
       });
       final isRouted =
           await PermissionNavigationService.requestPermissionsAndRoute(
@@ -194,19 +194,19 @@ class _TermsBottomSheetState extends ConsumerState<TermsBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(signUpProvider, _onSignUpStateChange);
+    ref.listen(signUpProvider, onSignUpStateChange);
     return CustomBottomSheet(
       title: S.of(context).termsTitle,
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildAllAgreeCheckbox(),
+          buildAllAgreeCheckbox(),
           Gaps.v32,
           ...Terms.values.map((term) {
             final isLastItem = term == Terms.values.last;
             return Column(
               children: [
-                _buildTermItem(
+                buildTermItem(
                   term: term,
                   label: _getTermLabel(term, context),
                   value: _agreements[term] ?? false,

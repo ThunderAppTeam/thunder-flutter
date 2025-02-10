@@ -1,8 +1,8 @@
-import 'dart:developer';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/constants/image_const.dart';
 import 'package:thunder/core/constants/time_const.dart';
@@ -12,11 +12,10 @@ import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/show_utils.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/custom_circular_indicator.dart';
-import 'package:thunder/features/camera/controllers/camera_controller.dart';
-import 'package:thunder/features/camera/models/camera_state.dart';
-import 'package:thunder/features/photo_preview/views/photo_preview_page.dart';
-import 'package:thunder/features/camera/views/widgets/camera_app_bar.dart';
-import 'package:thunder/features/camera/views/widgets/camera_bottom_controls.dart';
+import 'package:thunder/features/photo/controllers/camera_controller.dart';
+import 'package:thunder/features/photo/models/camera_state.dart';
+import 'package:thunder/features/photo/views/widgets/camera_app_bar.dart';
+import 'package:thunder/features/photo/views/widgets/camera_bottom_controls.dart';
 import 'package:thunder/generated/l10n.dart';
 
 class CameraPage extends ConsumerStatefulWidget {
@@ -84,16 +83,10 @@ class _CameraPageState extends ConsumerState<CameraPage>
 
     // 새로운 이미지가 선택되었을 때 미리보기 페이지로 이동
     if (prev?.selectedImagePath == null && next.selectedImagePath != null) {
-      log('selectedImagePath: ${next.selectedImagePath}');
-      // 새로운 이
       if (mounted) {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PhotoPreviewPage(
-              imagePath: next.selectedImagePath!,
-            ),
-          ),
+        await context.pushNamed(
+          Routes.photoPreview.name,
+          extra: next.selectedImagePath,
         );
         // 미리보기 화면에서 돌아왔을 시, 업로드 완료 후 Context.pop되었을 때, 이미지 삭제
         await _controller.clearSelectedImageStates();

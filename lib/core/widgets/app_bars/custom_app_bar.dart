@@ -49,6 +49,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       toolbarHeight: preferredSize.height,
       automaticallyImplyLeading: false,
+      surfaceTintColor: Colors.transparent,
       backgroundColor: Colors.transparent,
       titleSpacing: 0,
       title: Container(
@@ -107,6 +108,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       case CustomAppBarActionType.icon:
                         return InkWell(
                           onTap: action.onTap,
+                          borderRadius: BorderRadius.circular(Sizes.radius16),
                           child: Icon(
                             action.icon!,
                             size: Sizes.icon24,

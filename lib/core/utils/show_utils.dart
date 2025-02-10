@@ -50,7 +50,7 @@ Future<SurveyResult?> showSurveyBottomSheet(
   required String title,
   required List<String> options,
   required String buttonText,
-  FutureOr<void> Function()? onButtonTap,
+  FutureOr<bool?> Function()? onBeforeConfirm,
   bool hasOtherOption = false,
 }) async {
   final mediaQuery = MediaQuery.of(context);
@@ -71,7 +71,7 @@ Future<SurveyResult?> showSurveyBottomSheet(
       title: title,
       options: options,
       buttonText: buttonText,
-      onButtonTap: onButtonTap,
+      onBeforeConfirm: onBeforeConfirm,
       hasOtherOption: hasOtherOption,
     ),
   );

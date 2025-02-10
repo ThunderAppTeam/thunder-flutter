@@ -8,7 +8,7 @@ class TimeConst {
 
   /// 백엔드에 과한 요청을 막기 위해, 버튼 클릭 후 2초 동안 버튼 비활성화
   static const Duration onboardingButtonCoolDown = Duration(milliseconds: 2000);
-  static const Duration navigationDuration = Duration(milliseconds: 500);
+  static const Duration safeRouterDuration = Duration(milliseconds: 500);
   static const Duration permissionPopupDuration = Duration(milliseconds: 500);
 
   // camera

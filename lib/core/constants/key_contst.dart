@@ -16,5 +16,11 @@ class KeyConst {
   static const String fromUpload = 'fromUpload';
   static const String pointText = 'pointText';
   static const String flagReason = 'flagReason';
+  static const String otherReason = 'otherReason';
   static const String blockedMemberId = 'blockedMemberId';
+  static const String skipAnalytics = 'skipAnalytics';
+  static const String memberDeletionReason = 'memberDeletionReason';
+  static const String description = 'description';
+  static const String deletionReason = 'deletionReason';
+  static const String memberUuid = 'memberUuid';
 }

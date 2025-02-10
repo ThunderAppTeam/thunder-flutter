@@ -5,9 +5,10 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image/image.dart' as img;
 import 'package:thunder/core/constants/image_const.dart';
+import 'package:thunder/core/services/analytics_service.dart';
 import 'package:thunder/core/utils/image_utils.dart';
-import 'package:thunder/features/photo_preview/models/image_data.dart';
-import 'package:thunder/features/photo_preview/repositories/photo_preview_repository.dart';
+import 'package:thunder/features/photo/models/data/image_data.dart';
+import 'package:thunder/features/photo/repositories/photo_preview_repository.dart';
 
 class PhotoPreviewViewModel extends AsyncNotifier<void> {
   late final PhotoPreviewRepository _repository;
@@ -47,7 +48,10 @@ class PhotoPreviewViewModel extends AsyncNotifier<void> {
       await logImageInfo('Output Image', compressed);
       await file.writeAsBytes(compressed);
       final response = await _repository.uploadImage(imagePath);
+      // 업로드 성공 시 파일 삭제
+      await file.delete();
       imageData = ImageData.fromJson(response);
+      AnalyticsService.uploadPhoto();
     });
     return imageData;
   }

@@ -1,18 +1,19 @@
-import 'dart:developer';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:thunder/core/constants/app_const.dart';
+import 'package:thunder/core/services/log_service.dart';
 
 class EmailService {
-  Future<void> sendSupportEmail({
+  static Future<void> sendSupportEmail({
     required String nickname,
+    required String userId,
     required String subject,
     required String bodyGuide,
   }) async {
-    final userInfo = await _getUserInfo(nickname);
+    final userInfo = await _getUserInfo(nickname, userId);
     final body = '$bodyGuide\n\n\n-----\n$userInfo';
 
     final mail = Email(
@@ -24,12 +25,12 @@ class EmailService {
     try {
       await FlutterEmailSender.send(mail);
     } catch (e) {
-      log(e.toString());
+      LogService.error(e.toString());
       rethrow;
     }
   }
 
-  Future<String> _getUserInfo(String nickname) async {
+  static Future<String> _getUserInfo(String nickname, String userId) async {
     DeviceInfo deviceInfo;
     try {
       if (kIsWeb) {
@@ -48,7 +49,7 @@ class EmailService {
         };
       }
     } on PlatformException catch (e) {
-      log(e.toString());
+      LogService.error(e.toString());
       deviceInfo = DeviceInfo(
         deviceModel: 'Unknown',
         osVersion: 'Unknown',
@@ -61,10 +62,10 @@ class EmailService {
 - OS Version: ${deviceInfo.osVersion}
 - App Version: $appVersion
 - Nickname: $nickname
-- ID: ???''';
+- ID: $userId''';
   }
 
-  Future<DeviceInfo> _getAndroidDeviceInfo() async {
+  static Future<DeviceInfo> _getAndroidDeviceInfo() async {
     final info = await DeviceInfoPlugin().androidInfo;
     return DeviceInfo(
       deviceModel: '${info.manufacturer} ${info.model}',
@@ -72,7 +73,7 @@ class EmailService {
     );
   }
 
-  Future<DeviceInfo> _getIOSDeviceInfo() async {
+  static Future<DeviceInfo> _getIOSDeviceInfo() async {
     final info = await DeviceInfoPlugin().iosInfo;
     return DeviceInfo(
       deviceModel: info.modelName,

@@ -7,6 +7,7 @@ class CustomCircularIndicator extends StatelessWidget {
   final double strokeWidth;
   final Color color;
   final double padding;
+  final double? value;
 
   const CustomCircularIndicator({
     super.key,
@@ -14,6 +15,7 @@ class CustomCircularIndicator extends StatelessWidget {
     this.strokeWidth = Sizes.circularIndicatorStrokeWidth4,
     this.color = ColorName.white,
     this.padding = Sizes.spacing4,
+    this.value,
   });
 
   @override
@@ -26,6 +28,7 @@ class CustomCircularIndicator extends StatelessWidget {
         child: CircularProgressIndicator(
           color: color,
           strokeWidth: strokeWidth,
+          value: value,
         ),
       ),
     );

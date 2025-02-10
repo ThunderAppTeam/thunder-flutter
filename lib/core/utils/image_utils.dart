@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'dart:developer';
+
+import 'package:thunder/core/services/log_service.dart';
 
 String formatFileSize(int size) {
   if (size < 1024) return "$size bytes";
@@ -15,7 +16,7 @@ Future<void> logImageInfo(String title, Uint8List imageBytes) async {
   final originalSizeKB = (imageBytes.length / 1000).toStringAsFixed(2);
   final originalMB = (imageBytes.length / (1000 * 1000)).toStringAsFixed(2);
 
-  log('''
+  LogService.trace('''
   $title:
   - Resolution: ${originalImage.width} x ${originalImage.height}
   - Size: $originalSizeKB KB ($originalMB MB)

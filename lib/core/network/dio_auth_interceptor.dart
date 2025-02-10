@@ -1,10 +1,9 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/constants/key_contst.dart';
 import 'package:thunder/core/errors/network_error.dart';
 import 'package:thunder/core/providers/token_provider.dart';
+import 'package:thunder/core/services/log_service.dart';
 
 class DioAuthInterceptor extends Interceptor {
   final Ref _ref;
@@ -20,7 +19,7 @@ class DioAuthInterceptor extends Interceptor {
       final accessToken = _ref.read(tokenProvider).token;
 
       if (accessToken == null) {
-        log('No access token');
+        LogService.error('No access token');
         return handler.reject(
           DioException(
             requestOptions: options,

@@ -1,7 +1,9 @@
 import 'dart:async';
-import 'dart:developer';
+import 'package:extended_image/extended_image.dart' as extended_image;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/errors/server_error.dart';
+import 'package:thunder/core/services/analytics_service.dart';
+import 'package:thunder/core/services/log_service.dart';
 import 'package:thunder/features/auth/providers/auth_state_provider.dart';
 import 'package:thunder/features/rating/models/data/body_check_data.dart';
 import 'package:thunder/features/rating/repositories/rating_repository.dart';
@@ -38,7 +40,6 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
   @override
   FutureOr<List<BodyCheckData>> build() async {
     _repository = ref.read(ratingRepositoryProvider);
-
     final link = ref.keepAlive();
     ref.listen(authStateProvider, (prev, next) {
       if (!next.isLoggedIn) {
@@ -65,10 +66,21 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
   }
 
   void skip() async {
+    _clearImageCache();
     _currentIdx++;
     if (_needFetchMore()) await _fetchMore();
     _viewedIdx = _currentIdx;
     state = AsyncData(_list);
+  }
+
+  void _clearImageCache() async {
+    final url = _list[_currentIdx].imageUrl;
+    try {
+      await extended_image.clearDiskCachedImage(url);
+      extended_image.clearMemoryImageCache(url);
+    } catch (e) {
+      LogService.error('clearImageCache error: $e');
+    }
   }
 
   // void block() async {
@@ -95,9 +107,14 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
   void rate(int rating) async {
     if (_isRatingInProgress) return;
     _isRatingInProgress = true;
+    _clearImageCache();
     final bodyCheckData = _list[_currentIdx++];
     try {
       await _repository.rate(bodyCheckData.bodyPhotoId, rating);
+      AnalyticsService.reviewBody(
+        contentId: bodyCheckData.bodyPhotoId.toString(),
+        score: rating,
+      );
       if (_needFetchMore()) await _fetchMore();
     } on ServerError catch (e) {
       if (e == ServerError.alreadyReviewed) {
@@ -105,7 +122,7 @@ class RatingViewModel extends AutoDisposeAsyncNotifier<List<BodyCheckData>> {
       }
       rethrow;
     } catch (e, st) {
-      log('rate error: $e, $st');
+      LogService.error('rate error: $e, $st');
       state = AsyncError(e, st);
       return;
     } finally {

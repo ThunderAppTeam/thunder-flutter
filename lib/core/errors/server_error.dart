@@ -18,11 +18,13 @@ enum ServerError {
 
   notFoundMember("NOT_FOUND_MEMBER"),
   nicknameDuplicated("NICKNAME_DUPLICATED"),
+  mobileNumberDuplicated("MOBILE_NUMBER_DUPLICATED"),
 
   unsupportedImageFormat("UNSUPPORTED_IMAGE_FORMAT"),
   notFoundBodyPhoto("NOT_FOUND_BODY_PHOTO"),
-  notFoundReviewRotation("NOT_FOUND_REVIEW_ROTATION"),
-  alreadyReviewed("ALREADY_REVIEWED");
+  alreadyReviewed("ALREADY_REVIEWED"),
+  alreadyFlagged("ALREADY_FLAGGED"),
+  uploaderOrAdminOnlyAccess("UPLOADER_OR_ADMIN_ONLY_ACCESS");
 
   const ServerError(this.code);
 
@@ -44,6 +46,7 @@ enum ServerError {
 // EXPIRED_MOBILE_VERIFICATION(BAD_REQUEST, "Verification code is expired."),
 // INVALID_MOBILE_VERIFICATION(BAD_REQUEST, "Invalid mobile verification code."),
 // TOO_MANY_MOBILE_VERIFICATION(TOO_MANY_REQUESTS, "Mobile verification can only be requested 5 times per day."),
+
 // NOT_FOUND_MOBILE_NUMBER(BAD_REQUEST, "Not found mobile number."),
 // SEND_SMS_API_ERROR(INTERNAL_SERVER_ERROR, "Failed to send SMS due to an error in the external SMS service."),
 
@@ -53,10 +56,10 @@ enum ServerError {
 
 // NOT_FOUND_MEMBER(NOT_FOUND, "Member not found"),
 // NICKNAME_DUPLICATED(CONFLICT, "Nickname already exists."),
+// MOBILE_NUMBER_DUPLICATED(CONFLICT, "This mobile number is already registered."),
 
 // UNSUPPORTED_IMAGE_FORMAT(BAD_REQUEST, "Only JPG and PNG formats are allowed for image."),
 // NOT_FOUND_BODY_PHOTO(NOT_FOUND, "Body Photo not found."),
-// NOT_FOUND_REVIEW_ROTATION(NOT_FOUND, "Review Rotation not found."),
-// ALREADY_REVIEWED(CONFLICT, "Body Photo has already been reviewed by the member."),
-
-// 서버 에러 코드
+// ALREADY_REVIEWED(CONFLICT, "Body Photo has already been reviewed by same member."),
+// ALREADY_FLAGGED(CONFLICT, "Body Photo has already been flagged by same member."),
+// UPLOADER_OR_ADMIN_ONLY_ACCESS(FORBIDDEN, "Only uploader or admin has permission for this request."),

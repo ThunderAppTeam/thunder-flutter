@@ -1,7 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/errors/server_error.dart';
+import 'package:thunder/core/services/analytics_service.dart';
+import 'package:thunder/core/services/log_service.dart';
 import 'package:thunder/features/auth/models/states/phone_auth_state.dart';
 import 'package:thunder/core/providers/device_id_provider.dart';
 import 'package:thunder/features/auth/providers/auth_state_provider.dart';
@@ -15,6 +15,10 @@ class PhoneAuthNotifier extends StateNotifier<PhoneAuthState> {
       this._repository, this._deviceIdProvider, this._authNotifier)
       : super(PhoneAuthState());
 
+  void reset() {
+    state = PhoneAuthState();
+  }
+
   Future<void> sendVerificationCode({
     required String phoneNumber,
     required String countryCode,
@@ -22,7 +26,7 @@ class PhoneAuthNotifier extends StateNotifier<PhoneAuthState> {
     state = state.copyWith(isCodeSending: true, error: null);
     final deviceId = await _deviceIdProvider.deviceId;
     if (deviceId == null) {
-      log('deviceId is null after initialization');
+      LogService.error('deviceId is null after initialization');
       state = state.copyWith(error: PhoneAuthError.unknown);
       return;
     }
@@ -54,24 +58,25 @@ class PhoneAuthNotifier extends StateNotifier<PhoneAuthState> {
         state.copyWith(isCodeVerifying: true, isVerified: false, error: null);
     final deviceId = await _deviceIdProvider.deviceId;
     if (deviceId == null) {
-      log('deviceId is null after initialization');
+      LogService.error('deviceId is null after initialization');
       state = state.copyWith(error: PhoneAuthError.unknown);
       return false;
     }
     try {
-      final isExist = await _repository.verifyCodeAndCheckExist(
+      final memberUuid = await _repository.verifyCodeAndCheckExist(
         countryCode: countryCode,
         phoneNumber: phoneNumber,
         smsCode: smsCode,
         deviceId: deviceId,
       );
-      if (isExist) {
-        _authNotifier.login();
+      if (memberUuid != null) {
+        _authNotifier.login(memberUuid);
+        AnalyticsService.login();
       }
       state = state.copyWith(
         isCodeVerifying: false,
         isVerified: true,
-        isExistUser: isExist,
+        isExistUser: memberUuid != null,
       );
       return true;
     } on ServerError catch (e) {
@@ -88,7 +93,7 @@ class PhoneAuthNotifier extends StateNotifier<PhoneAuthState> {
 final phoneAuthProvider =
     StateNotifierProvider.autoDispose<PhoneAuthNotifier, PhoneAuthState>((ref) {
   return PhoneAuthNotifier(
-    ref.read(authRepoProvider),
+    ref.read(authRepositoryProvider),
     ref.read(deviceIdProvider),
     ref.read(authStateProvider.notifier),
   );

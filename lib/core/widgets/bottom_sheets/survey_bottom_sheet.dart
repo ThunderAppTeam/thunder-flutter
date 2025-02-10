@@ -11,7 +11,7 @@ import 'package:thunder/generated/l10n.dart';
 
 class SurveyResult {
   final int index;
-  final bool isOtherOption;
+  final bool isOtherOption; // 기타 항목이 있는지 여부
   final String? otherOptionText;
 
   SurveyResult({
@@ -30,7 +30,7 @@ class SurveyBottomSheet extends StatefulWidget {
   final String title;
   final List<String> options;
   final String buttonText;
-  final FutureOr<void> Function()? onButtonTap;
+  final FutureOr<bool?> Function()? onBeforeConfirm;
   final bool hasOtherOption;
 
   const SurveyBottomSheet({
@@ -38,7 +38,7 @@ class SurveyBottomSheet extends StatefulWidget {
     required this.title,
     required this.options,
     required this.buttonText,
-    this.onButtonTap,
+    this.onBeforeConfirm,
     this.hasOtherOption = false,
   });
 
@@ -47,10 +47,21 @@ class SurveyBottomSheet extends StatefulWidget {
 }
 
 class _SurveyBottomSheetState extends State<SurveyBottomSheet> {
+  final _textEditingController = TextEditingController();
   int? _selectedIndex;
   String? _otherOptionText;
   bool get _isOtherSelected =>
       widget.hasOtherOption && _selectedIndex == widget.options.length - 1;
+
+  bool get _isButtonEnabled =>
+      _selectedIndex != null &&
+      (_isOtherSelected ? _otherOptionText?.isNotEmpty == true : true);
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -226,6 +237,7 @@ class _SurveyBottomSheetState extends State<SurveyBottomSheet> {
                             ),
                             padding: EdgeInsets.all(Sizes.spacing10),
                             child: TextField(
+                              controller: _textEditingController,
                               autofocus: true,
                               maxLines: 3,
                               maxLength: 200,
@@ -234,7 +246,9 @@ class _SurveyBottomSheetState extends State<SurveyBottomSheet> {
                                     MediaQuery.of(context).viewInsets.bottom,
                               ),
                               onChanged: (value) {
-                                _otherOptionText = value;
+                                setState(() {
+                                  _otherOptionText = value;
+                                });
                               },
                               decoration: InputDecoration(
                                 counterStyle: textTheme.textBody12.copyWith(
@@ -267,17 +281,20 @@ class _SurveyBottomSheetState extends State<SurveyBottomSheet> {
                   backgroundColor: ColorName.black,
                   textColor: ColorName.white,
                   text: widget.buttonText,
-                  isEnabled: _selectedIndex != null,
+                  isEnabled: _isButtonEnabled,
                   onPressed: () async {
-                    await widget.onButtonTap?.call();
-                    if (context.mounted) {
-                      Navigator.of(context).pop(
-                        SurveyResult(
-                          index: _selectedIndex!,
-                          isOtherOption: _isOtherSelected,
-                          otherOptionText: _otherOptionText,
-                        ),
-                      );
+                    final surveyResult = SurveyResult(
+                      index: _selectedIndex!,
+                      isOtherOption: _isOtherSelected,
+                      otherOptionText: _otherOptionText,
+                    );
+                    if (widget.onBeforeConfirm == null) {
+                      Navigator.of(context).pop(surveyResult);
+                    } else {
+                      final confirmed = await widget.onBeforeConfirm!.call();
+                      if (confirmed == true && context.mounted) {
+                        Navigator.of(context).pop(surveyResult);
+                      }
                     }
                   },
                 ),

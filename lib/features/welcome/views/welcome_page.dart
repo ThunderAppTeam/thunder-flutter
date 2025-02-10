@@ -15,7 +15,9 @@ class WelcomePage extends ConsumerWidget {
   const WelcomePage({super.key});
 
   void _onStartPressed(BuildContext context, WidgetRef ref) {
-    ref.read(safeRouterProvider).pushNamed(context, Routes.onboarding.name);
+    ref
+        .read(safeRouterProvider)
+        .pushNamed(context, Routes.onboarding.phoneNumber.name);
   }
 
   @override

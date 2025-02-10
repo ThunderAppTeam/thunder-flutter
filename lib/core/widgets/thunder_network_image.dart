@@ -21,9 +21,7 @@ class ThunderNetworkImage extends StatelessWidget {
             return Shimmer.fromColors(
               baseColor: ColorName.darkBackground2,
               highlightColor: ColorName.darkBackground3,
-              child: Container(
-                color: Colors.white,
-              ),
+              child: Container(color: Colors.white),
             );
           case LoadState.completed:
             return state.completedWidget;

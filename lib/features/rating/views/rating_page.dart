@@ -48,8 +48,7 @@ class _RatingPageState extends ConsumerState<RatingPage>
       vsync: this,
     );
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final flagList = await _flagViewModel.fetchFlagList();
-      _flagDataList = flagList;
+      _flagDataList = await _flagViewModel.fetchFlagList();
     });
   }
 
@@ -120,6 +119,7 @@ class _RatingPageState extends ConsumerState<RatingPage>
       await _flagViewModel.flag(
         _viewModel.viewedBodyPhotoId,
         flagData.flagReason,
+        result.isOtherOption ? result.otherOptionText : null,
       );
       await Future.delayed(_ratingAnimationDelay);
       _viewModel.skip();

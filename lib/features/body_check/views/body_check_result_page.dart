@@ -9,6 +9,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/enums/gender.dart';
+import 'package:thunder/core/services/analytics_service.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/constants/styles.dart';
@@ -84,8 +85,7 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
       ),
     );
     if (confirmed == true && context.mounted) {
-      final deleted =
-          await _viewModel.deleteBodyCheckResult(widget.bodyPhotoId);
+      final deleted = await _viewModel.deleteBodyCheckResult();
       if (deleted) {
         ref
             .read(archiveViewModelProvider.notifier)
@@ -152,8 +152,11 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
 
       // 4) Share 패키지를 이용해 공유 시트 표시
       if (mounted) {
-        await Share.shareXFiles([XFile(file.path)],
+        final result = await Share.shareXFiles([XFile(file.path)],
             subject: S.of(context).bodyCheckResultShareTitle);
+        if (result.status == ShareResultStatus.success) {
+          AnalyticsService.share(widget.bodyPhotoId);
+        }
         await file.delete();
       }
     } finally {
