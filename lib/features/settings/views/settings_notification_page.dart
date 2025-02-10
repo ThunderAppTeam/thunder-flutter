@@ -8,10 +8,11 @@ class SettingsNotificationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: "알림"),
-      body: Column(
-        children: [
-          Text("알림"),
-        ],
+      body: Center(
+        child: TextButton(
+          onPressed: () => throw Exception(),
+          child: const Text("Throw Test Exception"),
+        ),
       ),
     );
   }

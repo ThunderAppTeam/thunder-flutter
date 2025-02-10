@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/routes.dart';
@@ -24,16 +26,20 @@ class NotificationPermissionPage extends ConsumerWidget {
 
   Future<void> _checkTrackingPermissionAndRoute(
       WidgetRef ref, BuildContext context) async {
-    final isDenied =
-        await PermissionService.checkPermissionDenied(PermissionType.tracking);
-    if (context.mounted) {
-      if (isDenied) {
-        ref
-            .read(safeRouterProvider)
-            .pushNamed(context, Routes.permission.tracking.name);
-      } else {
-        ref.read(safeRouterProvider).goToHome(context);
+    if (Platform.isIOS) {
+      final isDenied = await PermissionService.checkPermissionDenied(
+          PermissionType.tracking);
+      if (context.mounted) {
+        if (isDenied) {
+          ref
+              .read(safeRouterProvider)
+              .pushNamed(context, Routes.permission.tracking.name);
+        } else {
+          ref.read(safeRouterProvider).goToHome(context);
+        }
       }
+    } else {
+      ref.read(safeRouterProvider).goToHome(context);
     }
   }
 

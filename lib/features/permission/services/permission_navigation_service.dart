@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/routes.dart';
@@ -20,15 +22,17 @@ class PermissionNavigationService {
       }
       return true;
     }
-    final isTrackingDenied =
-        await PermissionService.checkPermissionDenied(PermissionType.tracking);
-    if (isTrackingDenied) {
-      if (context.mounted) {
-        ref
-            .read(safeRouterProvider)
-            .pushNamed(context, Routes.permission.tracking.name);
+    if (Platform.isIOS) {
+      final isTrackingDenied = await PermissionService.checkPermissionDenied(
+          PermissionType.tracking);
+      if (isTrackingDenied) {
+        if (context.mounted) {
+          ref
+              .read(safeRouterProvider)
+              .pushNamed(context, Routes.permission.tracking.name);
+        }
+        return true;
       }
-      return true;
     }
     return false;
   }

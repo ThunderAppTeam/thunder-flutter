@@ -48,6 +48,8 @@ class PhotoPreviewViewModel extends AsyncNotifier<void> {
       await logImageInfo('Output Image', compressed);
       await file.writeAsBytes(compressed);
       final response = await _repository.uploadImage(imagePath);
+      // 업로드 성공 시 파일 삭제
+      await file.delete();
       imageData = ImageData.fromJson(response);
       AnalyticsService.uploadPhoto();
     });
