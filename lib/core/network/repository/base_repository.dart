@@ -52,4 +52,21 @@ mixin BaseRepository {
       throw DioErrorParser.parseDio(e);
     }
   }
+
+  Future<T> put<T>(
+    String path, {
+    dynamic data,
+    Options? options,
+  }) async {
+    try {
+      final response = await dio.put(
+        path,
+        data: data,
+        options: options,
+      );
+      return response.data[KeyConst.data];
+    } on DioException catch (e) {
+      throw DioErrorParser.parseDio(e);
+    }
+  }
 }

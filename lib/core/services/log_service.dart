@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
 enum LogLevel {
@@ -56,26 +57,38 @@ class LogService {
   LogService._();
 
   static void trace(String message, {Object? error, StackTrace? stackTrace}) {
-    _logger.t(message, error: error, stackTrace: stackTrace);
+    if (kDebugMode) {
+      _logger.t(message, error: error, stackTrace: stackTrace);
+    }
   }
 
   static void debug(String message, {Object? error, StackTrace? stackTrace}) {
-    _logger.d(message, error: error, stackTrace: stackTrace);
+    if (kDebugMode) {
+      _logger.d(message, error: error, stackTrace: stackTrace);
+    }
   }
 
   static void info(String message, {Object? error, StackTrace? stackTrace}) {
-    _logger.i(message, error: error, stackTrace: stackTrace);
+    if (kDebugMode) {
+      _logger.i(message, error: error, stackTrace: stackTrace);
+    }
   }
 
   static void warning(String message, {Object? error, StackTrace? stackTrace}) {
-    _logger.w(message, error: error, stackTrace: stackTrace);
+    if (kDebugMode) {
+      _logger.w(message, error: error, stackTrace: stackTrace);
+    }
   }
 
   static void error(String message, {Object? error, StackTrace? stackTrace}) {
-    _logger.e(message, error: error, stackTrace: stackTrace);
+    if (kDebugMode) {
+      _logger.e(message, error: error, stackTrace: stackTrace);
+    }
   }
 
   static void fatal(String message, {Object? error, StackTrace? stackTrace}) {
-    _logger.f(message, error: error, stackTrace: stackTrace);
+    if (kDebugMode) {
+      _logger.f(message, error: error, stackTrace: stackTrace);
+    }
   }
 }

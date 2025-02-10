@@ -27,7 +27,13 @@ class AuthRepository with BaseRepository {
   }
 
   Future<void> signOut() async {
-    await _tokenProvider.clearToken();
+    try {
+      await put('/v1/member/logout', options: DioOptions.tokenOptions);
+    } catch (e) {
+      LogService.error('Logout API failed: $e');
+    } finally {
+      await _tokenProvider.clearToken();
+    }
   }
 
   /// 인증 코드 발송 (HTTP)
