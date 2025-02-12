@@ -79,7 +79,9 @@ class WelcomePage extends ConsumerWidget {
                                 .svg(height: Sizes.spacing32),
                             Text(
                               S.of(context).welcomeDescription,
-                              style: textTheme.textHead24,
+                              style: textTheme.textHead24.copyWith(
+                                height: Sizes.lineHeight36 / Sizes.fontSize24,
+                              ),
                               textAlign: TextAlign.center,
                             ),
                           ],
