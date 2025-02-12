@@ -72,3 +72,6 @@ key.properties
 
 # intl generated
 lib/generated/
+
+# Cursor rules
+*.cursorrules

@@ -100,10 +100,19 @@
   "settingsContact": "문의하기",
   "settingsLogoutTitle": "로그아웃을 하시겠어요?",
   "settingsLogoutSubtitle": "로그아웃을 하면 시작 화면으로 이동합니다.",
+  "@_SETTINGS_NOTIFICATION": {},
+  "settingsNotificationBannerTitle": "알림 설정이 꺼져있어요",
+  "settingsNotificationBannerDescription": "알림을 사용하려면 기기 설정에서 알림을 허용해주세요",
+  "settingsNotificationBannerButtonText": "허용하기",
+  "settingsNotificationBodycheckComplete": "눈바디 측정 완료",
+  "settingsNotificationBodycheckRequest": "눈바디 평가 요청",
+  "settingsNotificationMarketing": "마케팅 수신 동의",
+  "@_SETTINGS_ACCOUNT": {},
   "settingsAccountNickname": "닉네임",
   "settingsAccountPhoneNumber": "휴대폰 번호",
   "settingsAccountJoinedDate": "가입한 날짜",
   "settingsAccountDelete": "계정 삭제",
+  "@_SETTINGS_INFO": {},
   "settingsInfoTermsOfService": "이용약관",
   "settingsInfoPrivacyPolicy": "개인정보 처리방침",
   "settingsInfoOpenSourceLicense": "오픈소스 라이센스",
@@ -139,7 +148,7 @@
   "@contactSubject": {
     "nickname": {
       "description": "user.nickname",
-      "example": "구피닉네임999"
+      "example": "썬더닉네임999"
     }
   },
   "contactBodyGuide": "이곳에 문의사항을 기재해주세요.",

@@ -10,6 +10,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/router.dart';
 import 'package:thunder/core/constants/app_const.dart';
+import 'package:thunder/core/observers/lifecycle_handler.dart';
 import 'package:thunder/core/providers/token_provider.dart';
 import 'package:thunder/core/services/cache_service.dart';
 import 'package:thunder/core/services/log_service.dart';
@@ -46,12 +47,13 @@ void main() async {
   }
 
   await CacheService.cleanCache();
-  SystemChannels.lifecycle.setMessageHandler((msg) async {
-    if (msg == AppLifecycleState.resumed.toString()) {
-      await CacheService.cleanCache();
-    }
-    return null;
-  });
+  WidgetsBinding.instance.addObserver(
+    LifecycleEventHandler(
+      onPaused: () {
+        CacheService.cleanCache();
+      },
+    ),
+  );
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

@@ -16,5 +16,6 @@ abstract class Gaps {
   static const h4 = SizedBox(width: Sizes.spacing4);
   static const h8 = SizedBox(width: Sizes.spacing8);
   static const h12 = SizedBox(width: Sizes.spacing12);
+  static const h14 = SizedBox(width: Sizes.spacing14);
   static const h16 = SizedBox(width: Sizes.spacing16);
 }

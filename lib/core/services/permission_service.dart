@@ -33,6 +33,14 @@ class PermissionService {
     return status;
   }
 
+  static Future<bool> checkPermissionGranted(
+    PermissionType permissionType,
+  ) async {
+    final permission = _getPermission(permissionType);
+    final isGranted = await permission.isGranted;
+    return isGranted;
+  }
+
   static Future<TrackingStatus> requestTrackingPermission() async {
     if (Platform.isIOS) {
       return await AppTrackingTransparency.requestTrackingAuthorization();
@@ -40,9 +48,9 @@ class PermissionService {
     return TrackingStatus.notSupported;
   }
 
-  static Future<void> resetPermissions() async {
+  static Future<bool> openSettings() async {
     // 알림 권한 초기화를 위해 앱 설정으로 이동
-    await openAppSettings();
+    return await openAppSettings();
   }
 
   static Future<bool> checkCameraPermission() async {
