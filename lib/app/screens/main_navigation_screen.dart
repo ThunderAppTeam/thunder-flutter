@@ -44,16 +44,20 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
   }
 
   void _handleRouteChange() {
-    final config = ref.read(routerProvider).routerDelegate.currentConfiguration;
-    final screenName = config.last.route.name;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final config =
+          ref.read(routerProvider).routerDelegate.currentConfiguration;
+      final screenName = config.last.route.name;
 
-    if (screenName != null) {
-      if (screenName == Routes.home.name || screenName == Routes.archive.name) {
-        final extra = config.extra as Map<String, dynamic>?;
-        if (extra?[KeyConst.skipAnalytics] == true) return;
-        AnalyticsService.screenView(screenName: screenName);
+      if (screenName != null) {
+        if (screenName == Routes.home.name ||
+            screenName == Routes.archive.name) {
+          final extra = config.extra as Map<String, dynamic>?;
+          if (extra?[KeyConst.skipAnalytics] == true) return;
+          AnalyticsService.screenView(screenName: screenName);
+        }
       }
-    }
+    });
   }
 
   void _onMeasureTap() async {

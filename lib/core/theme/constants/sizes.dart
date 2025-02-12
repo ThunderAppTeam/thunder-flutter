@@ -93,4 +93,12 @@ class Sizes {
   // home indicator
   static const double homeIndicatorHeight5 = 5.0;
   static const double homeIndicatorWidth60 = 60.0;
+
+  // Switch sizes
+  static const double switchWidth = 60.0;
+  static const double switchHeight = 48.0;
+  static const double switchTrackWidth = 51.0;
+  static const double switchTrackHeight = 31.0;
+  static const double switchThumbSize = 27.0;
+  static const double switchThumbMargin = 2.0;
 }
