@@ -59,6 +59,7 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      AnalyticsService.viewBodyResult(widget.bodyPhotoId);
       Future.delayed(
           // 페이지 완전 전환 보단 약간 빠르게 시작
           Styles.pageTransitionDuration500 - Duration(milliseconds: 200), () {

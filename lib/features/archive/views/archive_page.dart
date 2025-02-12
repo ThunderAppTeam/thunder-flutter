@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/constants/key_contst.dart';
+import 'package:thunder/core/errors/server_error.dart';
 import 'package:thunder/core/services/log_service.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
@@ -41,24 +41,40 @@ class _ArchivePageState extends ConsumerState<ArchivePage> {
 
   void _onError(error) {
     LogService.error('error: $error');
-    showCommonUnknownErrorBottomSheet(context);
+    if (error == ServerError.notFoundBodyPhoto) {
+      showCustomBottomSheet(
+        context,
+        title: "데이터가 없습니다.",
+        subtitle: "새로고침 후 다시 시도해주세요.",
+      );
+    } else {
+      showCommonUnknownErrorBottomSheet(context);
+    }
   }
 
   void _onItemTap(BodyCheckPreviewData item, int index) async {
+    // 데이터가 있는지 없는지 확인
+    final bodyCheckExist = await ref
+        .read(archiveViewModelProvider.notifier)
+        .checkBodyCheckExist(item.bodyPhotoId);
+
+    if (!bodyCheckExist) return;
     // 페이지 이동
-    ref.read(safeRouterProvider).pushNamed(
-      context,
-      Routes.bodyCheck.name,
-      pathParameters: {
-        KeyConst.bodyPhotoId: item.bodyPhotoId.toString(),
-      },
-      extra: {
-        KeyConst.imageUrl: item.imageUrl,
-        KeyConst.pointText:
-            item.reviewCount == 0 ? '?.?' : item.reviewScore.toString(),
-      },
-    );
-    _scrollController.scrollToIndex(index);
+    if (mounted) {
+      ref.read(safeRouterProvider).pushNamed(
+        context,
+        Routes.bodyCheck.name,
+        pathParameters: {
+          KeyConst.bodyPhotoId: item.bodyPhotoId.toString(),
+        },
+        extra: {
+          KeyConst.imageUrl: item.imageUrl,
+          KeyConst.pointText:
+              item.reviewCount == 0 ? '?.?' : item.reviewScore.toString(),
+        },
+      );
+      _scrollController.scrollToIndex(index);
+    }
   }
 
   Future<void> _onRefresh() async {
@@ -119,10 +135,11 @@ class _ArchivePageState extends ConsumerState<ArchivePage> {
         final itemHeight = constraints.maxHeight / _crossAxisCount;
         return CustomScrollView(
           controller: _scrollController,
-          physics: const AlwaysScrollableScrollPhysics(),
+          physics: const AlwaysScrollableScrollPhysics(
+            parent: BouncingScrollPhysics(),
+          ),
           slivers: [
             CustomSliverRefreshControl(onRefresh: _onRefresh),
-            // CupertinoSliverRefreshControl(onRefresh: _onRefresh),
             archive.maybeWhen(
               skipError: true,
               data: (items) {

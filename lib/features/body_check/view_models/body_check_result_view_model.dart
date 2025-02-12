@@ -19,7 +19,6 @@ class BodyCheckResultViewModel
   Future<BodyCheckResult> _fetchBodyCheckResult(int bodyPhotoId) async {
     try {
       final data = await _repository.getBodyCheckResult(bodyPhotoId);
-      AnalyticsService.viewBodyResult(bodyPhotoId);
       return BodyCheckResult.fromJson(data);
     } catch (e) {
       state = AsyncError(e, StackTrace.current);
@@ -31,7 +30,7 @@ class BodyCheckResultViewModel
     final bodyPhotoId = state.valueOrNull?.bodyPhotoId;
     if (bodyPhotoId == null) return;
     state = const AsyncLoading();
-    state = AsyncData(await _fetchBodyCheckResult(bodyPhotoId));
+    state = await AsyncValue.guard(() => _fetchBodyCheckResult(bodyPhotoId));
   }
 
   Future<bool> deleteBodyCheckResult() async {
