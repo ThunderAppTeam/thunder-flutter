@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:thunder/core/services/permission_service.dart';
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
 import 'package:thunder/features/settings/widgets/settings_banner.dart';
 import 'package:thunder/features/settings/widgets/settings_list_tile.dart';
 import 'package:thunder/generated/l10n.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class SettingsNotificationPage extends StatefulWidget {
   const SettingsNotificationPage({super.key});
@@ -16,19 +16,24 @@ class SettingsNotificationPage extends StatefulWidget {
 
 class _SettingsNotificationPageState extends State<SettingsNotificationPage>
     with WidgetsBindingObserver {
-  bool _notificationEnabled = false;
+  bool _notificationEnabled = true;
   bool isReceiveBodycheckComplete = false;
   bool isReceiveBodycheckRequest = false;
   bool isReceiveMarketing = false;
 
   void _initPermission() async {
-    final status =
-        await PermissionService.requestPermission(PermissionType.notification);
+    final settings = await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
     setState(() {
-      _notificationEnabled = status == PermissionStatus.granted;
+      _notificationEnabled =
+          settings.authorizationStatus == AuthorizationStatus.authorized;
       if (!_notificationEnabled) {
         isReceiveBodycheckComplete = false;
         isReceiveBodycheckRequest = false;
+        isReceiveMarketing = false;
       }
     });
   }

@@ -21,7 +21,7 @@ class TokenProvider {
 
   Future<void> initialize() async {
     _cachedToken = await _storage.read(key: KeyConst.accessToken);
-    LogService.info('AccessToken: $_cachedToken');
+    LogService.debug('AccessToken: $_cachedToken');
   }
 }
 

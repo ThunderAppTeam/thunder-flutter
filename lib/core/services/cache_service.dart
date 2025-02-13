@@ -31,11 +31,11 @@ class CacheService {
       final sizeLimitResult = await limitCacheSize(cacheDir);
       // 최종 결과 로깅
       if (oldCacheResult.deletedCount > 0 || sizeLimitResult.deletedCount > 0) {
-        LogService.debug('Cache cleanup completed:\n'
+        LogService.trace('Cache cleanup completed:\n'
             '- Old files removed: ${oldCacheResult.deletedCount} (${oldCacheResult.deletedSizeMB.toStringAsFixed(2)}MB)\n'
             '- Size limit cleanup: ${sizeLimitResult.deletedCount} (${sizeLimitResult.deletedSizeMB.toStringAsFixed(2)}MB)');
       } else {
-        LogService.debug('No cache cleanup needed');
+        LogService.trace('No cache cleanup needed');
       }
     }
   }

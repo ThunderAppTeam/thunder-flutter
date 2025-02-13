@@ -4,7 +4,7 @@ description: "A new Flutter project."
 # Prevent accidental publishing to pub.dev
 publish_to: "none"
 
-version: 0.8.3+15
+version: 0.8.4+20250213
 
 environment:
   sdk: ^3.5.4
@@ -62,6 +62,7 @@ dependencies:
   firebase_core: ^3.11.0
   firebase_analytics: ^11.4.2
   firebase_crashlytics: ^4.3.2
+  firebase_messaging: ^15.2.2
 
   #=== Utils & Helpers
   freezed_annotation: ^2.4.4
