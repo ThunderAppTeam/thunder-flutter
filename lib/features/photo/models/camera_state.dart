@@ -41,6 +41,7 @@ class CameraState with _$CameraState {
     @Default(false) bool isProcessing,
     @Default(false) bool isCapturing,
     @Default(false) bool isCompressing,
+    @Default(false) bool isFlashModeAvailable,
     @Default(CameraFlashMode.auto) CameraFlashMode flashMode,
     @Default(CameraLensDirection.back) CameraLensDirection lensDirection,
     String? selectedImagePath,

@@ -8,6 +8,7 @@ class CameraAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onFlash;
   final IconData flashIcon;
   final bool hasPermission;
+  final bool isFlashModeAvailable;
 
   const CameraAppBar({
     super.key,
@@ -15,6 +16,7 @@ class CameraAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.onFlash,
     required this.flashIcon,
     required this.hasPermission, // 권한이 없을 때 flash 버튼 비활성화
+    required this.isFlashModeAvailable,
   });
 
   @override
@@ -33,7 +35,7 @@ class CameraAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Row(
           children: [
             const Expanded(child: SizedBox()),
-            if (hasPermission)
+            if (hasPermission && isFlashModeAvailable)
               CameraIcon(
                 icon: flashIcon,
                 onTap: onFlash,
