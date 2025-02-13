@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
-import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/theme/icon/thunder_icons_icons.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
+import 'package:thunder/core/widgets/buttons/custom_icon_button.dart';
 import 'package:thunder/core/widgets/thunder_network_image.dart';
 import 'package:thunder/features/rating/models/data/body_check_data.dart';
 import 'package:thunder/features/rating/widgets/rating_widget.dart';
@@ -80,16 +80,9 @@ class BodyCheckWidget extends StatelessWidget {
           style: textTheme.textTitle24.copyWith(fontWeight: FontWeight.w400),
         ),
         Spacer(),
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: onMoreTap,
-            customBorder: CircleBorder(),
-            child: Icon(
-              ThunderIcons.moreVert,
-              color: ColorName.white,
-            ),
-          ),
+        CustomIconButton(
+          icon: ThunderIcons.moreVert,
+          onTap: onMoreTap,
         ),
       ],
     );

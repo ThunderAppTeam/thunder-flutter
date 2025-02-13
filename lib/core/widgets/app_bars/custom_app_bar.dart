@@ -3,6 +3,7 @@ import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/theme/icon/thunder_icons_icons.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
+import 'package:thunder/core/widgets/buttons/custom_icon_button.dart';
 
 enum CustomAppBarActionType {
   text,
@@ -53,7 +54,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Colors.transparent,
       titleSpacing: 0,
       title: Container(
-        padding: const EdgeInsets.symmetric(horizontal: Sizes.spacing16),
+        padding: const EdgeInsets.symmetric(horizontal: Sizes.spacing8),
         height: preferredSize.height,
         child: Stack(
           children: [
@@ -70,14 +71,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             if (showBackButton)
               Align(
                 alignment: Alignment.centerLeft,
-                child: InkWell(
-                  customBorder: const CircleBorder(),
+                child: CustomIconButton(
+                  icon: ThunderIcons.chevronLeft,
                   onTap: onBack ?? () => Navigator.pop(context),
-                  child: Icon(
-                    ThunderIcons.chevronLeft,
-                    size: Sizes.icon24,
-                    color: ColorName.white,
-                  ),
                 ),
               ),
 
@@ -106,14 +102,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                           ),
                         );
                       case CustomAppBarActionType.icon:
-                        return InkWell(
+                        return CustomIconButton(
+                          icon: action.icon!,
                           onTap: action.onTap,
-                          borderRadius: BorderRadius.circular(Sizes.radius16),
-                          child: Icon(
-                            action.icon!,
-                            size: Sizes.icon24,
-                            color: ColorName.white,
-                          ),
+                          size: Sizes.icon24,
+                          color: ColorName.white,
                         );
                       case CustomAppBarActionType.child:
                         return action.child!;

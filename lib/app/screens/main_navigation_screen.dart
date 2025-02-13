@@ -13,6 +13,7 @@ import 'package:thunder/core/theme/gen/assets.gen.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/theme/icon/thunder_icons_icons.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
+import 'package:thunder/core/widgets/buttons/custom_icon_button.dart';
 import 'package:thunder/generated/l10n.dart';
 
 class MainNavigationScreen extends ConsumerStatefulWidget {
@@ -70,6 +71,10 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
     }
   }
 
+  void _onSettingsTap() {
+    ref.read(safeRouterProvider).pushNamed(context, Routes.settings.name);
+  }
+
   void _onTap(BuildContext context, Tabs tab) {
     AnalyticsService.tabTap(
       switch (tab) {
@@ -110,26 +115,19 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
           backgroundColor: Colors.transparent,
           centerTitle: false,
           title: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: Sizes.spacing16,
-              vertical: Sizes.spacing8,
+            padding: EdgeInsets.only(
+              left: Sizes.spacing16,
+              right: Sizes.spacing8,
+              top: Sizes.spacing8,
+              bottom: Sizes.spacing8,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Assets.images.logos.thunderLogotypeSmallW.svg(),
-                InkWell(
-                  customBorder: CircleBorder(),
-                  onTap: () {
-                    ref
-                        .read(safeRouterProvider)
-                        .pushNamed(context, Routes.settings.name);
-                  },
-                  child: Icon(
-                    size: Sizes.icon24,
-                    ThunderIcons.settings,
-                    color: ColorName.white,
-                  ),
+                CustomIconButton(
+                  icon: ThunderIcons.settings,
+                  onTap: _onSettingsTap,
                 ),
               ],
             ),

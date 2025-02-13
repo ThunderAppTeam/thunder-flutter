@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
-import 'package:thunder/features/photo/views/widgets/camera_icon.dart';
+import 'package:thunder/core/widgets/buttons/custom_icon_button.dart';
 import 'package:thunder/core/theme/icon/thunder_icons_icons.dart';
 
 class CameraAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -29,21 +29,21 @@ class CameraAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Colors.transparent,
       title: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: Sizes.spacing16,
+          horizontal: Sizes.spacing8,
           vertical: Sizes.spacing8,
         ),
         child: Row(
           children: [
             const Expanded(child: SizedBox()),
             if (hasPermission && isFlashModeAvailable)
-              CameraIcon(
+              CustomIconButton(
                 icon: flashIcon,
                 onTap: onFlash,
               ),
             Expanded(
               child: Align(
                 alignment: Alignment.centerRight,
-                child: CameraIcon(
+                child: CustomIconButton(
                   icon: ThunderIcons.closeSquareLight,
                   onTap: onClose,
                 ),
