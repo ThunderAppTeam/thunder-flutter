@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/services/permission_service.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
@@ -16,31 +13,12 @@ class NotificationPermissionPage extends ConsumerWidget {
   void _onTapAllow(WidgetRef ref, BuildContext context) async {
     await PermissionService.requestPermission(PermissionType.notification);
     if (context.mounted) {
-      _checkTrackingPermissionAndRoute(ref, context);
+      ref.read(safeRouterProvider).goToHome(context);
     }
   }
 
   void _onTapDeny(WidgetRef ref, BuildContext context) {
-    _checkTrackingPermissionAndRoute(ref, context);
-  }
-
-  Future<void> _checkTrackingPermissionAndRoute(
-      WidgetRef ref, BuildContext context) async {
-    if (Platform.isIOS) {
-      final isDenied = await PermissionService.checkPermissionDenied(
-          PermissionType.tracking);
-      if (context.mounted) {
-        if (isDenied) {
-          ref
-              .read(safeRouterProvider)
-              .pushNamed(context, Routes.permission.tracking.name);
-        } else {
-          ref.read(safeRouterProvider).goToHome(context);
-        }
-      }
-    } else {
-      ref.read(safeRouterProvider).goToHome(context);
-    }
+    ref.read(safeRouterProvider).goToHome(context);
   }
 
   @override

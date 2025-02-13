@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:permission_handler/permission_handler.dart';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 
@@ -42,10 +40,7 @@ class PermissionService {
   }
 
   static Future<TrackingStatus> requestTrackingPermission() async {
-    if (Platform.isIOS) {
-      return await AppTrackingTransparency.requestTrackingAuthorization();
-    }
-    return TrackingStatus.notSupported;
+    return await AppTrackingTransparency.requestTrackingAuthorization();
   }
 
   static Future<bool> openSettings() async {

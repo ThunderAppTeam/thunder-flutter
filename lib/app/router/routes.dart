@@ -64,7 +64,6 @@ class PermissionRoutes {
 
   final notification =
       const Route(path: 'notification', name: 'permissionNotification');
-  final tracking = const Route(path: 'tracking', name: 'permissionTracking');
 
   const PermissionRoutes();
 }

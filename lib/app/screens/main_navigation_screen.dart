@@ -41,6 +41,9 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
     super.initState();
     _routerDelegate = ref.read(routerProvider).routerDelegate;
     _routerDelegate.addListener(_handleRouteChange);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      PermissionService.requestTrackingPermission();
+    });
   }
 
   void _handleRouteChange() {
