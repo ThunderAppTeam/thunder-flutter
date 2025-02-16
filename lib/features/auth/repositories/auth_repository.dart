@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:dio/dio.dart';
 import 'package:extended_image/extended_image.dart' as extended_image;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,13 +10,10 @@ import 'package:thunder/core/providers/token_provider.dart';
 import 'package:thunder/core/services/log_service.dart';
 import 'package:thunder/features/auth/models/data/sign_up_user.dart';
 
-class AuthRepository with BaseRepository {
-  @override
-  final Dio dio;
-
+class AuthRepository extends BaseRepository {
   final TokenProvider _tokenProvider;
 
-  AuthRepository(this.dio, this._tokenProvider);
+  AuthRepository(super.dio, this._tokenProvider);
 
   bool get isLoggedIn => _tokenProvider.token != null;
 

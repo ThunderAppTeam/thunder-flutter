@@ -4,11 +4,8 @@ import 'package:thunder/core/network/dio_options.dart';
 import 'package:thunder/core/network/dio_provider.dart';
 import 'package:thunder/core/network/repository/base_repository.dart';
 
-class PhotoPreviewRepository with BaseRepository {
-  @override
-  final Dio dio;
-
-  PhotoPreviewRepository(this.dio);
+class PhotoPreviewRepository extends BaseRepository {
+  PhotoPreviewRepository(super.dio);
 
   Future<Map<String, dynamic>> uploadImage(String imagePath) async {
     final path = '/v1/body/photo';
