@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,21 +13,16 @@ import 'package:thunder/core/constants/app_const.dart';
 import 'package:thunder/core/observers/lifecycle_handler.dart';
 import 'package:thunder/core/providers/token_provider.dart';
 import 'package:thunder/core/services/cache_service.dart';
-import 'package:thunder/core/services/fcm_service.dart';
+import 'package:thunder/features/notification/services/notification_service.dart';
 import 'package:thunder/core/services/log_service.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/theme/text/default.dart';
 import 'package:thunder/firebase_options.dart';
 import 'package:thunder/generated/l10n.dart';
 
-@pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  LogService.debug('Handling a background message: ${message.messageId}');
-}
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await dotenv.load();
   final baseUrl = dotenv.env['BASE_URL'];
 
@@ -37,13 +31,7 @@ void main() async {
     // 앱 종료
     exit(0);
   }
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  await FCMService.initialize();
-
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
@@ -71,8 +59,10 @@ void main() async {
     DeviceOrientation.portraitUp,
   ]);
 
+  await NotificationService.instance.initialize();
   final container = ProviderContainer();
   await container.read(tokenProvider).initialize();
+
   runApp(
     ProviderScope(
       overrides: [
@@ -83,11 +73,26 @@ void main() async {
   );
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    NotificationService.instance.ref = ref;
+    NotificationService.instance.setupTokenRefreshListener();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      NotificationService.instance.handleInitialMessage();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp.router(
       title: AppConst.appName,
       localizationsDelegates: [
@@ -110,7 +115,7 @@ class MyApp extends ConsumerWidget {
           selectionHandleColor: ColorName.black,
         ),
       ),
-      routerConfig: ref.read(routerProvider),
+      routerConfig: ref.watch(routerProvider),
     );
   }
 }

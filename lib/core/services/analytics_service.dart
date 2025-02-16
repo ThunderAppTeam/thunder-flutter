@@ -25,13 +25,12 @@ class AnalyticsService {
     Map<String, Object>? parameters,
   }) async {
     try {
-      if (kDebugMode) {
-        if (parameters != null) {
-          LogService.info('Analytics Event: $name, Params: $parameters');
-        } else {
-          LogService.info('Analytics Event: $name');
-        }
+      if (parameters != null) {
+        LogService.info('Analytics Event: $name, Params: $parameters');
+      } else {
+        LogService.info('Analytics Event: $name');
       }
+      if (kDebugMode) return;
       await _analytics.logEvent(
         name: name,
         parameters: parameters,
@@ -48,8 +47,9 @@ class AnalyticsService {
   // User ID Management
   static Future<void> setUserId(String? userId) async {
     try {
-      await _analytics.setUserId(id: userId);
       LogService.info('Analytics: Set User ID - $userId');
+      if (kDebugMode) return;
+      await _analytics.setUserId(id: userId);
     } catch (e, stack) {
       LogService.error('Failed to set user ID', error: e, stackTrace: stack);
     }
@@ -57,8 +57,9 @@ class AnalyticsService {
 
   static Future<void> resetUserId() async {
     try {
-      await _analytics.setUserId(id: AnalyticsValue.nullValue);
       LogService.info('Analytics: Reset User ID');
+      if (kDebugMode) return;
+      await _analytics.setUserId(id: AnalyticsValue.nullValue);
     } catch (e, stack) {
       LogService.error('Failed to reset user ID', error: e, stackTrace: stack);
     }
@@ -70,6 +71,9 @@ class AnalyticsService {
     required int age,
   }) async {
     try {
+      LogService.info(
+          'Analytics: Set User Properties - Gender: $gender, Age: $age');
+      if (kDebugMode) return;
       await _analytics.setUserProperty(
         name: AnalyticsUserProperty.userGender,
         value: gender,
@@ -78,8 +82,6 @@ class AnalyticsService {
         name: AnalyticsUserProperty.userAge,
         value: age.toString(),
       );
-      LogService.info(
-          'Analytics: Set User Properties - Gender: $gender, Age: $age');
     } catch (e, stack) {
       LogService.error('Failed to set user properties',
           error: e, stackTrace: stack);
@@ -92,11 +94,12 @@ class AnalyticsService {
     String? screenClass,
   }) async {
     try {
+      LogService.info('Analytics: Screen View - $screenName');
+      if (kDebugMode) return;
       await _analytics.logScreenView(
         screenName: screenName,
         screenClass: screenClass,
       );
-      LogService.info('Analytics: Screen View - $screenName');
     } catch (e, stack) {
       LogService.error('Failed to log screen view',
           error: e, stackTrace: stack);
