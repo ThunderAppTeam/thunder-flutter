@@ -15,10 +15,7 @@ class ArchiveItem extends StatelessWidget {
     final textTheme = getTextTheme(context);
     return Stack(
       children: [
-        Hero(
-          tag: 'body_check_image_${item.bodyPhotoId}',
-          child: ThunderNetworkImage(imageUrl: item.imageUrl),
-        ),
+        ThunderNetworkImage(imageUrl: item.imageUrl),
         Positioned(
           left: Sizes.spacing8,
           right: Sizes.spacing8,

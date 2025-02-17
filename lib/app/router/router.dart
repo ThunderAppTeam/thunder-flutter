@@ -8,8 +8,6 @@ import 'package:thunder/app/screens/main_navigation_screen.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/core/constants/key_contst.dart';
 import 'package:thunder/core/constants/url_const.dart';
-// import 'package:thunder/core/providers/remote_message_provider.dart';
-import 'package:thunder/core/theme/constants/styles.dart';
 import 'package:thunder/core/widgets/web_view_page.dart';
 import 'package:thunder/features/archive/views/archive_page.dart';
 import 'package:thunder/features/auth/providers/auth_state_provider.dart';
@@ -54,21 +52,8 @@ final routerProvider = Provider<GoRouter>(
         OnboardingRouter(ref).route,
         // Main Navigation
         StatefulShellRoute.indexedStack(
-          pageBuilder: (context, state, navigationShell) {
-            return CustomTransitionPage<void>(
-              key: state.pageKey,
-              transitionDuration: Styles.pageTransitionDuration500,
-              reverseTransitionDuration: Styles.pageTransitionDuration300,
-              child: MainNavigationScreen(navigationShell: navigationShell),
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: child,
-                );
-              },
-            );
-          },
+          builder: (context, state, navigationShell) =>
+              MainNavigationScreen(navigationShell: navigationShell),
           branches: [
             StatefulShellBranch(
               routes: [
@@ -107,31 +92,18 @@ final routerProvider = Provider<GoRouter>(
         GoRoute(
           path: Routes.bodyCheck.path,
           name: Routes.bodyCheck.name,
-          pageBuilder: (context, state) {
+          builder: (context, state) {
             final bodyPhotoId =
                 int.parse(state.pathParameters[KeyConst.bodyPhotoId]!);
             final extra = state.extra as Map<String, dynamic>?;
             final fromUpload = extra?[KeyConst.fromUpload] ?? false;
             final imageUrl = extra?[KeyConst.imageUrl]!;
             final pointText = extra?[KeyConst.pointText];
-            return CustomTransitionPage<void>(
-              key: state.pageKey,
-              name: Routes.bodyCheck.name,
-              transitionDuration: Styles.pageTransitionDuration400,
-              reverseTransitionDuration: Styles.pageTransitionDuration300,
-              child: BodyCheckResultPage(
-                bodyPhotoId: bodyPhotoId,
-                fromUpload: fromUpload,
-                imageUrl: imageUrl,
-                pointText: pointText,
-              ),
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: child,
-                );
-              },
+            return BodyCheckResultPage(
+              bodyPhotoId: bodyPhotoId,
+              fromUpload: fromUpload,
+              imageUrl: imageUrl,
+              pointText: pointText,
             );
           },
         ),

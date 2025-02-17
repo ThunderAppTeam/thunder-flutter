@@ -12,7 +12,6 @@ import 'package:thunder/core/enums/gender.dart';
 import 'package:thunder/core/services/analytics_service.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
-import 'package:thunder/core/theme/constants/styles.dart';
 import 'package:thunder/core/theme/gen/assets.gen.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/theme/icon/thunder_icons_icons.dart';
@@ -49,8 +48,7 @@ class BodyCheckResultPage extends ConsumerStatefulWidget {
 
 class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
   bool _isAnimationStarted = false;
-  bool _isAnimationCompleted = false;
-  final Duration _animationDuration = const Duration(milliseconds: 500);
+  final bool _isAnimationCompleted = false;
   late final BodyCheckResultViewModel _viewModel;
   final GlobalKey _shareKey = GlobalKey();
   bool _isSharing = false;
@@ -60,12 +58,8 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       AnalyticsService.viewBodyResult(widget.bodyPhotoId);
-      Future.delayed(
-          // 페이지 완전 전환 보단 약간 빠르게 시작
-          Styles.pageTransitionDuration500 - Duration(milliseconds: 200), () {
-        setState(() {
-          _isAnimationStarted = true;
-        });
+      setState(() {
+        _isAnimationStarted = true;
       });
     });
     _viewModel = ref.read(bodyCheckResultProvider(widget.bodyPhotoId).notifier);
@@ -107,23 +101,6 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
       ModalActionItem(text: S.of(context).commonDelete, onTap: _onDelete),
     ];
     showActionBottomSheet(context, modalActions);
-  }
-
-  Widget _buildAnimatedOpacity({
-    required bool hasValue,
-    required Widget child,
-  }) {
-    return AnimatedOpacity(
-      opacity: _isAnimationStarted && hasValue ? 1.0 : 0.0,
-      duration: _animationDuration,
-      curve: Curves.linear,
-      child: child,
-      onEnd: () {
-        setState(() {
-          _isAnimationCompleted = true;
-        });
-      },
-    );
   }
 
   void _onShare() async {
@@ -213,22 +190,17 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
                 key: _shareKey,
                 child: Stack(
                   children: [
-                    Hero(
-                      tag: 'body_check_image_${widget.bodyPhotoId}',
-                      child: ThunderNetworkImage(
-                        imageUrl: resultState.maybeWhen(
-                          data: (result) => result.imageUrl,
-                          orElse: () => widget.imageUrl,
-                        ),
+                    ThunderNetworkImage(
+                      imageUrl: resultState.maybeWhen(
+                        data: (result) => result.imageUrl,
+                        orElse: () => widget.imageUrl,
                       ),
                     ),
                     Positioned(
                       left: 0,
                       right: 0,
                       bottom: 0,
-                      child: AnimatedContainer(
-                        duration: _animationDuration,
-                        curve: Curves.easeInOut,
+                      child: Container(
                         padding: const EdgeInsets.all(Sizes.spacing16),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
@@ -250,82 +222,76 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildAnimatedOpacity(
-                              hasValue: resultState.hasValue,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Material(
-                                    color: Colors.transparent,
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Assets.images.logos.thunderSymbolW.svg(
-                                          height: 30,
-                                        ),
-                                        Gaps.h8,
-                                        if (widget.pointText != null)
-                                          Text(
-                                            widget.pointText!,
-                                            style: textTheme.textHead32,
-                                          )
-                                        else
-                                          Text(
-                                            resultState.maybeWhen(
-                                              data: (result) =>
-                                                  result.reviewCount == 0
-                                                      ? '?.?'
-                                                      : result.reviewScore
-                                                          .toString(),
-                                              orElse: () => '?.?',
-                                            ),
-                                            style: textTheme.textHead32,
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Material(
+                                  color: Colors.transparent,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Assets.images.logos.thunderSymbolW.svg(
+                                        height: 30,
+                                      ),
+                                      Gaps.h8,
+                                      if (widget.pointText != null)
+                                        Text(
+                                          widget.pointText!,
+                                          style: textTheme.textHead32,
+                                        )
+                                      else
+                                        Text(
+                                          resultState.maybeWhen(
+                                            data: (result) =>
+                                                result.reviewCount == 0
+                                                    ? '?.?'
+                                                    : result.reviewScore
+                                                        .toString(),
+                                            orElse: () => '?.?',
                                           ),
-                                      ],
-                                    ),
+                                          style: textTheme.textHead32,
+                                        ),
+                                    ],
                                   ),
-                                  Text('점', style: textTheme.textTitle16),
-                                ],
-                              ),
+                                ),
+                                Text('점', style: textTheme.textTitle16),
+                              ],
                             ),
                             Gaps.v12,
-                            _buildAnimatedOpacity(
-                              hasValue: resultState.hasValue,
-                              child: resultState.maybeWhen(
-                                data: (result) => Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          result.isReviewCompleted
-                                              ? '최근 30일 기준 ${result.gender.toDisplayString(context)} 상위 ${result.genderTopRate.toStringAsFixed(0)}%'
-                                              : '눈바디 측정 중... ${result.progressRate.toStringAsFixed(0)}% 완료',
-                                          style: textTheme.textBody16,
-                                        ),
-                                        if (!result.isReviewCompleted) ...[
-                                          Gaps.h4,
-                                          CustomCircularIndicator(
-                                            size: Sizes.circularIndicatorSize18,
-                                            strokeWidth: Sizes
-                                                .circularIndicatorStrokeWidth2,
-                                          ),
-                                        ],
-                                      ],
-                                    ),
-                                    Assets.images.logos.thunderLogotypeW.svg(
-                                      height: Sizes.fontSize16,
-                                      colorFilter: ColorFilter.mode(
-                                        ColorName.white.withOpacity(0.8),
-                                        BlendMode.srcIn,
+                            resultState.maybeWhen(
+                              data: (result) => Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        result.isReviewCompleted
+                                            ? '최근 30일 기준 ${result.gender.toDisplayString(context)} 상위 ${result.genderTopRate.toStringAsFixed(0)}%'
+                                            : '눈바디 측정 중... ${result.progressRate.toStringAsFixed(0)}% 완료',
+                                        style: textTheme.textBody16,
                                       ),
+                                      if (!result.isReviewCompleted) ...[
+                                        Gaps.h4,
+                                        CustomCircularIndicator(
+                                          size: Sizes.circularIndicatorSize18,
+                                          strokeWidth: Sizes
+                                              .circularIndicatorStrokeWidth2,
+                                        ),
+                                      ],
+                                    ],
+                                  ),
+                                  Assets.images.logos.thunderLogotypeW.svg(
+                                    height: Sizes.fontSize16,
+                                    colorFilter: ColorFilter.mode(
+                                      ColorName.white.withOpacity(0.8),
+                                      BlendMode.srcIn,
                                     ),
-                                  ],
-                                ),
-                                orElse: () =>
-                                    const SizedBox(height: Sizes.spacing16),
+                                  ),
+                                ],
                               ),
+                              orElse: () =>
+                                  const SizedBox(height: Sizes.spacing16),
                             ),
                           ],
                         ),
