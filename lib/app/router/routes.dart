@@ -51,8 +51,10 @@ class SettingsRoutes {
 
   final account = const Route(path: 'account', name: 'settingsAccount');
   final info = const Route(path: 'info', name: 'settingsInfo');
-  final notification =
-      const Route(path: 'notification', name: 'settingsNotification');
+  final notification = const Route(
+      path: 'notification',
+      name: 'settingsNotification',
+      fullPath: '/settings/notification');
   final ossLicenses =
       const Route(path: 'oss-licenses', name: 'settingsOssLicenses');
   const SettingsRoutes();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
+import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/theme/icon/thunder_icons_icons.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/buttons/custom_icon_button.dart';
@@ -14,6 +15,8 @@ class BodyCheckWidget extends StatelessWidget {
   final Function(int targetRating)? onRatingChanged;
   final Function()? onRatingComplete;
   final VoidCallback? onMoreTap;
+  // For User Guide Line
+  final bool noRating;
 
   const BodyCheckWidget({
     super.key,
@@ -22,6 +25,7 @@ class BodyCheckWidget extends StatelessWidget {
     this.onRatingChanged,
     this.onRatingComplete,
     this.onMoreTap,
+    this.noRating = false,
   });
 
   @override
@@ -53,11 +57,58 @@ class BodyCheckWidget extends StatelessWidget {
               children: [
                 _buildUserSection(context),
                 Gaps.v16,
-                RatingWidget(
-                  rating: rating,
-                  onRatingChanged: onRatingChanged,
-                  onRatingComplete: onRatingComplete,
-                ),
+                if (!noRating)
+                  RatingWidget(
+                    rating: rating,
+                    onRatingChanged: onRatingChanged,
+                    onRatingComplete: onRatingComplete,
+                  )
+                else
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: Sizes.spacing20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: Sizes.spacing56,
+                          height: Sizes.spacing56,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                          child: IconButton(
+                            onPressed: () {
+                              onRatingChanged?.call(1);
+                              onRatingComplete?.call();
+                            },
+                            padding: EdgeInsets.all(0),
+                            iconSize: Sizes.icon36,
+                            color: ColorName.darkGray3,
+                            icon: Icon(Icons.close),
+                          ),
+                        ),
+                        Gaps.h32,
+                        Container(
+                          width: Sizes.spacing56,
+                          height: Sizes.spacing56,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                          child: IconButton(
+                            onPressed: () {
+                              onRatingChanged?.call(5);
+                              onRatingComplete?.call();
+                            },
+                            padding: EdgeInsets.all(0),
+                            iconSize: Sizes.icon32,
+                            color: ColorName.darkRed,
+                            icon: Icon(Icons.favorite),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
               ],
             ),
           ),

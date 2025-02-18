@@ -8,7 +8,6 @@ import 'package:thunder/core/errors/server_error.dart';
 import 'package:thunder/core/services/log_service.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
-import 'package:thunder/core/utils/event_control/debouncer.dart';
 import 'package:thunder/core/utils/show_utils.dart';
 import 'package:thunder/core/widgets/empty_widget.dart';
 import 'package:thunder/core/widgets/slivers/custom_sliver_refresh_control.dart';
@@ -28,12 +27,6 @@ class ArchivePage extends ConsumerStatefulWidget {
 class _ArchivePageState extends ConsumerState<ArchivePage> {
   final int _crossAxisCount = 3;
   final AutoScrollController _scrollController = AutoScrollController();
-  final _refreshDebouncer = Debouncer(duration: const Duration(seconds: 1));
-  @override
-  void dispose() {
-    _refreshDebouncer.dispose();
-    super.dispose();
-  }
 
   void _onButtonTap() {
     ref.read(safeRouterProvider).pushNamed(context, Routes.camera.name);
@@ -78,11 +71,10 @@ class _ArchivePageState extends ConsumerState<ArchivePage> {
   }
 
   Future<void> _onRefresh() async {
-    await _refreshDebouncer.run(() async {
-      await ref.read(archiveViewModelProvider.notifier).refresh(
-            keepPreviousData: true,
-          );
-    });
+    await Future.delayed(Duration(seconds: 1));
+    await ref
+        .read(archiveViewModelProvider.notifier)
+        .refresh(keepPreviousData: true);
   }
 
   SliverGrid _buildGrid(

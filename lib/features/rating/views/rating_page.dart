@@ -192,6 +192,7 @@ class _RatingPageState extends ConsumerState<RatingPage>
                       child: BodyCheckWidget(
                         bodyCheckData: bodyCheckList[viewedIdx + 1],
                         rating: 0,
+                        noRating: true,
                       ),
                     ),
                   // 현재 카드 (애니메이션 적용)
@@ -202,6 +203,7 @@ class _RatingPageState extends ConsumerState<RatingPage>
                       onRatingChanged: _onRatingChanged,
                       onRatingComplete: _onRatingComplete,
                       onMoreTap: _onMoreTap,
+                      noRating: true,
                     ),
                 ],
               );

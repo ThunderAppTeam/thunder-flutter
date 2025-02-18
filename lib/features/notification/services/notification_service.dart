@@ -70,7 +70,6 @@ class NotificationService {
 
   Future<void> requestPermission() async {
     final settings = await _messaging.requestPermission();
-
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       LogService.debug('User granted permission');
     } else {
