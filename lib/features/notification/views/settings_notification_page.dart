@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/core/services/permission_service.dart';
-import 'package:thunder/core/utils/event_control/debouncer.dart';
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
 import 'package:thunder/core/widgets/custom_circular_indicator.dart';
 import 'package:thunder/features/notification/view_models/notification_view_models.dart';
@@ -22,7 +21,6 @@ class _SettingsNotificationPageState
     extends ConsumerState<SettingsNotificationPage>
     with WidgetsBindingObserver {
   bool _notificationEnabled = true;
-  final _debouncer = Debouncer(duration: Duration(seconds: 1));
 
   void _initPermission() async {
     final settings = await FirebaseMessaging.instance.requestPermission(
@@ -65,6 +63,14 @@ class _SettingsNotificationPageState
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: CustomAppBar(title: S.of(context).settingsNotification),
+      body: Center(
+        child: Text(
+          "추후 업데이트 예정",
+        ),
+      ),
+    );
     final notificationState = ref.watch(notificationViewModelProvider);
     return Scaffold(
       appBar: CustomAppBar(title: S.of(context).settingsNotification),

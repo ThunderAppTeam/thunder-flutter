@@ -7,8 +7,13 @@ import 'package:thunder/features/archive/models/data/body_check_preview_data.dar
 
 class ArchiveItem extends StatelessWidget {
   final BodyCheckPreviewData item;
+  final bool isReleaseUi;
 
-  const ArchiveItem({super.key, required this.item});
+  const ArchiveItem({
+    super.key,
+    required this.item,
+    required this.isReleaseUi,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,21 +21,22 @@ class ArchiveItem extends StatelessWidget {
     return Stack(
       children: [
         ThunderNetworkImage(imageUrl: item.imageUrl),
-        Positioned(
-          left: Sizes.spacing8,
-          right: Sizes.spacing8,
-          bottom: Sizes.spacing8,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Assets.images.logos.thunderSymbolW.svg(height: Sizes.icon12),
-              Text(
-                item.reviewCount == 0 ? '?.?' : item.reviewScore.toString(),
-                style: textTheme.textSubtitle14,
-              ),
-            ],
+        if (isReleaseUi)
+          Positioned(
+            left: Sizes.spacing8,
+            right: Sizes.spacing8,
+            bottom: Sizes.spacing8,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Assets.images.logos.thunderSymbolW.svg(height: Sizes.icon12),
+                Text(
+                  item.reviewCount == 0 ? '?.?' : item.reviewScore.toString(),
+                  style: textTheme.textSubtitle14,
+                ),
+              ],
+            ),
           ),
-        ),
       ],
     );
   }

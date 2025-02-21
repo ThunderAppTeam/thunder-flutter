@@ -16,7 +16,7 @@ class BodyCheckWidget extends StatelessWidget {
   final Function()? onRatingComplete;
   final VoidCallback? onMoreTap;
   // For User Guide Line
-  final bool noRating;
+  final bool isReleaseUi;
 
   const BodyCheckWidget({
     super.key,
@@ -25,7 +25,7 @@ class BodyCheckWidget extends StatelessWidget {
     this.onRatingChanged,
     this.onRatingComplete,
     this.onMoreTap,
-    this.noRating = false,
+    this.isReleaseUi = true,
   });
 
   @override
@@ -57,7 +57,7 @@ class BodyCheckWidget extends StatelessWidget {
               children: [
                 _buildUserSection(context),
                 Gaps.v16,
-                if (!noRating)
+                if (isReleaseUi)
                   RatingWidget(
                     rating: rating,
                     onRatingChanged: onRatingChanged,

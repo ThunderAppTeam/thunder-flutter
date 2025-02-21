@@ -11,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/router.dart';
 import 'package:thunder/core/constants/app_const.dart';
 import 'package:thunder/core/observers/lifecycle_handler.dart';
+import 'package:thunder/core/providers/release_ui_provider.dart';
 import 'package:thunder/core/providers/token_provider.dart';
 import 'package:thunder/core/services/cache_service.dart';
 import 'package:thunder/features/notification/services/notification_service.dart';
@@ -86,6 +87,9 @@ class _MyAppState extends ConsumerState<MyApp> {
     super.initState();
     NotificationService.instance.ref = ref;
     NotificationService.instance.setupTokenRefreshListener();
+
+    ref.read(releaseUiProvider);
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       NotificationService.instance.handleInitialMessage();
     });

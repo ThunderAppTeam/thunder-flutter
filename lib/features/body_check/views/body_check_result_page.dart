@@ -9,12 +9,14 @@ import 'package:share_plus/share_plus.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/enums/gender.dart';
+import 'package:thunder/core/providers/release_ui_provider.dart';
 import 'package:thunder/core/services/analytics_service.dart';
 import 'package:thunder/core/theme/constants/gaps.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/assets.gen.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/theme/icon/thunder_icons_icons.dart';
+import 'package:thunder/core/theme/text/app_text_theme.dart';
 import 'package:thunder/core/utils/show_utils.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
@@ -24,6 +26,7 @@ import 'package:thunder/core/widgets/custom_circular_indicator.dart';
 import 'package:thunder/core/widgets/dialog/custom_alert_dialog.dart';
 import 'package:thunder/core/widgets/thunder_network_image.dart';
 import 'package:thunder/features/archive/view_models/archive_view_model.dart';
+import 'package:thunder/features/body_check/models/data/body_check_result.dart';
 import 'package:thunder/features/body_check/view_models/body_check_result_view_model.dart';
 import 'package:thunder/generated/l10n.dart';
 
@@ -149,13 +152,13 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
   @override
   Widget build(BuildContext context) {
     final resultState = ref.watch(bodyCheckResultProvider(widget.bodyPhotoId));
+    final isReleaseUi = ref.read(releaseUiProvider).valueOrNull ?? false;
     final textTheme = getTextTheme(context);
     ref.listen(bodyCheckResultProvider(widget.bodyPhotoId), (previous, next) {
       if (next.error != null && previous?.error != next.error) {
         _onError(context);
       }
     });
-
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
@@ -180,9 +183,7 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
           showBackButton: !widget.fromUpload,
         ),
         body: Padding(
-          padding: const EdgeInsets.only(
-            bottom: Sizes.spacing8,
-          ),
+          padding: const EdgeInsets.only(bottom: Sizes.spacing8),
           child: Column(
             children: [
               Expanded(
@@ -201,7 +202,12 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
                       right: 0,
                       bottom: 0,
                       child: Container(
-                        padding: const EdgeInsets.all(Sizes.spacing16),
+                        padding: const EdgeInsets.only(
+                          top: Sizes.spacing8,
+                          left: Sizes.spacing16,
+                          right: Sizes.spacing16,
+                          bottom: Sizes.spacing24,
+                        ),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
@@ -219,81 +225,11 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
                             end: Alignment.bottomCenter,
                           ),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Material(
-                                  color: Colors.transparent,
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Assets.images.logos.thunderSymbolW.svg(
-                                        height: 30,
-                                      ),
-                                      Gaps.h8,
-                                      if (widget.pointText != null)
-                                        Text(
-                                          widget.pointText!,
-                                          style: textTheme.textHead32,
-                                        )
-                                      else
-                                        Text(
-                                          resultState.maybeWhen(
-                                            data: (result) =>
-                                                result.reviewCount == 0
-                                                    ? '?.?'
-                                                    : result.reviewScore
-                                                        .toString(),
-                                            orElse: () => '?.?',
-                                          ),
-                                          style: textTheme.textHead32,
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                                Text('점', style: textTheme.textTitle16),
-                              ],
-                            ),
-                            Gaps.v12,
-                            resultState.maybeWhen(
-                              data: (result) => Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        result.isReviewCompleted
-                                            ? '최근 30일 기준 ${result.gender.toDisplayString(context)} 상위 ${result.genderTopRate.toStringAsFixed(0)}%'
-                                            : '눈바디 측정 중... ${result.progressRate.toStringAsFixed(0)}% 완료',
-                                        style: textTheme.textBody16,
-                                      ),
-                                      if (!result.isReviewCompleted) ...[
-                                        Gaps.h4,
-                                        CustomCircularIndicator(
-                                          size: Sizes.circularIndicatorSize18,
-                                          strokeWidth: Sizes
-                                              .circularIndicatorStrokeWidth2,
-                                        ),
-                                      ],
-                                    ],
-                                  ),
-                                  Assets.images.logos.thunderLogotypeW.svg(
-                                    height: Sizes.fontSize16,
-                                    colorFilter: ColorFilter.mode(
-                                      ColorName.white.withOpacity(0.8),
-                                      BlendMode.srcIn,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              orElse: () =>
-                                  const SizedBox(height: Sizes.spacing16),
-                            ),
-                          ],
+                        child: _buildInfoSection(
+                          textTheme: textTheme,
+                          resultState: resultState,
+                          context: context,
+                          isReleaseUi: isReleaseUi,
                         ),
                       ),
                     ),
@@ -319,6 +255,84 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Column _buildInfoSection({
+    required AppTextTheme textTheme,
+    required AsyncValue<BodyCheckResult> resultState,
+    required BuildContext context,
+    required bool isReleaseUi,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (isReleaseUi)
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Assets.images.logos.thunderSymbolW.svg(height: 30),
+                  Gaps.h8,
+                  if (widget.pointText != null)
+                    Text(
+                      widget.pointText!,
+                      style: textTheme.textHead32,
+                    )
+                  else
+                    Text(
+                      resultState.maybeWhen(
+                        data: (result) => result.reviewCount == 0
+                            ? '?.?'
+                            : result.reviewScore.toString(),
+                        orElse: () => '?.?',
+                      ),
+                      style: textTheme.textHead32,
+                    ),
+                ],
+              ),
+              Text('점', style: textTheme.textTitle16),
+            ],
+          ),
+        Gaps.v12,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (isReleaseUi)
+              resultState.maybeWhen(
+                data: (result) => Row(
+                  children: [
+                    Text(
+                      result.isReviewCompleted
+                          ? '최근 30일 기준 ${result.gender.toDisplayString(context)} 상위 ${result.genderTopRate.toStringAsFixed(0)}%'
+                          : '눈바디 측정 중... ${result.progressRate.toStringAsFixed(0)}% 완료',
+                      style: textTheme.textBody16,
+                    ),
+                    if (!result.isReviewCompleted) ...[
+                      Gaps.h4,
+                      CustomCircularIndicator(
+                        size: Sizes.circularIndicatorSize18,
+                        strokeWidth: Sizes.circularIndicatorStrokeWidth2,
+                      ),
+                    ],
+                  ],
+                ),
+                orElse: () => const SizedBox(height: Sizes.spacing16),
+              )
+            else
+              SizedBox(),
+            Assets.images.logos.thunderLogotypeW.svg(
+              height: Sizes.fontSize16,
+              colorFilter: ColorFilter.mode(
+                ColorName.white.withOpacity(0.8),
+                BlendMode.srcIn,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

@@ -23,10 +23,16 @@ default_platform(:android)
 
 platform :android do
   # common var
-  AAB_PATH = "../build/app/outputs/bundle/release/app-release.aab"
+  private_lane :build_aab do |options|
+    build_type = options[:build_type]
 
-  private_lane :build_aab do
-    sh "flutter build appbundle"
+    if build_type == "release"
+      # Release build with obfuscation
+      sh "flutter build appbundle --obfuscate --split-debug-info=#{ENV["ANDROID_DEBUG_SYMBOLS_PATH"]}"
+    else
+      # Development build without obfuscation
+      sh "flutter build appbundle"
+    end
   end
   
   desc "Runs all the tests"
@@ -45,10 +51,10 @@ platform :android do
 
   desc "Deploy a new version to the Google Play"
   lane :deploy do
-    build_aab
+    build_aab(build_type: "release")
     upload_to_play_store(
       track: "internal",
-      aab: AAB_PATH, 
+      aab: ENV["AAB_PATH"],
       skip_upload_images: true,
       skip_upload_screenshots: true,
       skip_upload_metadata: true
@@ -63,7 +69,7 @@ platform :android do
       groups_file: File.join(ROOT, 'fastlane', 'groups.txt'),
       release_notes_file: File.join(ROOT, 'fastlane', 'release_notes.txt'),
       android_artifact_type: "AAB",
-      android_artifact_path: AAB_PATH 
+      android_artifact_path: ENV["AAB_PATH"],
     ) 
   end
 end

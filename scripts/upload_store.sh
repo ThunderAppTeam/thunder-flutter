@@ -7,16 +7,16 @@ update_version() {
     fi 
 }
 
-read -p "Deploy to (android/ios): " platform
+read -p "Upload to Store (android/ios): " platform
 
 case $platform in
     "android")
         update_version
-        ( cd android && fastlane distribute )
+        ( cd android && fastlane deploy )
         ;;
     "ios")
         update_version
-        ( cd ios && fastlane distribute )
+        ( cd ios && fastlane beta )
         ;;
     *)
         echo "Invalid platform. Use 'android' or 'ios'"

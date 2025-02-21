@@ -23,4 +23,7 @@ class KeyConst {
   static const String description = 'description';
   static const String deletionReason = 'deletionReason';
   static const String memberUuid = 'memberUuid';
+  static const String mobileOs = 'mobileOs';
+  static const String appVersion = 'appVersion';
+  static const String isReleaseUi = 'isReleaseUi';
 }

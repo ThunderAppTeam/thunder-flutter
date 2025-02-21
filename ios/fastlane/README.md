@@ -21,7 +21,15 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane ios distribute
 ```
 
- Deploy a test -version to the Firebase App distribution
+Deploy a test -version to the Firebase App distribution
+
+### ios beta
+
+```sh
+[bundle exec] fastlane ios beta
+```
+
+Upload beta to testfilght (App Store)
 
 ----
 
