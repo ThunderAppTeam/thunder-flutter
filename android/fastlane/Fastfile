@@ -1,0 +1,69 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+ROOT = File.expand_path('../../', __dir__)
+
+fastlane_require 'dotenv'
+before_all do
+  Dotenv.overload File.join(ROOT, 'fastlane', '.env')
+end
+
+default_platform(:android)
+
+platform :android do
+  # common var
+  AAB_PATH = "../build/app/outputs/bundle/release/app-release.aab"
+
+  private_lane :build_aab do
+    sh "flutter build appbundle"
+  end
+  
+  desc "Runs all the tests"
+  lane :test do
+    gradle(task: "test")
+  end
+
+  desc "Submit a new Beta Build to Crashlytics Beta"
+  lane :beta do
+    gradle(task: "clean assembleRelease")
+    crashlytics
+  
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+  end
+
+  desc "Deploy a new version to the Google Play"
+  lane :deploy do
+    build_aab
+    upload_to_play_store(
+      track: "internal",
+      aab: AAB_PATH, 
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      skip_upload_metadata: true
+    )
+  end
+
+  desc "Deploy a test -version to the Firebase App distribution"
+  lane :distribute do 
+    build_aab
+    firebase_app_distribution(
+      app: ENV['FIREBASE_ANDROID_APP_ID'],
+      groups_file: File.join(ROOT, 'fastlane', 'groups.txt'),
+      release_notes_file: File.join(ROOT, 'fastlane', 'release_notes.txt'),
+      android_artifact_type: "AAB",
+      android_artifact_path: AAB_PATH 
+    ) 
+  end
+end
