@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
-import 'package:thunder/features/photo/views/widgets/camera_icon.dart';
+import 'package:thunder/core/widgets/buttons/custom_icon_button.dart';
 import 'package:thunder/core/theme/icon/thunder_icons_icons.dart';
 
 class CameraAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -8,6 +8,7 @@ class CameraAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onFlash;
   final IconData flashIcon;
   final bool hasPermission;
+  final bool isFlashModeAvailable;
 
   const CameraAppBar({
     super.key,
@@ -15,6 +16,7 @@ class CameraAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.onFlash,
     required this.flashIcon,
     required this.hasPermission, // 권한이 없을 때 flash 버튼 비활성화
+    required this.isFlashModeAvailable,
   });
 
   @override
@@ -27,21 +29,21 @@ class CameraAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Colors.transparent,
       title: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: Sizes.spacing16,
+          horizontal: Sizes.spacing8,
           vertical: Sizes.spacing8,
         ),
         child: Row(
           children: [
             const Expanded(child: SizedBox()),
-            if (hasPermission)
-              CameraIcon(
+            if (hasPermission && isFlashModeAvailable)
+              CustomIconButton(
                 icon: flashIcon,
                 onTap: onFlash,
               ),
             Expanded(
               child: Align(
                 alignment: Alignment.centerRight,
-                child: CameraIcon(
+                child: CustomIconButton(
                   icon: ThunderIcons.closeSquareLight,
                   onTap: onClose,
                 ),

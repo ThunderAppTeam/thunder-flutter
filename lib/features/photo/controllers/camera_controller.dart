@@ -69,6 +69,7 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
       _controller = _backController;
       await _initController(_controller!);
     } catch (e) {
+      LogService.error('initializeCamera error: $e');
       state = state.copyWith(error: CameraError.initializationFailed);
     }
   }
@@ -76,7 +77,12 @@ class CameraStateNotifier extends StateNotifier<CameraState> {
   Future<void> _initController(CameraController controller) async {
     await controller.initialize();
     await controller.lockCaptureOrientation(DeviceOrientation.portraitUp);
-    await controller.setFlashMode(state.flashMode.flashMode);
+    try {
+      await controller.setFlashMode(state.flashMode.flashMode);
+      state = state.copyWith(isFlashModeAvailable: true);
+    } catch (e) {
+      state = state.copyWith(isFlashModeAvailable: false);
+    }
     await _initZoomLevels(controller);
     state = state.copyWith(isInitialized: true);
   }

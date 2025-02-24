@@ -10,8 +10,11 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thunder/app/router/router.dart';
 import 'package:thunder/core/constants/app_const.dart';
+import 'package:thunder/core/observers/lifecycle_handler.dart';
+import 'package:thunder/core/providers/release_ui_provider.dart';
 import 'package:thunder/core/providers/token_provider.dart';
 import 'package:thunder/core/services/cache_service.dart';
+import 'package:thunder/features/notification/services/notification_service.dart';
 import 'package:thunder/core/services/log_service.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/theme/text/default.dart';
@@ -20,6 +23,7 @@ import 'package:thunder/generated/l10n.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await dotenv.load();
   final baseUrl = dotenv.env['BASE_URL'];
 
@@ -28,9 +32,7 @@ void main() async {
     // 앱 종료
     exit(0);
   }
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
@@ -46,19 +48,22 @@ void main() async {
   }
 
   await CacheService.cleanCache();
-  SystemChannels.lifecycle.setMessageHandler((msg) async {
-    if (msg == AppLifecycleState.resumed.toString()) {
-      await CacheService.cleanCache();
-    }
-    return null;
-  });
+  WidgetsBinding.instance.addObserver(
+    LifecycleEventHandler(
+      onPaused: () {
+        CacheService.cleanCache();
+      },
+    ),
+  );
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
 
+  await NotificationService.instance.initialize();
   final container = ProviderContainer();
   await container.read(tokenProvider).initialize();
+
   runApp(
     ProviderScope(
       overrides: [
@@ -69,11 +74,29 @@ void main() async {
   );
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    NotificationService.instance.ref = ref;
+    NotificationService.instance.setupTokenRefreshListener();
+
+    ref.read(releaseUiProvider);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      NotificationService.instance.handleInitialMessage();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp.router(
       title: AppConst.appName,
       localizationsDelegates: [
@@ -96,7 +119,7 @@ class MyApp extends ConsumerWidget {
           selectionHandleColor: ColorName.black,
         ),
       ),
-      routerConfig: ref.read(routerProvider),
+      routerConfig: ref.watch(routerProvider),
     );
   }
 }

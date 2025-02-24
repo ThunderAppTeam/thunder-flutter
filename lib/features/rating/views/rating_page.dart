@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/core/providers/release_ui_provider.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/utils/show_utils.dart';
@@ -167,8 +168,8 @@ class _RatingPageState extends ConsumerState<RatingPage>
     });
 
     final providerState = ref.watch(ratingViewModelProvider);
-
     final viewedIdx = _viewModel.viewedIdx;
+    final isReleaseUi = ref.read(releaseUiProvider).valueOrNull ?? false;
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(vertical: Sizes.spacing8),
@@ -192,6 +193,7 @@ class _RatingPageState extends ConsumerState<RatingPage>
                       child: BodyCheckWidget(
                         bodyCheckData: bodyCheckList[viewedIdx + 1],
                         rating: 0,
+                        isReleaseUi: isReleaseUi,
                       ),
                     ),
                   // 현재 카드 (애니메이션 적용)
@@ -202,6 +204,7 @@ class _RatingPageState extends ConsumerState<RatingPage>
                       onRatingChanged: _onRatingChanged,
                       onRatingComplete: _onRatingComplete,
                       onMoreTap: _onMoreTap,
+                      isReleaseUi: isReleaseUi,
                     ),
                 ],
               );

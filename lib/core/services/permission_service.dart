@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:permission_handler/permission_handler.dart';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 
@@ -33,16 +31,21 @@ class PermissionService {
     return status;
   }
 
-  static Future<TrackingStatus> requestTrackingPermission() async {
-    if (Platform.isIOS) {
-      return await AppTrackingTransparency.requestTrackingAuthorization();
-    }
-    return TrackingStatus.notSupported;
+  static Future<bool> checkPermissionGranted(
+    PermissionType permissionType,
+  ) async {
+    final permission = _getPermission(permissionType);
+    final isGranted = await permission.isGranted;
+    return isGranted;
   }
 
-  static Future<void> resetPermissions() async {
+  static Future<TrackingStatus> requestTrackingPermission() async {
+    return await AppTrackingTransparency.requestTrackingAuthorization();
+  }
+
+  static Future<bool> openSettings() async {
     // 알림 권한 초기화를 위해 앱 설정으로 이동
-    await openAppSettings();
+    return await openAppSettings();
   }
 
   static Future<bool> checkCameraPermission() async {

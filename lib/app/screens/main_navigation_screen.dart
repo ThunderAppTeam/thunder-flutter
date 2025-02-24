@@ -13,6 +13,7 @@ import 'package:thunder/core/theme/gen/assets.gen.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
 import 'package:thunder/core/theme/icon/thunder_icons_icons.dart';
 import 'package:thunder/core/utils/theme_utils.dart';
+import 'package:thunder/core/widgets/buttons/custom_icon_button.dart';
 import 'package:thunder/generated/l10n.dart';
 
 class MainNavigationScreen extends ConsumerStatefulWidget {
@@ -41,19 +42,26 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
     super.initState();
     _routerDelegate = ref.read(routerProvider).routerDelegate;
     _routerDelegate.addListener(_handleRouteChange);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      PermissionService.requestTrackingPermission();
+    });
   }
 
   void _handleRouteChange() {
-    final config = ref.read(routerProvider).routerDelegate.currentConfiguration;
-    final screenName = config.last.route.name;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final config =
+          ref.read(routerProvider).routerDelegate.currentConfiguration;
+      final screenName = config.last.route.name;
 
-    if (screenName != null) {
-      if (screenName == Routes.home.name || screenName == Routes.archive.name) {
-        final extra = config.extra as Map<String, dynamic>?;
-        if (extra?[KeyConst.skipAnalytics] == true) return;
-        AnalyticsService.screenView(screenName: screenName);
+      if (screenName != null) {
+        if (screenName == Routes.home.name ||
+            screenName == Routes.archive.name) {
+          final extra = config.extra as Map<String, dynamic>?;
+          if (extra?[KeyConst.skipAnalytics] == true) return;
+          AnalyticsService.screenView(screenName: screenName);
+        }
       }
-    }
+    });
   }
 
   void _onMeasureTap() async {
@@ -61,6 +69,10 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
     if (mounted) {
       ref.read(safeRouterProvider).pushNamed(context, Routes.camera.name);
     }
+  }
+
+  void _onSettingsTap() {
+    ref.read(safeRouterProvider).pushNamed(context, Routes.settings.name);
   }
 
   void _onTap(BuildContext context, Tabs tab) {
@@ -103,26 +115,19 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
           backgroundColor: Colors.transparent,
           centerTitle: false,
           title: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: Sizes.spacing16,
-              vertical: Sizes.spacing8,
+            padding: EdgeInsets.only(
+              left: Sizes.spacing16,
+              right: Sizes.spacing8,
+              top: Sizes.spacing8,
+              bottom: Sizes.spacing8,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Assets.images.logos.thunderLogotypeSmallW.svg(),
-                InkWell(
-                  customBorder: CircleBorder(),
-                  onTap: () {
-                    ref
-                        .read(safeRouterProvider)
-                        .pushNamed(context, Routes.settings.name);
-                  },
-                  child: Icon(
-                    size: Sizes.icon24,
-                    ThunderIcons.settings,
-                    color: ColorName.white,
-                  ),
+                CustomIconButton(
+                  icon: ThunderIcons.settings,
+                  onTap: _onSettingsTap,
                 ),
               ],
             ),

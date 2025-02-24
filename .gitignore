@@ -60,10 +60,11 @@ firebase.json
 .firebase/
 
 # Secret Keys
-**/lib/core/constants/api_keys.dart
 .env
 *.jks
 key.properties
+# Fast Lane
+.env.fastlane
 
 # Generated
 *.freezed.dart
@@ -72,3 +73,22 @@ key.properties
 
 # intl generated
 lib/generated/
+
+# Cursor rules
+*.cursorrules
+
+.vscode/
+
+fastlane/*
+
+# fastlane specific
+**/fastlane/report.xml
+
+# deliver temporary files
+**/fastlane/Preview.html
+
+# snapshot generated screenshots
+**/fastlane/screenshots
+
+# scan temporary files
+**/fastlane/test_output

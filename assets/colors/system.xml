@@ -35,6 +35,8 @@
     <color name="dark_background_4">#3A3A3C</color>
     <color name="dark_label_2">#99EBEBF5</color>
 
+    <color name="dark_red">#FF5757</color>
+
     <!-- Divider -->
     <color name="divider_gray">#FFBFBFBF</color>
 
@@ -44,4 +46,6 @@
 
     <color name="dark_skeleton_base">#424242</color>
     <color name="dark_skeleton_highlight">#616161</color>
+
+    <color name="dark_switch_inactive">#0D0D0D</color>
 </resources>

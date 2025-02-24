@@ -5,10 +5,10 @@ import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/constants/key_contst.dart';
 import 'package:thunder/core/errors/server_error.dart';
+import 'package:thunder/core/providers/release_ui_provider.dart';
 import 'package:thunder/core/services/log_service.dart';
 import 'package:thunder/core/theme/constants/sizes.dart';
 import 'package:thunder/core/theme/gen/colors.gen.dart';
-import 'package:thunder/core/utils/event_control/debouncer.dart';
 import 'package:thunder/core/utils/show_utils.dart';
 import 'package:thunder/core/widgets/empty_widget.dart';
 import 'package:thunder/core/widgets/slivers/custom_sliver_refresh_control.dart';
@@ -28,12 +28,6 @@ class ArchivePage extends ConsumerStatefulWidget {
 class _ArchivePageState extends ConsumerState<ArchivePage> {
   final int _crossAxisCount = 3;
   final AutoScrollController _scrollController = AutoScrollController();
-  final _refreshDebouncer = Debouncer(duration: const Duration(seconds: 1));
-  @override
-  void dispose() {
-    _refreshDebouncer.dispose();
-    super.dispose();
-  }
 
   void _onButtonTap() {
     ref.read(safeRouterProvider).pushNamed(context, Routes.camera.name);
@@ -78,17 +72,17 @@ class _ArchivePageState extends ConsumerState<ArchivePage> {
   }
 
   Future<void> _onRefresh() async {
-    await _refreshDebouncer.run(() async {
-      await ref.read(archiveViewModelProvider.notifier).refresh(
-            keepPreviousData: true,
-          );
-    });
+    await Future.delayed(Duration(seconds: 1));
+    await ref
+        .read(archiveViewModelProvider.notifier)
+        .refresh(keepPreviousData: true);
   }
 
   SliverGrid _buildGrid(
     List<BodyCheckPreviewData> items, {
     required double itemWidth,
     required double itemHeight,
+    required bool isReleaseUi,
   }) {
     return SliverGrid(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -109,7 +103,7 @@ class _ArchivePageState extends ConsumerState<ArchivePage> {
               child: SizedBox(
                 width: itemWidth,
                 height: itemHeight,
-                child: ArchiveItem(item: item),
+                child: ArchiveItem(item: item, isReleaseUi: isReleaseUi),
               ),
             ),
           );
@@ -122,6 +116,7 @@ class _ArchivePageState extends ConsumerState<ArchivePage> {
   @override
   Widget build(BuildContext context) {
     final archive = ref.watch(archiveViewModelProvider);
+    final isReleaseUi = ref.read(releaseUiProvider).valueOrNull ?? false;
     ref.listen(archiveViewModelProvider, (previous, next) {
       if (next.error != null && !next.isLoading) {
         _onError(next.error);
@@ -152,8 +147,12 @@ class _ArchivePageState extends ConsumerState<ArchivePage> {
                     ),
                   );
                 }
-                return _buildGrid(items,
-                    itemWidth: itemWidth, itemHeight: itemHeight);
+                return _buildGrid(
+                  items,
+                  itemWidth: itemWidth,
+                  itemHeight: itemHeight,
+                  isReleaseUi: isReleaseUi,
+                );
               },
               loading: () => archive.value == null
                   ? SliverFillRemaining(
@@ -167,6 +166,7 @@ class _ArchivePageState extends ConsumerState<ArchivePage> {
                       archive.value!,
                       itemWidth: itemWidth,
                       itemHeight: itemHeight,
+                      isReleaseUi: isReleaseUi,
                     ),
               orElse: () => const SliverFillRemaining(
                 child: SizedBox.shrink(),

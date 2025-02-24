@@ -1,7 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/features/permission/views/notification_permission_page.dart';
-import 'package:thunder/features/permission/views/traking_permission_page.dart';
 
 class PermissionRouter {
   static GoRoute get route => GoRoute(
@@ -18,11 +17,6 @@ class PermissionRouter {
             path: Routes.permission.notification.path,
             name: Routes.permission.notification.name,
             builder: (context, state) => const NotificationPermissionPage(),
-          ),
-          GoRoute(
-            path: Routes.permission.tracking.path,
-            name: Routes.permission.tracking.name,
-            builder: (context, state) => const TrackingPermissionPage(),
           ),
         ],
       );

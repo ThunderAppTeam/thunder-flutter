@@ -3,7 +3,7 @@ import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/features/settings/views/oss_licenses_page.dart';
 import 'package:thunder/features/settings/views/settings_account_page.dart';
 import 'package:thunder/features/settings/views/settings_info_page.dart';
-import 'package:thunder/features/settings/views/settings_notification_page.dart';
+import 'package:thunder/features/notification/views/settings_notification_page.dart';
 import 'package:thunder/features/settings/views/settings_page.dart';
 
 class SettingsRouter {

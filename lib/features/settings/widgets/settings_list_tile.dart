@@ -26,6 +26,7 @@ class SettingsListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = getTextTheme(context);
     return ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: Sizes.spacing16),
       onTap: onTap,
       horizontalTitleGap: Sizes.spacing12,
       leading: icon != null

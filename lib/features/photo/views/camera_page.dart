@@ -98,7 +98,6 @@ class _CameraPageState extends ConsumerState<CameraPage>
   Widget build(BuildContext context) {
     final cameraState = ref.watch(cameraStateNotifierProvider);
     ref.listen(cameraStateNotifierProvider, _onCameraStateChanged);
-
     return SafeArea(
       child: Scaffold(
         appBar: CameraAppBar(
@@ -107,6 +106,7 @@ class _CameraPageState extends ConsumerState<CameraPage>
             // 카메라가 초기화 에러가 아닐 때, 초기화가 안되있으면 뒤로가기 방지
             ref.read(safeRouterProvider).pop(context);
           },
+          isFlashModeAvailable: cameraState.isFlashModeAvailable,
           onFlash: () => _controller.cycleFlashMode(),
           flashIcon: cameraState.flashMode.icon,
           hasPermission: cameraState.hasPermission,
