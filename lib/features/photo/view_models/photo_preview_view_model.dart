@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,18 +20,17 @@ class PhotoPreviewViewModel extends AsyncNotifier<void> {
     return null;
   }
 
-  Future<ImageData> cropAndUploadImage({
+  Future<ImageData?> cropAndUploadImage({
     required String imagePath,
     required Rect cropRect,
   }) async {
-    state = const AsyncLoading();
-    late final ImageData imageData;
+    state = const AsyncValue.loading();
+    ImageData? imageData;
     state = await AsyncValue.guard(() async {
       final file = File(imagePath);
       final bytes = await file.readAsBytes();
       final image = img.decodeImage(bytes);
       if (image == null) throw Exception('Failed to decode image');
-
       final croppedImage = img.copyCrop(
         image,
         x: cropRect.left.toInt(),
@@ -44,13 +44,12 @@ class PhotoPreviewViewModel extends AsyncNotifier<void> {
         croppedBytes,
         quality: ImageConst.targetQuality,
       );
-
-      await logImageInfo('Output Image', compressed);
+      if (kDebugMode) await logImageInfo('Output Image', compressed);
       await file.writeAsBytes(compressed);
       final response = await _repository.uploadImage(imagePath);
+      imageData = ImageData.fromJson(response);
       // 업로드 성공 시 파일 삭제
       await file.delete();
-      imageData = ImageData.fromJson(response);
       AnalyticsService.uploadPhoto();
     });
     return imageData;

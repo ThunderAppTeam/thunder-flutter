@@ -89,7 +89,7 @@ const AppTextTheme defaultTextTheme = AppTextTheme(
   textBody14: TextStyle(
     fontFamily: FontFamily.pretendard,
     fontSize: Sizes.fontSize14,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w500,
     color: Colors.white,
     height: Sizes.defaultFontHeight,
   ),
@@ -97,6 +97,15 @@ const AppTextTheme defaultTextTheme = AppTextTheme(
     fontFamily: FontFamily.pretendard,
     fontSize: Sizes.fontSize12,
     fontWeight: FontWeight.w500,
+    color: Colors.white,
+    height: Sizes.defaultFontHeight,
+  ),
+
+  // ##### --- Small Style (더 작은 텍스트)
+  textSmall10: TextStyle(
+    fontFamily: FontFamily.pretendard,
+    fontSize: Sizes.fontSize10,
+    fontWeight: FontWeight.w400,
     color: Colors.white,
     height: Sizes.defaultFontHeight,
   ),
