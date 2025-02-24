@@ -91,7 +91,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 alignment: Alignment.centerRight,
                 child: Wrap(
                   direction: Axis.horizontal,
-                  spacing: Sizes.spacing20,
+                  spacing: Sizes.spacing4,
                   children: actions!.map((action) {
                     switch (action.type) {
                       case CustomAppBarActionType.text:

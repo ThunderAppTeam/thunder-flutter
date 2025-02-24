@@ -53,7 +53,7 @@ platform :android do
   lane :deploy do
     build_aab(build_type: "release")
     upload_to_play_store(
-      track: "internal",
+      track: ENV["UPLOAD_PLAY_STORE_TRACK"],
       aab: ENV["AAB_PATH"],
       skip_upload_images: true,
       skip_upload_screenshots: true,
@@ -66,7 +66,7 @@ platform :android do
     build_aab
     firebase_app_distribution(
       app: ENV['FIREBASE_ANDROID_APP_ID'],
-      groups_file: File.join(ROOT, 'fastlane', 'groups.txt'),
+      groups: ENV['FIREBASE_APP_DISTRIBUTION_GROUPS'],
       release_notes_file: File.join(ROOT, 'fastlane', 'release_notes.txt'),
       android_artifact_type: "AAB",
       android_artifact_path: ENV["AAB_PATH"],

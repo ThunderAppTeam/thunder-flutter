@@ -51,8 +51,6 @@ class BodyCheckResultPage extends ConsumerStatefulWidget {
 }
 
 class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
-  bool _isAnimationStarted = false;
-  final bool _isAnimationCompleted = false;
   late final BodyCheckResultViewModel _viewModel;
   final GlobalKey _shareKey = GlobalKey();
   bool _isSharing = false;
@@ -62,9 +60,6 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       AnalyticsService.viewBodyResult(widget.bodyPhotoId);
-      setState(() {
-        _isAnimationStarted = true;
-      });
     });
     _viewModel = ref.read(bodyCheckResultProvider(widget.bodyPhotoId).notifier);
   }
@@ -237,14 +232,8 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
                           gradient: LinearGradient(
                             colors: [
                               Colors.black.withOpacity(0.0),
-                              Colors.black.withOpacity(
-                                  _isAnimationStarted && resultState.hasValue
-                                      ? 0.25
-                                      : 0.0),
-                              Colors.black.withOpacity(
-                                  _isAnimationStarted && resultState.hasValue
-                                      ? 0.5
-                                      : 0.0),
+                              Colors.black.withOpacity(0.25),
+                              Colors.black.withOpacity(0.5),
                             ],
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
@@ -267,12 +256,7 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
                     const EdgeInsets.symmetric(horizontal: Sizes.spacing16),
                 child: CustomWideButton(
                   text: S.of(context).commonShare,
-                  isEnabled: !_isSharing &&
-                      _isAnimationCompleted &&
-                      resultState.maybeWhen(
-                        data: (result) => result.isReviewCompleted,
-                        orElse: () => false,
-                      ),
+                  isEnabled: !_isSharing,
                   onPressed: _onShare,
                 ),
               ),

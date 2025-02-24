@@ -43,7 +43,7 @@ platform :ios do
       app: ENV["FIREBASE_IOS_APP_ID"],
       ipa_path: ENV["IPA_PATH"],
       googleservice_info_plist_path: ENV["GOOGLESERVICE_INFO_PLIST_PATH"],
-      groups_file: File.join(ROOT, 'fastlane', 'groups.txt'),
+      groups: ENV['FIREBASE_APP_DISTRIBUTION_GROUPS'],
       release_notes_file: File.join(ROOT, 'fastlane', 'release_notes.txt'),
     ) 
   end

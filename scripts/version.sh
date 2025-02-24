@@ -49,8 +49,6 @@ fi
 
 # Build number: YYMMDD + 2-digit suffix
 base_date=$(date +%y%m%d)  # e.g. '230224' for 2023-02-24
-default_suffix="00"
-default_build="${base_date}${default_suffix}"  # e.g. '23022400'
 
 if [[ "$current_build" == "$base_date"* ]]; then
     # Attempt to parse the existing 2-digit suffix
@@ -72,8 +70,9 @@ if [[ "$current_build" == "$base_date"* ]]; then
         apply_version "$new_version" "$new_build"
         echo "Updated to version: $new_version+$new_build"
     else
-        apply_version "$new_version" "$default_build"
-        echo "Updated to version: $new_version+$default_build"
+         new_build="${base_date}${existing_suffix}"
+        apply_version "$new_version" "$current_build"
+        echo "Updated to version: $new_version+$current_build"
     fi
 else
     # Not same day or version changed => just set to "YYMMDD00"
