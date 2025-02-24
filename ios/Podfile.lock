@@ -93,6 +93,8 @@ PODS:
     - nanopb (~> 3.30910.0)
     - PromisesSwift (~> 2.1)
   - Flutter (1.0.0)
+  - flutter_app_badge_control (0.0.1):
+    - Flutter
   - flutter_email_sender (0.0.1):
     - Flutter
   - flutter_image_compress_common (1.0.0):
@@ -231,6 +233,7 @@ DEPENDENCIES:
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
+  - flutter_app_badge_control (from `.symlinks/plugins/flutter_app_badge_control/ios`)
   - flutter_email_sender (from `.symlinks/plugins/flutter_email_sender/ios`)
   - flutter_image_compress_common (from `.symlinks/plugins/flutter_image_compress_common/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
@@ -287,6 +290,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
     :path: Flutter
+  flutter_app_badge_control:
+    :path: ".symlinks/plugins/flutter_app_badge_control/ios"
   flutter_email_sender:
     :path: ".symlinks/plugins/flutter_email_sender/ios"
   flutter_image_compress_common:
@@ -335,6 +340,7 @@ SPEC CHECKSUMS:
   FirebaseRemoteConfigInterop: 98897a64aa372eac3c5b3fe2816594ccfaac55ef
   FirebaseSessions: 32ed7a9387ae71efe3a35a7f20f3a7292950957b
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  flutter_app_badge_control: 1f0ac37334d1a2da72bde7e4d3c6c8675517a471
   flutter_email_sender: 2397f5e84aaacfb61af569637a963e7c687858d8
   flutter_image_compress_common: 1697a328fd72bfb335507c6bca1a65fa5ad87df1
   flutter_local_notifications: 395056b3175ba4f08480a7c5de30cd36d69827e4

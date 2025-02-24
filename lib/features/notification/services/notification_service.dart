@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_app_badge_control/flutter_app_badge_control.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -16,9 +17,6 @@ import 'package:http/http.dart' as http;
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // // android background handler
   LogService.debug('_firebaseMessagingBackgroundHandler: ${message.data}');
-  // await Firebase.initializeApp();
-  // await NotificationService.instance.setupLocalNotifications();
-  // // await NotificationService.instance.showNotification(message);
 }
 
 class NotificationConst {
@@ -191,6 +189,7 @@ class NotificationService {
       _handleBackgroundMessage(_initialMessage!);
       _initialMessage = null;
     }
+    _clearAppBadge();
   }
 
   Future<void> _handleNotificationData(Map<String, dynamic> data) async {
@@ -209,6 +208,7 @@ class NotificationService {
 
   Future<void> _handleBackgroundMessage(RemoteMessage message) async {
     await _handleNotificationData(message.data);
+    _clearAppBadge();
   }
 
   Future<void> _setupFCMToken() async {
@@ -231,5 +231,11 @@ class NotificationService {
   Future<void> unsubscribeFromTopic(String topic) async {
     await _messaging.unsubscribeFromTopic(topic);
     LogService.debug('Unsubscribed from topic: $topic');
+  }
+
+  Future<void> _clearAppBadge() async {
+    if (await FlutterAppBadgeControl.isAppBadgeSupported()) {
+      FlutterAppBadgeControl.removeBadge();
+    }
   }
 }
