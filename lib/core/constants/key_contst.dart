@@ -26,4 +26,5 @@ class KeyConst {
   static const String mobileOs = 'mobileOs';
   static const String appVersion = 'appVersion';
   static const String isReleaseUi = 'isReleaseUi';
+  static const String fcmToken = 'fcmToken';
 }

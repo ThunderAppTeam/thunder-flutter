@@ -6,9 +6,9 @@ part 'notification_data.g.dart';
 @freezed
 class NotificationData with _$NotificationData {
   const factory NotificationData({
-    required bool isReceiveBodyCheckCompleted,
-    required bool isReceiveBodyCheckRequest,
-    required bool isMarketingAgreement,
+    required bool reviewCompleteNotify,
+    required bool reviewRequestNotify,
+    required bool marketingAgreement,
   }) = _NotificationData;
 
   factory NotificationData.fromJson(Map<String, dynamic> json) =>
@@ -16,8 +16,8 @@ class NotificationData with _$NotificationData {
 
   factory NotificationData.fromState(NotificationState state) =>
       NotificationData(
-        isReceiveBodyCheckCompleted: state.isReceiveRatingRequest,
-        isReceiveBodyCheckRequest: state.isReceiveRatingRequest,
-        isMarketingAgreement: state.isMarketingAgreed,
+        reviewCompleteNotify: state.isReviewCompletNotify,
+        reviewRequestNotify: state.isReviewRequestNotify,
+        marketingAgreement: state.isMarketingAgreement,
       );
 }

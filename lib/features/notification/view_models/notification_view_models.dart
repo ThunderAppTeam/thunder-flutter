@@ -38,13 +38,13 @@ class NotificationViewModel extends AsyncNotifier<NotificationState> {
 
     switch (type) {
       case NotificationSettingsType.bodyCheckCompleted:
-        settings = settings.copyWith(isReceiveBodyCheckCompleted: value);
+        settings = settings.copyWith(isReviewCompletNotify: value);
         break;
       case NotificationSettingsType.ratingRequest:
-        settings = settings.copyWith(isReceiveRatingRequest: value);
+        settings = settings.copyWith(isReviewRequestNotify: value);
         break;
       case NotificationSettingsType.marketingArgree:
-        settings = settings.copyWith(isMarketingAgreed: value);
+        settings = settings.copyWith(isMarketingAgreement: value);
         break;
     }
     state = AsyncData(settings);

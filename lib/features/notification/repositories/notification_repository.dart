@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/core/constants/key_contst.dart';
 import 'package:thunder/core/network/dio_options.dart';
 import 'package:thunder/core/network/dio_provider.dart';
 import 'package:thunder/core/network/repository/base_repository.dart';
@@ -8,7 +9,7 @@ import 'package:thunder/features/notification/models/data/notification_data.dart
 class NotificationRepository extends BaseRepository {
   NotificationRepository(super.dio);
   Future<Map<String, dynamic>> fetchNotificationSettings() async {
-    final path = '/v1/member';
+    final path = '/v1/member/settings';
     return await get(
       path,
       options: DioOptions.tokenOptions,
@@ -20,7 +21,7 @@ class NotificationRepository extends BaseRepository {
     try {
       await post(
         path,
-        data: {'fcmToken': token},
+        data: {KeyConst.fcmToken: token},
         options: DioOptions.tokenOptions,
       );
     } catch (e) {
@@ -29,8 +30,8 @@ class NotificationRepository extends BaseRepository {
   }
 
   Future<void> postNotificationSettings(NotificationData data) async {
-    final path = '/v1/member/settings/notification';
-    return await post(
+    final path = '/v1/member/settings';
+    return await put(
       path,
       data: data,
       options: DioOptions.tokenOptions,

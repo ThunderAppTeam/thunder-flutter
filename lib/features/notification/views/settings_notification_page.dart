@@ -63,14 +63,6 @@ class _SettingsNotificationPageState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(title: S.of(context).settingsNotification),
-      body: Center(
-        child: Text(
-          "추후 업데이트 예정",
-        ),
-      ),
-    );
     final notificationState = ref.watch(notificationViewModelProvider);
     return Scaffold(
       appBar: CustomAppBar(title: S.of(context).settingsNotification),
@@ -91,7 +83,7 @@ class _SettingsNotificationPageState
                 SettingsListTile(
                   title: S.of(context).settingsNotificationBodycheckComplete,
                   trailing: SettingsTrailing.toggle(
-                    toggleValue: settings.isReceiveBodyCheckCompleted,
+                    toggleValue: settings.isReviewCompletNotify,
                     toggleOnChanged: (value) => _toggleSettings(
                         NotificationSettingsType.bodyCheckCompleted, value),
                   ),
@@ -99,7 +91,7 @@ class _SettingsNotificationPageState
                 SettingsListTile(
                   title: S.of(context).settingsNotificationBodycheckRequest,
                   trailing: SettingsTrailing.toggle(
-                    toggleValue: settings.isReceiveRatingRequest,
+                    toggleValue: settings.isReviewRequestNotify,
                     toggleOnChanged: (value) => _toggleSettings(
                         NotificationSettingsType.ratingRequest, value),
                   ),
@@ -107,7 +99,7 @@ class _SettingsNotificationPageState
                 SettingsListTile(
                   title: S.of(context).settingsNotificationMarketing,
                   trailing: SettingsTrailing.toggle(
-                    toggleValue: settings.isMarketingAgreed,
+                    toggleValue: settings.isMarketingAgreement,
                     toggleOnChanged: (value) => _toggleSettings(
                         NotificationSettingsType.marketingArgree, value),
                   ),
