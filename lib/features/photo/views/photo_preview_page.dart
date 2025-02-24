@@ -7,6 +7,8 @@ import 'package:thunder/app/router/routes.dart';
 import 'package:thunder/app/router/safe_router.dart';
 import 'package:thunder/core/constants/image_const.dart';
 import 'package:thunder/core/constants/key_contst.dart';
+import 'package:thunder/core/errors/server_error.dart';
+import 'package:thunder/core/utils/show_utils.dart';
 
 import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
 import 'package:thunder/core/widgets/custom_circular_indicator.dart';
@@ -45,40 +47,59 @@ class _PhotoPreviewPageState extends ConsumerState<PhotoPreviewPage> {
     setState(() {
       _isProcessing = true;
     });
+    try {
+      final editorState = _editorKey.currentState;
+      if (editorState == null) return;
 
-    final editorState = _editorKey.currentState;
-    if (editorState == null) return;
+      final Rect? cropRect = editorState.getCropRect();
+      if (cropRect == null) return;
 
-    final Rect? cropRect = editorState.getCropRect();
-    if (cropRect == null) return;
-
-    final imageData = await _viewModel.cropAndUploadImage(
-      imagePath: imagePath,
-      cropRect: cropRect,
-    );
-    if (mounted) {
-      ref.read(archiveViewModelProvider.notifier).refresh();
-      ref.read(safeRouterProvider).goToArchive(context, skip: true);
-      ref.read(safeRouterProvider).pushNamed(
-        context,
-        Routes.bodyCheck.name,
-        pathParameters: {
-          KeyConst.bodyPhotoId: imageData.bodyPhotoId.toString(),
-        },
-        extra: {
-          KeyConst.fromUpload: true,
-          KeyConst.imageUrl: imageData.imageUrl,
-        },
+      final imageData = await _viewModel.cropAndUploadImage(
+        imagePath: imagePath,
+        cropRect: cropRect,
       );
+      if (imageData == null) return;
+      if (mounted) {
+        ref.read(archiveViewModelProvider.notifier).refresh();
+        ref.read(safeRouterProvider).goToArchive(context, skip: true);
+        ref.read(safeRouterProvider).pushNamed(
+          context,
+          Routes.bodyCheck.name,
+          pathParameters: {
+            KeyConst.bodyPhotoId: imageData.bodyPhotoId.toString(),
+          },
+          extra: {
+            KeyConst.fromUpload: true,
+            KeyConst.imageUrl: imageData.imageUrl,
+          },
+        );
+      }
+    } finally {
+      setState(() {
+        _isProcessing = false;
+      });
     }
-    setState(() {
-      _isProcessing = false;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     final isNavigating = ref.watch(safeRouterStateProvider);
+    ref.listen(
+      photoPreviewProvider,
+      (prev, next) {
+        if (!next.isLoading && next.hasError) {
+          if (next.error == ServerError.bodyNotDetectedInPhoto) {
+            showCustomBottomSheet(
+              context,
+              title: S.of(context).photoPreviewBodyNotDetectedErrorTitle,
+              subtitle: S.of(context).photoPreviewBodyNotDetectedErrorSubtitle,
+            );
+          } else {
+            showCommonUnknownErrorBottomSheet(context);
+          }
+        }
+      },
+    );
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(

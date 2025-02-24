@@ -29,6 +29,7 @@ class CustomAppBarAction {
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showBackButton;
+  final Widget? leading;
   final String? title;
   final List<CustomAppBarAction>? actions;
   final VoidCallback? onBack;
@@ -36,6 +37,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
     super.key,
     this.showBackButton = true,
+    this.leading,
     this.title,
     this.actions,
     this.onBack,
@@ -75,6 +77,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   icon: ThunderIcons.chevronLeft,
                   onTap: onBack ?? () => Navigator.pop(context),
                 ),
+              ),
+
+            if (leading != null)
+              Align(
+                alignment: Alignment.centerLeft,
+                child: leading,
               ),
 
             // (3) Actions (오른쪽)

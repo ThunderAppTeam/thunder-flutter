@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:thunder/app/router/routes.dart';
@@ -159,28 +160,52 @@ class _BodyCheckResultPageState extends ConsumerState<BodyCheckResultPage> {
         _onError(context);
       }
     });
+    final createdAt = resultState.valueOrNull?.createdAt;
+    final localeTime = createdAt?.toLocal();
+    final currentLocale = Platform.localeName;
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
-          title: S.of(context).bodyCheckResultTitle,
+          leading: Padding(
+            padding: const EdgeInsets.only(left: Sizes.spacing8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (localeTime != null)
+                  Text(
+                    DateFormat.yMMMd().format(localeTime),
+                    style: textTheme.textTitle16,
+                  ),
+                Gaps.v4,
+                if (localeTime != null)
+                  Text(
+                    currentLocale == 'ko_KR'
+                        ? DateFormat('aa h시 mm분').format(localeTime)
+                        : DateFormat.jm().format(localeTime),
+                    style: textTheme.textSmall10
+                        .copyWith(color: ColorName.darkLabel9),
+                  ),
+              ],
+            ),
+          ),
           actions: [
             CustomAppBarAction(
               type: CustomAppBarActionType.icon,
               icon: ThunderIcons.moreHoriz,
               onTap: _onMoreTap,
             ),
-            if (widget.fromUpload)
-              CustomAppBarAction(
-                type: CustomAppBarActionType.icon,
-                icon: ThunderIcons.closeSquareLight,
-                onTap: () {
-                  ref
-                      .read(safeRouterProvider)
-                      .goNamed(context, Routes.archive.name);
-                },
-              ),
+            CustomAppBarAction(
+              type: CustomAppBarActionType.icon,
+              icon: ThunderIcons.closeSquareLight,
+              onTap: () {
+                ref
+                    .read(safeRouterProvider)
+                    .goNamed(context, Routes.archive.name);
+              },
+            ),
           ],
-          showBackButton: !widget.fromUpload,
+          showBackButton: false,
         ),
         body: Padding(
           padding: const EdgeInsets.only(bottom: Sizes.spacing8),

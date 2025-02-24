@@ -91,6 +91,8 @@
   "cameraPermissionAllow": "카메라 접근 권한 허용하기",
   "@_PHOTO_PREVIEW": {},
   "photoPreviewTitle": "사진 미리보기",
+  "photoPreviewBodyNotDetectedErrorTitle": "신체가 포함된 사진을 등록해주세요",
+  "photoPreviewBodyNotDetectedErrorSubtitle": "전신, 상체, 하체 등 측정하고자 하는 신체 부위가 포함된 사진을 등록해주세요. 눈바디 측정에 적합하지 않은 사진은 등록할 수 없어요.",
   "@_SETTINGS": {},
   "settingsTitle": "설정",
   "settingsLogout": "로그아웃",
