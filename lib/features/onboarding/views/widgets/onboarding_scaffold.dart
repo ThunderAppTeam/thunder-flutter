@@ -1,65 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:thunder/core/extensions/text_style.dart';
+import 'package:thunder/core/theme/constants/gaps.dart';
+import 'package:thunder/core/theme/constants/styles.dart';
+import 'package:thunder/core/theme/constants/sizes.dart';
+import 'package:thunder/core/utils/theme_utils.dart';
+import 'package:thunder/core/widgets/app_bars/custom_app_bar.dart';
 
 class OnboardingScaffold extends StatelessWidget {
   final String title;
-  final String? subtitle;
+  final String? guideText;
   final Widget content;
   final Widget bottomButton;
-  final bool showAppBar;
+  final bool showBackButton;
 
   const OnboardingScaffold({
     super.key,
     required this.title,
-    this.subtitle,
+    this.guideText, // 안내 텍스트, 존재하면 gap과 함
     required this.content,
     required this.bottomButton,
-    this.showAppBar = true,
+    this.showBackButton = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: showAppBar
-          ? AppBar(
-              backgroundColor: Colors.transparent,
-            )
-          : null,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              if (subtitle != null) ...[
-                const SizedBox(height: 8),
-                Text(
-                  subtitle!,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
+    final textTheme = getTextTheme(context);
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: CustomAppBar(
+          showBackButton: showBackButton,
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: Sizes.spacing20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: Sizes.spacing32),
+                  child: Text(
+                    title,
+                    style: textTheme.textHead24,
                   ),
                 ),
-              ],
-              const SizedBox(height: 32),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    content,
-                    const Spacer(),
-                  ],
+                content,
+                if (guideText != null) ...[
+                  Gaps.v16,
+                  Text(
+                    guideText!,
+                    style:
+                        textTheme.textSubtitle14.withOpacity(Styles.opacity80),
+                  ),
+                ],
+                Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: Sizes.spacing8),
+                  child: bottomButton,
                 ),
-              ),
-              bottomButton,
-              const SizedBox(height: 32),
-            ],
+              ],
+            ),
           ),
         ),
       ),

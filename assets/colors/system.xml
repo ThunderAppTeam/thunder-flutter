@@ -1,0 +1,52 @@
+<!-- assets/color/colors.xml -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base Colors -->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+
+    <!-- Gray Scale -->
+    <color name="gray_900">#1A1A1A</color>
+    <color name="gray_800">#333333</color>
+    <color name="gray_700">#4D4D4D</color>
+    <color name="gray_600">#666666</color>
+    <color name="gray_500">#808080</color>
+    <color name="gray_400">#999999</color>
+    <color name="gray_300">#B3B3B3</color>
+    <color name="gray_200">#CCCCCC</color>
+    <color name="gray_100">#E6E6E6</color>
+    <color name="gray_50">#F2F2F2</color>
+
+    <!-- Alert Colors -->
+    <color name="alert_gray">#8E8E93</color>
+    <color name="alert_gray_light">#808080</color>
+    <color name="alert_red">#FF5151</color>
+    
+
+    <!-- Accent -->
+    <color name="accent_red">#FE2C55</color>
+    <color name="accent_blue">#007AFF</color>
+
+    <!-- IOS -->
+    <color name="ios_blue">#007AFF</color>
+
+    <color name="dark_background_2">#1C1C1C</color>
+    <color name="dark_background_3">#2C2C2E</color>
+    <color name="dark_background_4">#3A3A3C</color>
+    <color name="dark_label_2">#99EBEBF5</color>
+    <color name="dark_label_9">#DBDBDB</color>
+
+    <color name="dark_red">#FF5757</color>
+
+    <!-- Divider -->
+    <color name="divider_gray">#FFBFBFBF</color>
+
+    <color name="dark_fill_2">#4D787880</color>
+    <color name="dark_line_2">#A6545458</color>
+    <color name="dark_gray_3">#FF8E8D93</color>
+
+    <color name="dark_skeleton_base">#424242</color>
+    <color name="dark_skeleton_highlight">#616161</color>
+
+    <color name="dark_switch_inactive">#0D0D0D</color>
+</resources>

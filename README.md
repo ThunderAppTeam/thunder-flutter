@@ -1,16 +1,37 @@
-# noon_body
+# Thunder - Flutter
 
-A new Flutter project.
+A Flutter mobile application for Thunder
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- 📱 Phone number authentication
+- 📸 Body photo capture and upload
+- ⭐ Rating system
+- 🌏 Multi-language support (Korean)
+- 🎨 Custom theme and design system
 
-A few resources to get you started if this is your first Flutter project:
+## Development Setup
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Prerequisites
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Flutter SDK
+- Android Studio / Xcode
+- Firebase project setup
+- `.env` file with required configuration
+
+### Build Commands
+
+```bash
+flutter pub get
+flutterfire configure
+flutter pub run build_runner build --delete-conflicting-outputs
+flutter pub run intl_utils:generate
+```
+
+## Note
+
+This repository is provided for reference and development purposes. To run or deploy the application, please contact the Thunder development team for necessary credentials and configuration.
+
+## Contribute
+
+Developed and maintained by [jrsky723](https://github.com/jrsky723)

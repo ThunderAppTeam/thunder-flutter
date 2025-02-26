@@ -1,0 +1,75 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+ROOT = File.expand_path('../../', __dir__)
+
+fastlane_require 'dotenv'
+before_all do
+  Dotenv.overload File.join(ROOT, 'z_secure/fastlane', '.env')
+end
+
+default_platform(:android)
+
+platform :android do
+  # common var
+  private_lane :build_aab do |options|
+    build_type = options[:build_type]
+
+    if build_type == "release"
+      # Release build with obfuscation
+      sh "flutter build appbundle --obfuscate --split-debug-info=#{ENV["ANDROID_DEBUG_SYMBOLS_PATH"]}"
+    else
+      # Development build without obfuscation
+      sh "flutter build appbundle"
+    end
+  end
+  
+  desc "Runs all the tests"
+  lane :test do
+    gradle(task: "test")
+  end
+
+  desc "Submit a new Beta Build to Crashlytics Beta"
+  lane :beta do
+    gradle(task: "clean assembleRelease")
+    crashlytics
+  
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+  end
+
+  desc "Deploy a new version to the Google Play"
+  lane :deploy do
+    build_aab(build_type: "release")
+    upload_to_play_store(
+      track: ENV["UPLOAD_PLAY_STORE_TRACK"],
+      aab: ENV["AAB_PATH"],
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      skip_upload_metadata: true
+    )
+  end
+
+  desc "Deploy a test -version to the Firebase App distribution"
+  lane :distribute do 
+    build_aab
+    firebase_app_distribution(
+      app: ENV['FIREBASE_ANDROID_APP_ID'],
+      groups: ENV['FIREBASE_APP_DISTRIBUTION_GROUPS'],
+      release_notes_file: ENV['RELEASE_NOTES_PATH'],
+      android_artifact_type: "AAB",
+      android_artifact_path: ENV["AAB_PATH"],
+    ) 
+  end
+end

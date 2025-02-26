@@ -1,60 +1,180 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
-import 'package:noon_body/core/router/routes.dart';
-import 'package:noon_body/features/onboarding/views/widgets/onboarding_button.dart';
-import 'package:noon_body/features/onboarding/views/widgets/onboarding_scaffold.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thunder/core/constants/app_const.dart';
+import 'package:thunder/core/constants/time_const.dart';
+import 'package:thunder/app/router/safe_router.dart';
+import 'package:thunder/core/services/analytics_service.dart';
+import 'package:thunder/core/theme/constants/gaps.dart';
+import 'package:thunder/core/widgets/bottom_sheets/custom_bottom_sheet.dart';
+import 'package:thunder/features/auth/models/states/phone_auth_state.dart';
+import 'package:thunder/features/auth/providers/phone_auth_provider.dart';
+import 'package:thunder/features/onboarding/controllers/verification_controller.dart';
 
-class VerificationPage extends StatefulWidget {
+import 'package:thunder/core/widgets/buttons/custom_wide_button.dart';
+import 'package:thunder/features/onboarding/providers/onboarding_provider.dart';
+import 'package:thunder/features/permission/services/permission_navigation_service.dart';
+import 'package:thunder/features/onboarding/views/widgets/onboarding_scaffold.dart';
+import 'package:thunder/features/onboarding/views/widgets/onboarding_small_button.dart';
+import 'package:thunder/features/onboarding/views/widgets/onboarding_text_field.dart';
+import 'package:thunder/generated/l10n.dart';
+
+class VerificationPage extends ConsumerStatefulWidget {
   const VerificationPage({super.key});
 
   @override
-  State<VerificationPage> createState() => _VerificationPageState();
+  ConsumerState<VerificationPage> createState() => _VerificationPageState();
 }
 
-class _VerificationPageState extends State<VerificationPage> {
-  final _controller = TextEditingController();
-  bool get _isValid => _controller.text.length == 6;
+class _VerificationPageState extends ConsumerState<VerificationPage> {
+  final _textController = TextEditingController();
+  late final VerificationTimerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = ref.read(verificationTimerProvider.notifier);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _controller.init();
+      ref.read(phoneAuthProvider.notifier).reset();
+    });
+  }
+
+  String _formattedTime(int seconds) {
+    final minutes = seconds ~/ TimeConst.minute;
+    final remainingSeconds = seconds % TimeConst.minute;
+    return '$minutes:${remainingSeconds.toString().padLeft(2, '0')}';
+  }
+
+  void _onResendPressed() {
+    _controller.resendVerificationCode();
+  }
+
+  void _onVerifyPressed() async {
+    final smsCode = _textController.text;
+    _controller.verifyCode(smsCode);
+  }
+
+  void _onVerifySuccess(bool isExistUser) async {
+    AnalyticsService.authPhone();
+    if (isExistUser) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.invalidate(onboardingProvider);
+        ref.invalidate(verificationTimerProvider);
+      });
+      final isRouted =
+          await PermissionNavigationService.requestPermissionsAndRoute(
+              context, ref);
+      if (!isRouted && mounted) {
+        ref.read(safeRouterProvider).goToHome(context);
+      }
+    } else {
+      ref.read(onboardingProvider.notifier).setPhoneNumberVerified(true);
+      ref.read(onboardingProvider.notifier).pushNextStep(
+            context: context,
+            currentStep: OnboardingStep.verification,
+          );
+    }
+  }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _textController.dispose();
     super.dispose();
+  }
+
+  void _onPhoneAuthStateChanged(PhoneAuthState? prev, PhoneAuthState next) {
+    if (next.isVerified) {
+      _onVerifySuccess(next.isExistUser);
+    }
+    if (prev?.error != next.error && next.error != null) {
+      final String title, subtitle;
+      switch (next.error!) {
+        case PhoneAuthError.tooManyMobileVerification:
+          title = S.of(context).verificationErrorTooManyMobileVerificationTitle;
+          subtitle =
+              S.of(context).verificationErrorTooManyMobileVerificationSubtitle;
+          break;
+        case PhoneAuthError.notFoundMobileNumber:
+          title = S.of(context).verificationErrorNotFoundMobileNumberTitle;
+          subtitle =
+              S.of(context).verificationErrorNotFoundMobileNumberSubtitle;
+          break;
+        case PhoneAuthError.invalidVerificationCode:
+          title = S.of(context).verificationErrorInvalidVerificationCodeTitle;
+          subtitle =
+              S.of(context).verificationErrorInvalidVerificationCodeSubtitle;
+          break;
+        case PhoneAuthError.unknown:
+          title = S.of(context).commonErrorUnknownTitle;
+          subtitle =
+              S.of(context).commonErrorUnknownSubtitle(AppConst.supportEmail);
+          break;
+        case PhoneAuthError.expiredVerificationCode:
+          title = S.of(context).verificationErrorExpiredVerificationCodeTitle;
+          subtitle =
+              S.of(context).verificationErrorExpiredVerificationCodeSubtitle;
+          break;
+      }
+      showModalBottomSheet(
+        context: context,
+        builder: (context) => CustomBottomSheet(
+          title: title,
+          subtitle: subtitle,
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(phoneAuthProvider, _onPhoneAuthStateChanged);
+    final timerState = ref.watch(verificationTimerProvider);
+    final phoneAuthState = ref.watch(phoneAuthProvider);
+
+    final isResendEnabled = !phoneAuthState.isTooManyMobileVerification &&
+        !phoneAuthState.isCodeSending &&
+        timerState.canSend;
+
+    final isVerifyEnabled = _textController.text.length == 6 &&
+        timerState.canVerify &&
+        !phoneAuthState.isCodeVerifying &&
+        !ref.read(safeRouterProvider).isNavigating;
+
     return OnboardingScaffold(
-      title: '인증번호를\n입력해주세요',
-      subtitle: '입력하신 휴대폰 번호로 인증번호를 전송했습니다',
+      title: S.of(context).verificationTitle,
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TextFormField(
-            controller: _controller,
+          OnboardingTextField(
+            controller: _textController,
+            hintText: S.of(context).verificationHint,
+            suffixText: _formattedTime(timerState.remainingSeconds),
             keyboardType: TextInputType.number,
             inputFormatters: [
               FilteringTextInputFormatter.digitsOnly,
               LengthLimitingTextInputFormatter(6),
             ],
-            decoration: const InputDecoration(
-              hintText: '인증번호 6자리 입력',
-            ),
+            canClear: true,
             onChanged: (_) => setState(() {}),
           ),
-          const SizedBox(height: 16),
-          TextButton(
-            onPressed: () {
-              // TODO: Implement resend verification code
-            },
-            child: const Text('인증번호 다시 받기'),
+          Gaps.v16,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              OnboardingSmallButton(
+                text: S.of(context).verificationResend,
+                onPressed: _onResendPressed,
+                isEnabled: isResendEnabled,
+              ),
+            ],
           ),
         ],
       ),
-      bottomButton: OnboardingButton(
-        text: '다음',
-        onPressed: () => context.pushNamed(Routes.nickname.name),
-        isEnabled: _isValid,
+      bottomButton: CustomWideButton(
+        text: S.of(context).commonConfirm,
+        onPressed: _onVerifyPressed,
+        isEnabled: isVerifyEnabled,
       ),
     );
   }

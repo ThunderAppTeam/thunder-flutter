@@ -1,0 +1,59 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+ROOT = File.expand_path('../../', __dir__)
+
+fastlane_require 'dotenv'
+before_all do
+  Dotenv.overload File.join(ROOT, 'z_secure/fastlane', '.env')
+end
+
+
+default_platform(:ios)
+
+platform :ios do
+  private_lane :build_ipa do |options|
+    # Default to app-store if no method specified
+    export_method = options[:method]
+
+    if export_method == "app-store"
+      sh "flutter build ipa --export-method #{export_method} --obfuscate --split-debug-info=#{ENV['IOS_DEBUG_SYMBOLS_PATH']}"
+      # debug용 symbol 위치 ./build/ios/debug-info
+    else
+      sh "flutter build ipa --export-method #{export_method}"
+    end
+  end
+
+  desc "Deploy a test -version to the Firebase App distribution"
+  lane :distribute do
+    build_ipa(method: "ad-hoc")
+    firebase_app_distribution(
+      app: ENV["FIREBASE_IOS_APP_ID"],
+      ipa_path: ENV["IPA_PATH"],
+      googleservice_info_plist_path: ENV["GOOGLESERVICE_INFO_PLIST_PATH"],
+      groups: ENV['FIREBASE_APP_DISTRIBUTION_GROUPS'],
+      release_notes_file:  ENV['RELEASE_NOTES_PATH'],
+    ) 
+  end
+
+  desc "Upload beta to testfilght (App Store)"
+  lane :beta do
+    build_ipa(method: "app-store")  # Will include obfuscation
+    upload_to_testflight(
+      api_key_path: ENV["APPLE_CONNECT_API_KEY_PATH"],
+      ipa: ENV["IPA_PATH"],
+    )
+  end
+end
