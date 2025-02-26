@@ -37,7 +37,6 @@ apply_version() {
 current_version=$(get_current_version)
 current_build=$(get_current_build)
 echo "Current version: $current_version (Build: $current_build)"
-
 # Let user override version (x.y.z)
 read -p "Enter new version (press enter to keep $current_version): " new_version
 new_version="${new_version:-$current_version}"
@@ -49,7 +48,8 @@ fi
 
 # Build number: YYMMDD + 2-digit suffix
 base_date=$(date +%y%m%d)  # e.g. '230224' for 2023-02-24
-
+default_suffix="00"
+default_build="${base_date}${default_suffix}"
 if [[ "$current_build" == "$base_date"* ]]; then
     # Attempt to parse the existing 2-digit suffix
     existing_suffix="${current_build#$base_date}"  # strip out the leading base_date
@@ -70,7 +70,7 @@ if [[ "$current_build" == "$base_date"* ]]; then
         apply_version "$new_version" "$new_build"
         echo "Updated to version: $new_version+$new_build"
     else
-         new_build="${base_date}${existing_suffix}"
+        new_build="${base_date}${existing_suffix}"
         apply_version "$new_version" "$current_build"
         echo "Updated to version: $new_version+$current_build"
     fi
