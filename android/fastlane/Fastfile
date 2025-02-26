@@ -16,7 +16,7 @@ ROOT = File.expand_path('../../', __dir__)
 
 fastlane_require 'dotenv'
 before_all do
-  Dotenv.overload File.join(ROOT, 'fastlane', '.env')
+  Dotenv.overload File.join(ROOT, 'z_secure/fastlane', '.env')
 end
 
 default_platform(:android)
@@ -67,7 +67,7 @@ platform :android do
     firebase_app_distribution(
       app: ENV['FIREBASE_ANDROID_APP_ID'],
       groups: ENV['FIREBASE_APP_DISTRIBUTION_GROUPS'],
-      release_notes_file: File.join(ROOT, 'fastlane', 'release_notes.txt'),
+      release_notes_file: ENV['RELEASE_NOTES_PATH'],
       android_artifact_type: "AAB",
       android_artifact_path: ENV["AAB_PATH"],
     ) 

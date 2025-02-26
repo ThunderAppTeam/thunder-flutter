@@ -17,7 +17,7 @@ ROOT = File.expand_path('../../', __dir__)
 
 fastlane_require 'dotenv'
 before_all do
-  Dotenv.overload File.join(ROOT, 'fastlane', '.env')
+  Dotenv.overload File.join(ROOT, 'z_secure/fastlane', '.env')
 end
 
 
@@ -44,7 +44,7 @@ platform :ios do
       ipa_path: ENV["IPA_PATH"],
       googleservice_info_plist_path: ENV["GOOGLESERVICE_INFO_PLIST_PATH"],
       groups: ENV['FIREBASE_APP_DISTRIBUTION_GROUPS'],
-      release_notes_file: File.join(ROOT, 'fastlane', 'release_notes.txt'),
+      release_notes_file:  ENV['RELEASE_NOTES_PATH'],
     ) 
   end
 
