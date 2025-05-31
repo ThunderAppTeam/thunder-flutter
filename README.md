@@ -34,4 +34,4 @@ This repository is provided for reference and development purposes. To run or de
 
 ## Contribute
 
-Developed and maintained by [jrsky723](https://github.com/jrsky723)
+Developed and maintained by [yanmoyy](https://github.com/yanmoyy)
